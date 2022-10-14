@@ -8,13 +8,13 @@ const Dashboard = () => {
     return (
         <>
             <div className="flex flex-rows w-screen">
-                <div className="lg:flex md:w-screen hidden">
+                <div className="lg:flex lg:w-1/3 hidden">
                     Test
                 </div>
-                <div className="flex w-screen">
+                <div className="flex lg:w-1/3 w-screen">
                     <Gmaps />
                 </div>
-                <div className="lg:flex md:w-screen hidden">
+                <div className="lg:flex lg:w-1/3 hidden">
                     Two
                 </div>
 
