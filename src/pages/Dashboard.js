@@ -1,24 +1,26 @@
 import { useState, useEffect } from "react";
 
-const PageLogin = () => {
+import Gmaps from "../components/Gmaps";
+
+const Dashboard = () => {
 
 
-  return (
-    <>
-      <div className="flex flex-rows w-screen">
-        <div className="lg:flex md:w-screen hidden">
-            Test
-        </div>
-        <div className="flex w-screen">
-            One
-        </div>
-        <div className="lg:flex md:w-screen hidden">
-            Two
-        </div>
+    return (
+        <>
+            <div className="flex flex-rows w-screen">
+                <div className="lg:flex md:w-screen hidden">
+                    Test
+                </div>
+                <div className="flex w-screen">
+                    <Gmaps />
+                </div>
+                <div className="lg:flex md:w-screen hidden">
+                    Two
+                </div>
 
-      </div>
-    </>
-  );
+            </div>
+        </>
+    );
 };
 
-export default PageLogin;
+export default Dashboard;
