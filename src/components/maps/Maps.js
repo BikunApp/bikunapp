@@ -12,7 +12,8 @@ import {
     Marker,
     Circle,
     Popup,
-    GeoJSON
+    GeoJSON,
+    useMap
 
 } from 'react-leaflet'
 import L from 'leaflet';
@@ -36,20 +37,27 @@ import halteBiru from '../../data/halteBiru.json';
 import RouteIcon from '@mui/icons-material/Route';
 import ForkLeftIcon from '@mui/icons-material/ForkLeft';
 import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import PlaceIcon from '@mui/icons-material/Place';
 
 import redStopIcon from '../../assets/icons/bus-stop-red.png';
 import blueStopIcon from '../../assets/icons/bus-stop-blue.png';
 
+
+
 const Maps = () => {
 
-    const ref = useRef(null);
+    const mainRef = useRef();
+
+    const mapCenter = [-6.3616334, 106.8275797];
+    const mapZoom = 15;
 
     const routeRef = useRef();
     const [route, setRoute] = useState(jalurMerah);
     const [halte, setHalte] = useState("merah");
 
     useEffect(() => {
+
 
         //Change displayed route
         if (routeRef.current) {
@@ -142,6 +150,12 @@ const Maps = () => {
         }
     }
 
+    var handleResetView = (e) => {
+
+        mainRef.current.setView(mapCenter, mapZoom);
+
+    }
+
     //Leaflet Icons
     const busStopRed = L.icon({
         iconUrl: redStopIcon,
@@ -187,7 +201,7 @@ const Maps = () => {
                             leaveFrom="transform opacity-100 scale-100"
                             leaveTo="transform opacity-0 scale-95"
                         >
-                            <Menu.Items className="absolute right-0 mt-2 w-28 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                            <Menu.Items className="absolute right-0 mt-2 w-32 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                 <div className="px-1 py-1">
                                     <Menu.Item>
                                         {({ active }) => (
@@ -214,6 +228,19 @@ const Maps = () => {
                                             </button>
                                         )}
                                     </Menu.Item>
+
+                                    <Menu.Item>
+                                        {({ active }) => (
+                                            <button
+                                                className={`${active ? 'bg-violet-500 text-white' : 'text-gray-900'} 
+                                                group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                                                onClick={() => handleResetView()}
+                                            >
+                                                <RestartAltIcon />
+                                                Reset View
+                                            </button>
+                                        )}
+                                    </Menu.Item>
                                 </div>
                             </Menu.Items>
                         </Transition>
@@ -221,7 +248,7 @@ const Maps = () => {
                 </div>
             </div>
 
-            <MapContainer center={[-6.3616334, 106.8275797]} zoom={15} scrollWheelZoom={true}>
+            <MapContainer center={mapCenter} zoom={mapZoom} scrollWheelZoom={true} ref={mainRef}>
 
                 <TileLayer
                     attribution='&copy; <a href="https://www.google.com/help/legalnotices_maps/">Google</a> Maps'
