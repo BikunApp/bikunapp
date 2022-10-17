@@ -1,6 +1,6 @@
-import React, { Fragment, useEffect, useState, useRef } from 'react';
+import { Fragment, useEffect, useState, useRef } from 'react';
 
-import './Gmaps.css';
+import './Maps.css';
 
 //Leaflet maps
 import {
@@ -21,7 +21,7 @@ import L from 'leaflet';
 import { Menu, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 
-//mui material
+//MUI material
 import Button from '@mui/material/Button';
 
 //GeoJSON rute bikun
@@ -41,16 +41,23 @@ const Gmaps = () => {
 
     useEffect(() => {
 
+        //Change displayed route
         if (routeRef.current) {
 
             routeRef.current.clearLayers();
-            routeRef.current.addData(route);
-            if (route == jalurMerah) {
-                routeRef.current.setStyle({ color: 'red' });
-            } else {
-                routeRef.current.setStyle({ color: 'blue' });
-            }
+            if (route != null) {
 
+                routeRef.current.addData(route);
+                if (route == jalurMerah) {
+
+                    routeRef.current.setStyle({ color: 'red' });
+
+                } else {
+
+                    routeRef.current.setStyle({ color: 'blue' });
+
+                }
+            }
         }
 
     }, [route, routeRef]);
@@ -68,15 +75,28 @@ const Gmaps = () => {
         }
     }
 
-    const busStop = L.icon({
-        iconUrl: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.PvhWU6cToMl7Ji0LqnPMJQHaHa%26pid%3DApi&f=1&ipt=bb850850150200790e4effc1d35f990bb34774fb32333c9a8fb16bf32aa91eb7&ipo=images',
-        iconSize: [30, 30],
-        iconAnchor: [32, 64],
-        popupAnchor: null,
-        shadowUrl: null,
-        shadowSize: null,
-        shadowAnchor: null
-    });
+    var handleRoute = (e) => {
+
+        if (route == null) {
+
+            setRoute(jalurMerah);
+
+        } else {
+
+            setRoute(null);
+
+        }
+    }
+
+    // const busStop = L.icon({
+    //     iconUrl: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.PvhWU6cToMl7Ji0LqnPMJQHaHa%26pid%3DApi&f=1&ipt=bb850850150200790e4effc1d35f990bb34774fb32333c9a8fb16bf32aa91eb7&ipo=images',
+    //     iconSize: [30, 30],
+    //     iconAnchor: [32, 64],
+    //     popupAnchor: null,
+    //     shadowUrl: null,
+    //     shadowSize: null,
+    //     shadowAnchor: null
+    // });
 
     return (
         <>
@@ -103,63 +123,16 @@ const Gmaps = () => {
                             leaveTo="transform opacity-0 scale-95"
                         >
                             <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                <div className="px-1 py-1 ">
+                                <div className="px-1 py-1">
                                     <Menu.Item>
                                         {({ active }) => (
                                             <button
-                                                className={`${active ? 'bg-violet-500 text-white' : 'text-gray-900'
-                                                    } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                                                className={`${active ? 'bg-violet-500 text-white' : 'text-gray-900'} 
+                                                group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                                                onClick={() => handleRoute()}
                                             >
                                                 <RouteIcon />
                                                 Toggle Rute
-                                            </button>
-                                        )}
-                                    </Menu.Item>
-
-                                </div>
-                                <div className="px-1 py-1">
-                                    <Menu.Item>
-                                        {({ active }) => (
-                                            <button
-                                                className={`${active ? 'bg-violet-500 text-white' : 'text-gray-900'
-                                                    } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                                            >
-                                                {active ? (
-                                                    <ArchiveActiveIcon
-                                                        className="mr-2 h-5 w-5"
-                                                        aria-hidden="true"
-                                                    />
-                                                ) : (
-                                                    <ArchiveInactiveIcon
-                                                        className="mr-2 h-5 w-5"
-                                                        aria-hidden="true"
-                                                    />
-                                                )}
-                                                Archive
-                                            </button>
-                                        )}
-                                    </Menu.Item>
-
-                                </div>
-                                <div className="px-1 py-1">
-                                    <Menu.Item>
-                                        {({ active }) => (
-                                            <button
-                                                className={`${active ? 'bg-violet-500 text-white' : 'text-gray-900'
-                                                    } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                                            >
-                                                {active ? (
-                                                    <DeleteActiveIcon
-                                                        className="mr-2 h-5 w-5 text-violet-400"
-                                                        aria-hidden="true"
-                                                    />
-                                                ) : (
-                                                    <DeleteInactiveIcon
-                                                        className="mr-2 h-5 w-5 text-violet-400"
-                                                        aria-hidden="true"
-                                                    />
-                                                )}
-                                                Delete
                                             </button>
                                         )}
                                     </Menu.Item>

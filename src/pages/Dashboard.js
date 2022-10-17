@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import Gmaps from "../components/maps/Gmaps";
+import Maps from "../components/maps/Maps";
 
 const Dashboard = () => {
 
@@ -12,7 +12,7 @@ const Dashboard = () => {
                     test
                 </div>
                 <div className="flex lg:w-1/3 w-screen">
-                    <Gmaps />
+                    <Maps />
                 </div>
                 <div className="lg:flex lg:w-1/3 hidden">
                     Two
