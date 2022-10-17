@@ -30,6 +30,7 @@ import jalurBiru from '../../data/JalurBikunBiru.json';
 
 //Lokasi halte bikun
 import halteMerah from '../../data/halteMerah.json';
+import halteBiru from '../../data/halteBiru.json';
 
 //Icons
 import RouteIcon from '@mui/icons-material/Route';
@@ -66,7 +67,7 @@ const Gmaps = () => {
             }
         }
 
-    }, [route, routeRef]);
+    }, [route, routeRef, halte]);
 
     var handleChangeRoute = (e) => {
 
@@ -221,7 +222,7 @@ const Gmaps = () => {
                         </Marker>
 
                     )) : halte == "biru" ?
-                        halteMerah.map(lokasi => (
+                        halteBiru.map(lokasi => (
 
                             <Marker icon={busStop} position={[lokasi.coordinate[1], lokasi.coordinate[0]]}>
                                 <Popup>
