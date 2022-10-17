@@ -28,9 +28,13 @@ import Button from '@mui/material/Button';
 import jalurMerah from '../../data/JalurBikunMerah.json';
 import jalurBiru from '../../data/JalurBikunBiru.json';
 
+//Lokasi halte bikun
+import halteMerah from '../../data/halteMerah.json';
+
 //Icons
 import RouteIcon from '@mui/icons-material/Route';
 import ForkLeftIcon from '@mui/icons-material/ForkLeft';
+import PlaceIcon from '@mui/icons-material/Place';
 
 const Gmaps = () => {
 
@@ -38,9 +42,10 @@ const Gmaps = () => {
 
     const routeRef = useRef();
     const [route, setRoute] = useState(jalurMerah);
+    const [currentColor, setCurrentColor] = useState("merah");
 
     useEffect(() => {
-
+        console.log(halteMerah[0]);
         //Change displayed route
         if (routeRef.current) {
 
@@ -67,10 +72,12 @@ const Gmaps = () => {
         if (route == jalurMerah) {
 
             setRoute(jalurBiru);
+            setCurrentColor("biru");
 
         } else {
 
             setRoute(jalurMerah);
+            setCurrentColor("merah");
 
         }
     }
@@ -97,6 +104,16 @@ const Gmaps = () => {
     //     shadowSize: null,
     //     shadowAnchor: null
     // });
+
+    const busStop = L.icon({
+        iconUrl: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Flibrary.kissclipart.com%2F20181001%2Fjye%2Fkissclipart-bus-clipart-bus-stop-public-transport-timetable-3dce917fba791f97.png&f=1&nofb=1&ipt=cafff30e0501e05b4edb388c027c7ddb0f2b5f964cdad75673d9c9df85f5e4ed&ipo=images',
+        iconSize: [30, 30],
+        iconAnchor: [12, 28],
+        popupAnchor: [4, -24],
+        shadowUrl: null,
+        shadowSize: null,
+        shadowAnchor: null
+    })
 
     return (
         <>
@@ -151,6 +168,20 @@ const Gmaps = () => {
                 />
 
                 <GeoJSON data={route} ref={routeRef} style={{ color: 'red' }} />
+
+                {currentColor == "merah" ?
+                    halteMerah.map(lokasi => (
+                        <Marker icon={busStop} position={[lokasi.coordinate[1], lokasi.coordinate[0]]}>
+                            <Popup>
+                                Halte <br></br>
+                                {lokasi.namaHalte}
+                            </Popup>
+                        </Marker>
+                    )) : null
+                }
+
+
+
 
                 {/* <Marker icon={busStop} position={[-6.360804892417688, 106.83160041986518]}>
                     <Popup>
