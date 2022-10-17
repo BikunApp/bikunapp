@@ -21,77 +21,77 @@
         ]
     },
     {
-        "namaHalte": "St. Pondok Cina",
+        "namaHalte": "FH",
         "coordinate": [
             106.83221206068993,
             -6.364901492199248
         ]
     },
     {
-        "namaHalte": "RIK",
+        "namaHalte": "St. Pondok Cina",
         "coordinate": [
             106.83178257197142,
             -6.368212251024606
         ]
     },
     {
-        "namaHalte": "FKM",
+        "namaHalte": "RIK",
         "coordinate": [
             106.8310546875,
             -6.36987795182555
         ]
     },
     {
-        "namaHalte": "FIK",
+        "namaHalte": "FKM",
         "coordinate": [
             106.8293622136116,
             -6.371677262480034
         ]
     },
     {
-        "namaHalte": "FMIPA",
+        "namaHalte": "FIK",
         "coordinate": [
             106.8268945813179,
             -6.371008186217929
         ]
     },
     {
-        "namaHalte": "PNJ",
+        "namaHalte": "FMIPA",
         "coordinate": [
             106.8257811293006,
             -6.369828304090281
         ]
     },
     {
-        "namaHalte": "Vokasi",
+        "namaHalte": "PNJ",
         "coordinate": [
             106.82448193430899,
             -6.366915739619239
         ]
     },
     {
-        "namaHalte": "FT",
+        "namaHalte": "Vokasi",
         "coordinate": [
             106.8216535449028,
             -6.366036735678631
         ]
     },
     {
-        "namaHalte": "FEB",
+        "namaHalte": "FT",
         "coordinate": [
             106.82325214147568,
             -6.361043911445512
         ]
     },
     {
-        "namaHalte": "FIB",
+        "namaHalte": "FEB",
         "coordinate": [
             106.82582974433899,
             -6.35946048561971
         ]
     },
     {
-        "namaHalte": "FISIP",
+        "namaHalte": "FIB/FISIP",
         "coordinate": [
             106.82978868484497,
             -6.361254501381427
