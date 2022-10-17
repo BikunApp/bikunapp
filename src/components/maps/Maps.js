@@ -38,6 +38,9 @@ import ForkLeftIcon from '@mui/icons-material/ForkLeft';
 import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
 import PlaceIcon from '@mui/icons-material/Place';
 
+import redStopIcon from '../../assets/icons/bus-stop-red.png';
+import blueStopIcon from '../../assets/icons/bus-stop-blue.png';
+
 const Gmaps = () => {
 
     const ref = useRef(null);
@@ -134,8 +137,18 @@ const Gmaps = () => {
     //     shadowAnchor: null
     // });
 
-    const busStop = L.icon({
-        iconUrl: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Flibrary.kissclipart.com%2F20181001%2Fjye%2Fkissclipart-bus-clipart-bus-stop-public-transport-timetable-3dce917fba791f97.png&f=1&nofb=1&ipt=cafff30e0501e05b4edb388c027c7ddb0f2b5f964cdad75673d9c9df85f5e4ed&ipo=images',
+    const busStopRed = L.icon({
+        iconUrl: redStopIcon,
+        iconSize: [30, 30],
+        iconAnchor: [12, 28],
+        popupAnchor: [4, -24],
+        shadowUrl: null,
+        shadowSize: null,
+        shadowAnchor: null
+    })
+
+    const busStopBlue = L.icon({
+        iconUrl: blueStopIcon,
         iconSize: [30, 30],
         iconAnchor: [12, 28],
         popupAnchor: [4, -24],
@@ -214,7 +227,7 @@ const Gmaps = () => {
                 {halte == "merah" ?
                     halteMerah.map(lokasi => (
 
-                        <Marker icon={busStop} position={[lokasi.coordinate[1], lokasi.coordinate[0]]}>
+                        <Marker icon={busStopRed} position={[lokasi.coordinate[1], lokasi.coordinate[0]]}>
                             <Popup>
                                 Halte <br></br>
                                 {lokasi.namaHalte}
@@ -224,7 +237,7 @@ const Gmaps = () => {
                     )) : halte == "biru" ?
                         halteBiru.map(lokasi => (
 
-                            <Marker icon={busStop} position={[lokasi.coordinate[1], lokasi.coordinate[0]]}>
+                            <Marker icon={busStopBlue} position={[lokasi.coordinate[1], lokasi.coordinate[0]]}>
                                 <Popup>
                                     Halte <br></br>
                                     {lokasi.namaHalte}
