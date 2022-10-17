@@ -50,7 +50,7 @@ const Gmaps = () => {
     const [halte, setHalte] = useState("merah");
 
     useEffect(() => {
-        console.log(halteMerah[0]);
+
         //Change displayed route
         if (routeRef.current) {
 
@@ -70,6 +70,21 @@ const Gmaps = () => {
             }
         }
 
+        if (halte !== null) {
+
+            if (route !== null) {
+
+                if (route == jalurMerah) {
+
+                    setHalte("merah");
+
+                } else {
+
+                    setHalte("biru");
+
+                }
+            }
+        }
     }, [route, routeRef, halte]);
 
     var handleChangeRoute = (e) => {
@@ -127,16 +142,7 @@ const Gmaps = () => {
         }
     }
 
-    // const busStop = L.icon({
-    //     iconUrl: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.PvhWU6cToMl7Ji0LqnPMJQHaHa%26pid%3DApi&f=1&ipt=bb850850150200790e4effc1d35f990bb34774fb32333c9a8fb16bf32aa91eb7&ipo=images',
-    //     iconSize: [30, 30],
-    //     iconAnchor: [32, 64],
-    //     popupAnchor: null,
-    //     shadowUrl: null,
-    //     shadowSize: null,
-    //     shadowAnchor: null
-    // });
-
+    //Leaflet Icons
     const busStopRed = L.icon({
         iconUrl: redStopIcon,
         iconSize: [30, 30],
