@@ -6,15 +6,9 @@ import './Maps.css';
 import {
     MapContainer,
     TileLayer,
-    LayersControl,
-    LayerGroup,
-    FeatureGroup,
     Marker,
-    Circle,
     Popup,
     GeoJSON,
-    useMap
-
 } from 'react-leaflet'
 import L from 'leaflet';
 
@@ -38,7 +32,6 @@ import RouteIcon from '@mui/icons-material/Route';
 import ForkLeftIcon from '@mui/icons-material/ForkLeft';
 import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import PlaceIcon from '@mui/icons-material/Place';
 
 import redStopIcon from '../../assets/icons/bus-stop-red.png';
 import blueStopIcon from '../../assets/icons/bus-stop-blue.png';
