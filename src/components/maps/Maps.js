@@ -33,6 +33,8 @@ import ForkLeftIcon from '@mui/icons-material/ForkLeft';
 import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 
+import redBusIcon from '../../assets/icons/bus-icon-red.png';
+import blueBusIcon from '../../assets/icons/bus-icon-blue.png';
 import redStopIcon from '../../assets/icons/bus-stop-red.png';
 import blueStopIcon from '../../assets/icons/bus-stop-blue.png';
 
@@ -175,6 +177,26 @@ const Maps = () => {
     }
 
     //Leaflet Icons
+    const redBus = L.icon({
+        iconUrl: redBusIcon,
+        iconSize: [32, 32],
+        iconAnchor: [15, 20],
+        popupAnchor: [4, -24],
+        shadowUrl: null,
+        shadowSize: null,
+        shadowAnchor: null
+    });
+
+    const blueBus = L.icon({
+        iconUrl: blueBusIcon,
+        iconSize: [32, 32],
+        iconAnchor: [15, 20],
+        popupAnchor: [4, -24],
+        shadowUrl: null,
+        shadowSize: null,
+        shadowAnchor: null
+    });
+
     const busStopRed = L.icon({
         iconUrl: redStopIcon,
         iconSize: [30, 30],
@@ -183,7 +205,7 @@ const Maps = () => {
         shadowUrl: null,
         shadowSize: null,
         shadowAnchor: null
-    })
+    });
 
     const busStopBlue = L.icon({
         iconUrl: blueStopIcon,
@@ -193,7 +215,7 @@ const Maps = () => {
         shadowUrl: null,
         shadowSize: null,
         shadowAnchor: null
-    })
+    });
 
     return (
         <>
@@ -300,7 +322,11 @@ const Maps = () => {
 
                 {theSocketMessage == null ? null :
                     theSocketMessage.map(busses => (
-                        <Marker icon={busses.type == "merah" ? busStopRed : busStopBlue} position={busses.coordinate}></Marker>))}
+                        <Marker icon={busses.type == "merah" ? redBus : blueBus} position={busses.coordinate}>
+                            <Popup>
+                                {busses.type == "merah" ? "Bus jalur merah" : "Bus jalur biru"} <br></br>
+                            </Popup>
+                        </Marker>))}
             </MapContainer>
         </>
     )
