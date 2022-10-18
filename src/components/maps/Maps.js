@@ -38,21 +38,25 @@ import blueStopIcon from '../../assets/icons/bus-stop-blue.png';
 
 import io from 'socket.io-client';
 
-const socket = io('http://localhost:4000', {
+//websocket connection
+const socket = io('ws://localhost:4000', {
     withCredentials: true
 });
 
-// connection with server
-socket.on('connect', (test) => {
+//connection with server
+socket.on('connect', () => {
 
-    console.log('Connected to Server', socket.id)
+    console.log('Connected to Server');
 
 });
 
-
+//when disconnected
 socket.on('disconnect', function () {
+
     console.log('Disconnect from server')
+
 });
+
 const Maps = () => {
 
     const mainRef = useRef();
@@ -64,6 +68,7 @@ const Maps = () => {
     const [route, setRoute] = useState(jalurMerah);
     const [halte, setHalte] = useState("merah");
 
+    //bus location
     const [theSocketMessage, setTheSocketMessage] = useState(null);
 
     useEffect(() => {
@@ -293,7 +298,9 @@ const Maps = () => {
                         )) : null
                 }
 
-                {theSocketMessage == null ? null : <Marker icon={busStopRed} position={theSocketMessage}></Marker>}
+                {theSocketMessage == null ? null :
+                    theSocketMessage.map(busses => (
+                        <Marker icon={busses.type == "merah" ? busStopRed : busStopBlue} position={busses.coordinate}></Marker>))}
             </MapContainer>
         </>
     )
