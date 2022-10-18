@@ -6,12 +6,11 @@ import TestPage from "../components/TestPage";
 
 const Dashboard = () => {
 
-
     return (
         <>
             <div className="flex flex-rows h-screen w-screen">
                 <div className="lg:flex lg:w-1/3 hidden">
-                    <TestPage />
+                    tes page
                 </div>
                 <div className="flex lg:w-1/3 w-screen">
                     <Maps />

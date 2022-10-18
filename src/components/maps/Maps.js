@@ -36,8 +36,23 @@ import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import redStopIcon from '../../assets/icons/bus-stop-red.png';
 import blueStopIcon from '../../assets/icons/bus-stop-blue.png';
 
+import io from 'socket.io-client';
+
+const socket = io('http://localhost:4000', {
+    withCredentials: true
+});
+
+// connection with server
+socket.on('connect', (test) => {
+
+    console.log('Connected to Server', socket.id)
+
+});
 
 
+socket.on('disconnect', function () {
+    console.log('Disconnect from server')
+});
 const Maps = () => {
 
     const mainRef = useRef();
@@ -49,8 +64,9 @@ const Maps = () => {
     const [route, setRoute] = useState(jalurMerah);
     const [halte, setHalte] = useState("merah");
 
-    useEffect(() => {
+    const [theSocketMessage, setTheSocketMessage] = useState(null);
 
+    useEffect(() => {
 
         //Change displayed route
         if (routeRef.current) {
@@ -87,6 +103,10 @@ const Maps = () => {
             }
         }
     }, [route, routeRef, halte]);
+
+    socket.on('broadcast', (message) => {
+        setTheSocketMessage(message.coordinate);
+    });
 
     var handleChangeRoute = (e) => {
 
@@ -273,6 +293,7 @@ const Maps = () => {
                         )) : null
                 }
 
+                {theSocketMessage == null ? null : <Marker icon={busStopRed} position={theSocketMessage}></Marker>}
             </MapContainer>
         </>
     )

@@ -5,25 +5,18 @@ const socket = io('http://localhost:4000', {
     withCredentials: true
 });
 
-
-
 const TestPage = () => {
 
     const [theSocketMessage, setTheSocketMessage] = useState("");
 
-    useEffect(() => {
+    // connection with server
+    socket.on('connect', (test) => {
 
-        // connection with server
-        socket.on('connect', (test) => {
+        console.log('Connected to Server', socket.id)
 
-            console.log('Connected to Server', socket.id)
-
-        });
-
-    }, [theSocketMessage]);
+    });
 
     socket.on('broadcast', (message) => {
-        console.log(message);
         setTheSocketMessage(message.description);
     });
 
