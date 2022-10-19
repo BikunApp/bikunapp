@@ -41,7 +41,7 @@ import blueStopIcon from '../../assets/icons/bus-stop-blue.png';
 import io from 'socket.io-client';
 
 //websocket connection
-const socket = io('ws://localhost:4000', {
+const socket = io('wss://bikunapp-backend.onrender.com:4000', {
     withCredentials: true
 });
 
