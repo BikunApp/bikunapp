@@ -1,18 +1,15 @@
-import { HashRouter as Router, Routes, Route } from "react-router-dom";
+import { Suspense, lazy } from "react";
+
+import Loading from './components/loading/Loading'
 import './App.css';
 
-import Dashboard from './pages/Dashboard';
+const Routing = lazy(() => import('./components/routing/Routing'));
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route exact path="/" element={<Dashboard />} />
-
-        <Route exact path="*" element={<Dashboard />} />
-
-      </Routes>
-    </Router>
+    <Suspense fallback={<Loading />}>
+      <Routing />
+    </Suspense>
   );
 }
 
