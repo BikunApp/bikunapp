@@ -2,8 +2,6 @@ import Maps from "../components/maps/Maps";
 import RouteInfo from "../components/info/RouteInfo";
 import BottomDrawer from "../components/navigation/BottomDrawer";
 
-import TestPage from "../components/TestPage";
-
 const Dashboard = () => {
 
     return (
