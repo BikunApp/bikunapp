@@ -1,18 +1,18 @@
 {
   "files": {
     "main.css": "/bikunapp/static/css/main.5c9ab6f5.css",
-    "main.js": "/bikunapp/static/js/main.482a874e.js",
+    "main.js": "/bikunapp/static/js/main.c15931ee.js",
     "static/js/787.11313f1a.chunk.js": "/bikunapp/static/js/787.11313f1a.chunk.js",
     "static/media/rute-bikun-only.png": "/bikunapp/static/media/rute-bikun-only.90a3827ef956d72cf681.png",
     "static/media/bus-icon-red.png": "/bikunapp/static/media/bus-icon-red.a1e1eccd116c8e43019d.png",
     "static/media/bus-icon-blue.png": "/bikunapp/static/media/bus-icon-blue.49eb66e0cf2d2c18132a.png",
     "index.html": "/bikunapp/index.html",
     "main.5c9ab6f5.css.map": "/bikunapp/static/css/main.5c9ab6f5.css.map",
-    "main.482a874e.js.map": "/bikunapp/static/js/main.482a874e.js.map",
+    "main.c15931ee.js.map": "/bikunapp/static/js/main.c15931ee.js.map",
     "787.11313f1a.chunk.js.map": "/bikunapp/static/js/787.11313f1a.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.5c9ab6f5.css",
-    "static/js/main.482a874e.js"
+    "static/js/main.c15931ee.js"
   ]
 }
