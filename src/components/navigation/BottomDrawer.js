@@ -44,7 +44,7 @@ export default function SimpleBottomNavigation() {
                 open={ruteOpen}
                 onClick={handleInformasiRuteClose}
             >
-                <div className="flex h-screen w-11/12 items-center justify-center">
+                <div className="flex h-screen w-10/12 sm:w-4/5 md:w-3/5 items-center justify-center">
                     <div className="py-4 w-full bg-white rounded-xl shadow-xl drop-shadow-sm">
 
                         <RouteInfo />

@@ -1,6 +1,11 @@
 import { Fragment, useEffect, useState, useRef } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
 
+import Backdrop from '@mui/material/Backdrop';
+
+import About from '../info/About';
 import './Maps.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 //Leaflet maps
 import {
@@ -32,6 +37,7 @@ import RouteIcon from '@mui/icons-material/Route';
 import ForkLeftIcon from '@mui/icons-material/ForkLeft';
 import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
 import redBusIcon from '../../assets/icons/bus-icon-red.png';
 import blueBusIcon from '../../assets/icons/bus-icon-blue.png';
@@ -49,6 +55,7 @@ const socket = io('wss://bikunapp-backend.onrender.com', {
 socket.on('connect', () => {
 
     console.log('Connected to Server');
+    clearTimeout(socket._connectTimer);
 
 });
 
@@ -58,6 +65,22 @@ socket.on('disconnect', function () {
     console.log('Disconnect from server')
 
 });
+
+socket._connectTimer = setTimeout(function () {
+
+    socket.close();
+    toast.error('Error connecting to server', {
+        position: "top-right",
+        autoClose: 8000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+    });
+
+}, 10000);
 
 const Maps = () => {
 
@@ -176,6 +199,20 @@ const Maps = () => {
 
     }
 
+    const [ruteOpen, setRuteOpen] = useState(false);
+
+    const handleInformasiRuteClose = () => {
+
+        setRuteOpen(false);
+
+    };
+
+    const handleInformaiRute = () => {
+
+        setRuteOpen(!ruteOpen);
+
+    };
+
     //Leaflet Icons
     const redBus = L.icon({
         iconUrl: redBusIcon,
@@ -199,9 +236,9 @@ const Maps = () => {
 
     const busStopRed = L.icon({
         iconUrl: redStopIcon,
-        iconSize: [30, 30],
-        iconAnchor: [12, 28],
-        popupAnchor: [4, -24],
+        iconSize: [35, 35],
+        iconAnchor: [17, 30],
+        popupAnchor: [2, -24],
         shadowUrl: null,
         shadowSize: null,
         shadowAnchor: null
@@ -209,9 +246,9 @@ const Maps = () => {
 
     const busStopBlue = L.icon({
         iconUrl: blueStopIcon,
-        iconSize: [30, 30],
-        iconAnchor: [12, 28],
-        popupAnchor: [4, -24],
+        iconSize: [35, 35],
+        iconAnchor: [17, 30],
+        popupAnchor: [2, -24],
         shadowUrl: null,
         shadowSize: null,
         shadowAnchor: null
@@ -241,7 +278,7 @@ const Maps = () => {
                             leaveFrom="transform opacity-100 scale-100"
                             leaveTo="transform opacity-0 scale-95"
                         >
-                            <Menu.Items className="absolute right-0 mt-2 w-32 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                            <Menu.Items className="absolute right-0 mt-2 w-36 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                 <div className="px-1 py-1">
                                     <Menu.Item>
                                         {({ active }) => (
@@ -277,7 +314,20 @@ const Maps = () => {
                                                 onClick={() => handleResetView()}
                                             >
                                                 <RestartAltIcon />
-                                                Reset View
+                                                Reset Tampilan
+                                            </button>
+                                        )}
+                                    </Menu.Item>
+
+                                    <Menu.Item>
+                                        {({ active }) => (
+                                            <button
+                                                className={`${active ? 'bg-violet-500 text-white' : 'text-gray-900'} 
+                                                group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                                                onClick={handleInformaiRute}
+                                            >
+                                                <InfoOutlinedIcon />
+                                                Tentang
                                             </button>
                                         )}
                                     </Menu.Item>
@@ -328,6 +378,38 @@ const Maps = () => {
                             </Popup>
                         </Marker>))}
             </MapContainer>
+
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={ruteOpen}
+                onClick={handleInformasiRuteClose}
+            >
+
+                <div className="flex h-2/3 items-center justify-center">
+                    <div className="bg-white py-5 w-11/12 sm:w-3/5 md:w-3/6 lg:w-3/5 rounded-xl shadow-xl drop-shadow-sm">
+
+                        <About />
+                    </div>
+
+                </div>
+
+
+            </Backdrop>
+
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
+            {/* Same as */}
+            <ToastContainer />
         </>
     )
 }
