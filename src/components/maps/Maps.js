@@ -44,43 +44,48 @@ import blueBusIcon from '../../assets/icons/bus-icon-blue.png';
 import redStopIcon from '../../assets/icons/bus-stop-red.png';
 import blueStopIcon from '../../assets/icons/bus-stop-blue.png';
 
+
 import io from 'socket.io-client';
 
-//websocket connection
-const socket = io('wss://bikunapp-backend.onrender.com', {
-    withCredentials: true
-});
+import * as mqtt from 'react-paho-mqtt';
 
-//connection with server
-socket.on('connect', () => {
+// //websocket connection
+// const socket = io('wss://bikunapp-backend.onrender.com', {
+//     withCredentials: true
+// });
 
-    console.log('Connected to Server');
-    clearTimeout(socket._connectTimer);
+// //connection with server
+// socket.on('connect', () => {
 
-});
+//     console.log('Connected to Server');
+//     clearTimeout(socket._connectTimer);
 
-//when disconnected
-socket.on('disconnect', function () {
+// });
 
-    console.log('Disconnect from server')
+// //when disconnected
+// socket.on('disconnect', function () {
 
-});
+//     console.log('Disconnect from server')
 
-socket._connectTimer = setTimeout(function () {
+// });
 
-    socket.close();
-    toast.error('Error connecting to server', {
-        position: "top-right",
-        autoClose: 8000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-    });
+// socket._connectTimer = setTimeout(function () {
 
-}, 10000);
+//     socket.close();
+//     toast.error('Error connecting to server', {
+//         position: "top-right",
+//         autoClose: 8000,
+//         hideProgressBar: false,
+//         closeOnClick: true,
+//         pauseOnHover: true,
+//         draggable: true,
+//         progress: undefined,
+//         theme: "light",
+//     });
+
+// }, 10000);
+
+let firstTimeSub = 0;
 
 const Maps = () => {
 
@@ -96,7 +101,14 @@ const Maps = () => {
     //bus location
     const [theSocketMessage, setTheSocketMessage] = useState(null);
 
+    const [client, setClient] = useState(null);
+    const _topic = ["bikun"];
+    const _options = {};
+
     useEffect(() => {
+
+
+        _init();
 
         //Change displayed route
         if (routeRef.current) {
@@ -132,11 +144,52 @@ const Maps = () => {
                 }
             }
         }
+
     }, [route, routeRef, halte]);
 
-    socket.on('broadcast', (message) => {
-        setTheSocketMessage(message.coordinate);
-    });
+
+    const _init = () => {
+        const c = mqtt.connect("broker.hivemq.com", Number(8000), "mqtt", _onConnectionLost, _onMessageArrived); // mqtt.connect(host, port, clientId, _onConnectionLost, _onMessageArrived)
+        setClient(c);
+
+    }
+
+    // called when client lost connection
+    const _onConnectionLost = responseObject => {
+        if (responseObject.errorCode !== 0) {
+            console.log("onConnectionLost: " + responseObject.errorMessage);
+        }
+    }
+
+    // called when messages arrived
+    const _onMessageArrived = message => {
+
+        var jsonMes = JSON.parse(message.payloadString);
+        var arrMes = Object.keys(message.payloadString);
+        console.log("onMessageArrived: " + message.payloadString);
+        
+        setTheSocketMessage(JSON.parse(message.payloadString).coordinate);
+    }
+
+    
+
+    // called when subscribing topic(s)
+    const _onSubscribe = () => {
+        client.connect({
+            onSuccess: () => {
+                for (var i = 0; i < _topic.length; i++) {
+                    client.subscribe(_topic[i], _options);
+                }
+            }
+        }); // called when the client connects
+
+        firstTimeSub++;
+    }
+
+    //Websocket connection
+    // socket.on('broadcast', (message) => {
+    //     setTheSocketMessage(message.coordinate);
+    // });
 
     var handleChangeRoute = (e) => {
 
@@ -410,6 +463,7 @@ const Maps = () => {
             />
             {/* Same as */}
             <ToastContainer />
+            {client !== null ? firstTimeSub == 0 ? _onSubscribe() : null : null}
         </>
     )
 }
