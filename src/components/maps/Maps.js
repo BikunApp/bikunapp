@@ -117,7 +117,7 @@ const Maps = () => {
             if (route != null) {
 
                 routeRef.current.addData(route);
-                if (route == jalurMerah) {
+                if (route === jalurMerah) {
 
                     routeRef.current.setStyle({ color: 'red' });
 
@@ -164,11 +164,11 @@ const Maps = () => {
     // called when messages arrived
     const _onMessageArrived = message => {
 
-        var jsonMes = JSON.parse(message.payloadString);
-        var arrMes = Object.keys(message.payloadString);
-        console.log("onMessageArrived: " + message.payloadString);
+        // var jsonMes = JSON.parse(message.payloadString);
+        // var arrMes = Object.keys(message.payloadString);
+        console.log("onMessageArrived(" + Date.now() + "): " + message.payloadString);
         
-        setTheSocketMessage(JSON.parse(message.payloadString).coordinate);
+        // setTheSocketMessage(JSON.parse(message.payloadString).coordinate);
     }
 
     
@@ -193,7 +193,7 @@ const Maps = () => {
 
     var handleChangeRoute = (e) => {
 
-        if (route == jalurMerah) {
+        if (route === jalurMerah) {
 
             setRoute(jalurBiru);
             if (halte != null) {
@@ -215,7 +215,7 @@ const Maps = () => {
 
     var handleRoute = (e) => {
 
-        if (route == null) {
+        if (route === null) {
 
             setRoute(jalurMerah);
 
@@ -228,9 +228,9 @@ const Maps = () => {
 
     var handleHalte = (e) => {
 
-        if (halte == null) {
+        if (halte === null) {
 
-            if (route == jalurMerah) {
+            if (route === jalurMerah) {
 
                 setHalte("merah");
 
@@ -400,7 +400,7 @@ const Maps = () => {
 
                 <GeoJSON data={route} ref={routeRef} style={{ color: 'red' }} />
 
-                {halte == "merah" ?
+                {halte === "merah" ?
                     halteMerah.map(lokasi => (
 
                         <Marker icon={busStopRed} position={[lokasi.coordinate[1], lokasi.coordinate[0]]}>
@@ -410,7 +410,7 @@ const Maps = () => {
                             </Popup>
                         </Marker>
 
-                    )) : halte == "biru" ?
+                    )) : halte === "biru" ?
                         halteBiru.map(lokasi => (
 
                             <Marker icon={busStopBlue} position={[lokasi.coordinate[1], lokasi.coordinate[0]]}>
@@ -423,11 +423,11 @@ const Maps = () => {
                         )) : null
                 }
 
-                {theSocketMessage == null ? null :
+                {theSocketMessage === null ? null :
                     theSocketMessage.map(busses => (
-                        <Marker icon={busses.type == "merah" ? redBus : blueBus} position={busses.coordinate}>
+                        <Marker icon={busses.type === "merah" ? redBus : blueBus} position={busses.coordinate}>
                             <Popup>
-                                {busses.type == "merah" ? "Bus jalur merah" : "Bus jalur biru"} <br></br>
+                                {busses.type === "merah" ? "Bus jalur merah" : "Bus jalur biru"} <br></br>
                             </Popup>
                         </Marker>))}
             </MapContainer>
@@ -463,7 +463,7 @@ const Maps = () => {
             />
             {/* Same as */}
             <ToastContainer />
-            {client !== null ? firstTimeSub == 0 ? _onSubscribe() : null : null}
+            {client !== null ? firstTimeSub === 0 ? _onSubscribe() : null : null}
         </>
     )
 }
