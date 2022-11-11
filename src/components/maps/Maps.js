@@ -107,7 +107,6 @@ const Maps = () => {
 
     useEffect(() => {
 
-
         _init();
 
         //Change displayed route
@@ -149,7 +148,8 @@ const Maps = () => {
 
 
     const _init = () => {
-        const c = mqtt.connect("broker.hivemq.com", Number(8000), "mqtt", _onConnectionLost, _onMessageArrived); // mqtt.connect(host, port, clientId, _onConnectionLost, _onMessageArrived)
+
+        const c = mqtt.connect("mqtt.flespi.io", Number(443), "mqtt", _onConnectionLost, _onMessageArrived); // mqtt.connect(host, port, clientId, _onConnectionLost, _onMessageArrived)
         setClient(c);
 
     }
@@ -157,8 +157,14 @@ const Maps = () => {
     // called when client lost connection
     const _onConnectionLost = responseObject => {
         if (responseObject.errorCode !== 0) {
+
             console.log("onConnectionLost: " + responseObject.errorMessage);
+
         }
+
+        console.log("connecting again");
+        firstTimeSub = 0;
+        _init();
     }
 
     // called when messages arrived
@@ -167,15 +173,16 @@ const Maps = () => {
         // var jsonMes = JSON.parse(message.payloadString);
         // var arrMes = Object.keys(message.payloadString);
         console.log("onMessageArrived(" + Date.now() + "): " + message.payloadString);
-        
+
         // setTheSocketMessage(JSON.parse(message.payloadString).coordinate);
     }
 
-    
+
 
     // called when subscribing topic(s)
     const _onSubscribe = () => {
         client.connect({
+            userName: "ryzDiqhw7pSOtWxB15MjrMn2StWFFF8U4ylaMruKGbmYVHpND1WUC9LkrvNU0MDS",
             onSuccess: () => {
                 for (var i = 0; i < _topic.length; i++) {
                     client.subscribe(_topic[i], _options);
