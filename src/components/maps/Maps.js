@@ -210,7 +210,7 @@ const Maps = () => {
         let splitMessage = message.split(";");
         let busId = splitMessage[0];
         let busStatus = splitMessage[1];
-        let busColor = splitMessage[2] = '0' ? "merah" : "biru";
+        let busColor = splitMessage[2] == '0' ? "merah" : "biru";
         let busLat = splitMessage[3];
         let busLong = splitMessage[4];
 
