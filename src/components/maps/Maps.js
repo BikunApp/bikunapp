@@ -146,7 +146,7 @@ const Maps = () => {
             }
         }
 
-    }, [route, routeRef, halte]);
+    }, [route, routeRef, halte, currentBus]);
 
 
     const _init = () => {
@@ -176,17 +176,8 @@ const Maps = () => {
         // var arrMes = Object.keys(message.payloadString);
         console.log("onMessageArrived(" + Date.now() + "): " + message.payloadString);
 
-        let splitMessage = message.payloadString.split(";");
-        let busId = splitMessage[0];
-        let busStatus = splitMessage[1];
-        let busColor = splitMessage[2] = '0' ? "merah" : "biru";
-        let busLat = splitMessage[3];
-        let busLong = splitMessage[4];
+        parseIncomingMessage(message.payloadString);
 
-        let busData = JSON.parse('{ "id": ' + busId + ', "status": ' + busStatus + ', "color": "' + busColor + '", "coordinate": [' + busLat + ', ' + busLong + '] }');
-        console.log(busData);
-
-        // setTheSocketMessage(JSON.parse(message.payloadString).coordinate);
     }
 
 
@@ -210,6 +201,47 @@ const Maps = () => {
     // socket.on('broadcast', (message) => {
     //     setTheSocketMessage(message.coordinate);
     // });
+
+    var parseIncomingMessage = (message) => {
+
+        let splitMessage = message.split(";");
+        let busId = splitMessage[0];
+        let busStatus = splitMessage[1];
+        let busColor = splitMessage[2] = '0' ? "merah" : "biru";
+        let busLat = splitMessage[3];
+        let busLong = splitMessage[4];
+
+        let busData = JSON.parse('{ "id": ' + busId + ', "status": ' + busStatus + ', "color": "' + busColor + '", "coordinate": [' + busLat + ', ' + busLong + '], "lastUpdate": ' + Date.now() + '}');
+
+        let busDataArray = currentBus;
+
+        if (busDataArray.length > 0) {
+            for (let i = 0; i <= busDataArray.length; i++) {
+
+                if (busDataArray[i].id == busData.id) {
+
+                    busDataArray.splice(i, 1);
+                    busDataArray.push(busData);
+                    break;
+
+                } else {
+
+                    busDataArray.push(busData);
+
+                }
+            }
+        } else {
+
+            busDataArray.push(busData);
+        }
+
+        setCurrentBus(busDataArray);
+
+        console.log(busData);
+
+        // setTheSocketMessage(JSON.parse(message.payloadString).coordinate);
+
+    }
 
     var handleChangeRoute = (e) => {
 
@@ -329,6 +361,7 @@ const Maps = () => {
 
     return (
         <>
+            {console.log(currentBus)}
             <div className="absolute z-[1001] pt-2 lg:right-1/3 right-0 pr-2">
                 <div className="flex space-x-2">
                     <Button variant="contained" size="medium" style={{ backgroundColor: "#FFFFFF" }} onClick={() => handleChangeRoute()}> <ForkLeftIcon style={{ color: "#000000" }} /> </Button>
