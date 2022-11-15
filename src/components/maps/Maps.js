@@ -98,6 +98,8 @@ const Maps = () => {
     const [route, setRoute] = useState(jalurMerah);
     const [halte, setHalte] = useState("merah");
 
+    const [currentBus, setCurrentBus] = useState([]);
+
     //bus location
     const [theSocketMessage, setTheSocketMessage] = useState(null);
 
@@ -149,7 +151,7 @@ const Maps = () => {
 
     const _init = () => {
 
-        const c = mqtt.connect("mqtt.flespi.io", Number(443), "mqtt", _onConnectionLost, _onMessageArrived); // mqtt.connect(host, port, clientId, _onConnectionLost, _onMessageArrived)
+        const c = mqtt.connect("mqtt.flespi.io", Number(80), "mqtt", _onConnectionLost, _onMessageArrived); // mqtt.connect(host, port, clientId, _onConnectionLost, _onMessageArrived)
         setClient(c);
 
     }
@@ -174,6 +176,16 @@ const Maps = () => {
         // var arrMes = Object.keys(message.payloadString);
         console.log("onMessageArrived(" + Date.now() + "): " + message.payloadString);
 
+        let splitMessage = message.payloadString.split(";");
+        let busId = splitMessage[0];
+        let busStatus = splitMessage[1];
+        let busColor = splitMessage[2] = '0' ? "merah" : "biru";
+        let busLat = splitMessage[3];
+        let busLong = splitMessage[4];
+
+        let busData = JSON.parse('{ "id": ' + busId + ', "status": ' + busStatus + ', "color": "' + busColor + '", "coordinate": [' + busLat + ', ' + busLong + '] }');
+        console.log(busData);
+
         // setTheSocketMessage(JSON.parse(message.payloadString).coordinate);
     }
 
@@ -183,6 +195,7 @@ const Maps = () => {
     const _onSubscribe = () => {
         client.connect({
             userName: "ryzDiqhw7pSOtWxB15MjrMn2StWFFF8U4ylaMruKGbmYVHpND1WUC9LkrvNU0MDS",
+            useSSL: false,
             onSuccess: () => {
                 for (var i = 0; i < _topic.length; i++) {
                     client.subscribe(_topic[i], _options);
