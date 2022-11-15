@@ -146,6 +146,8 @@ const Maps = () => {
             }
         }
 
+        checkBusTimeout();
+
     }, [route, routeRef, halte, currentBus]);
 
 
@@ -202,6 +204,7 @@ const Maps = () => {
     //     setTheSocketMessage(message.coordinate);
     // });
 
+    // Parse the incoming message from IoT
     var parseIncomingMessage = (message) => {
 
         let splitMessage = message.split(";");
@@ -216,20 +219,25 @@ const Maps = () => {
         let busDataArray = currentBus;
 
         if (busDataArray.length > 0) {
-            for (let i = 0; i <= busDataArray.length; i++) {
+            let idNotExist = 1;
+            for (let i = 0; i < busDataArray.length; i++) {
 
                 if (busDataArray[i].id == busData.id) {
 
                     busDataArray.splice(i, 1);
                     busDataArray.push(busData);
+                    idNotExist = 0;
                     break;
-
-                } else {
-
-                    busDataArray.push(busData);
 
                 }
             }
+
+            if (idNotExist == 1) {
+
+                busDataArray.push(busData);
+
+            }
+
         } else {
 
             busDataArray.push(busData);
@@ -237,10 +245,35 @@ const Maps = () => {
 
         setCurrentBus(busDataArray);
 
-        console.log(busData);
+        checkBusTimeout();
 
         // setTheSocketMessage(JSON.parse(message.payloadString).coordinate);
 
+    }
+
+    // check if last time bus send data not more than 1 minute
+    var checkBusTimeout = () => {
+
+        let busDataArray = currentBus;
+
+        // console.log("Arr: ")
+        // console.log(busDataArray.length > 0 ? new Date(busDataArray[0].lastUpdate).getTime() : null);
+
+        if (busDataArray.length > 0) {
+            for (let i = 0; i <= busDataArray.length; i++) {
+
+
+                if ((Date.now() - new Date(busDataArray[0].lastUpdate).getTime()) > 60000) {
+
+                    busDataArray.splice(i, 1);
+
+                }
+
+            }
+
+            setCurrentBus(busDataArray);
+
+        }
     }
 
     var handleChangeRoute = (e) => {
