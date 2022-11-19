@@ -48,6 +48,7 @@ import blueStopIcon from '../../assets/icons/bus-stop-blue.png';
 import io from 'socket.io-client';
 
 import * as mqtt from 'react-paho-mqtt';
+import axios from 'axios';
 
 // //websocket connection
 // const socket = io('wss://bikunapp-backend.onrender.com', {
@@ -216,6 +217,15 @@ const Maps = () => {
 
         let busData = JSON.parse('{ "id": ' + busId + ', "status": ' + busStatus + ', "color": "' + busColor + '", "coordinate": [' + busLat + ', ' + busLong + '], "lastUpdate": ' + Date.now() + '}');
 
+        let coorString = busLong + "," + busLat;
+        for (let i = 0; i < halteBiru.length; i++) {
+
+            coorString = coorString + ";" + halteBiru[i].coordinate[0] + "," + halteBiru[i].coordinate[1];
+
+        }
+
+        calculateETA(coorString);
+
         let busDataArray = currentBus;
 
         if (busDataArray.length > 0) {
@@ -274,6 +284,32 @@ const Maps = () => {
             setCurrentBus(busDataArray);
 
         }
+    }
+
+    var calculateETA = (coorString) => {
+        axios({
+
+            method: 'get',
+            url: 'https://router.project-osrm.org/table/v1/bike/' + coorString + '.json',
+            responseType: 'json'
+
+        }).then(function (response) {
+
+            console.log(response.data);
+            let nearest = response.data.durations[0][1];
+            let theHalte;
+            for (let i = 1; i < response.data.durations[0].length; i++) {
+
+                if(nearest > response.data.durations[0][i]){
+
+                    theHalte = halteBiru[i-1].namaHalte;
+                    nearest = response.data.durations[0][i];
+
+                }
+            }
+
+            console.log("halte" + theHalte + " dalam waktu " + nearest + " detik");
+        })
     }
 
     var handleChangeRoute = (e) => {
