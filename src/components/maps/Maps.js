@@ -102,7 +102,7 @@ const Maps = () => {
     const [currentBus, setCurrentBus] = useState([]);
 
     //bus location
-    const [theSocketMessage, setTheSocketMessage] = useState(null);
+    // const [theSocketMessage, setTheSocketMessage] = useState(null);
 
     const [client, setClient] = useState(null);
     const _topic = ["bikun"];
@@ -300,9 +300,9 @@ const Maps = () => {
             let theHalte;
             for (let i = 1; i < response.data.durations[0].length; i++) {
 
-                if(nearest > response.data.durations[0][i]){
+                if (nearest > response.data.durations[0][i]) {
 
-                    theHalte = halteBiru[i-1].namaHalte;
+                    theHalte = halteBiru[i - 1].namaHalte;
                     nearest = response.data.durations[0][i];
 
                 }
@@ -545,11 +545,11 @@ const Maps = () => {
                         )) : null
                 }
 
-                {theSocketMessage === null ? null :
-                    theSocketMessage.map(busses => (
-                        <Marker icon={busses.type === "merah" ? redBus : blueBus} position={busses.coordinate}>
+                {currentBus === null ? null :
+                    currentBus.map(busses => (
+                        <Marker icon={busses.busColor === "merah" ? redBus : blueBus} position={busses.coordinate}>
                             <Popup>
-                                {busses.type === "merah" ? "Bus jalur merah" : "Bus jalur biru"} <br></br>
+                                {busses.busColor === "merah" ? "Bus jalur merah" : "Bus jalur biru"} <br></br>
                             </Popup>
                         </Marker>))}
             </MapContainer>
