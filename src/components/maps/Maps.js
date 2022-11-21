@@ -423,7 +423,8 @@ const Maps = () => {
     return (
         <>
             {console.log(currentBus)}
-            <div className="absolute z-[1001] pt-2 lg:right-1/3 right-0 pr-2">
+            
+            {/* <div className="absolute z-[1001] pt-2 lg:right-1/3 right-0 pr-2">
                 <div className="flex space-x-2">
                     <Button variant="contained" size="medium" style={{ backgroundColor: "#FFFFFF" }} onClick={() => handleChangeRoute()}> <ForkLeftIcon style={{ color: "#000000" }} /> </Button>
                     <Menu as="div" className="relative inline-block text-left">
@@ -503,7 +504,7 @@ const Maps = () => {
                         </Transition>
                     </Menu>
                 </div>
-            </div>
+            </div> */}
 
             <MapContainer center={mapCenter} zoom={mapZoom} scrollWheelZoom={true} zoomControl={false} ref={mainRef}>
 
