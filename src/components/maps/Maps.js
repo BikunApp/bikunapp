@@ -119,7 +119,7 @@ const Maps = () => {
             if (route != null) {
 
                 routeRef.current.addData(route);
-                
+
             }
         }
 
@@ -505,7 +505,7 @@ const Maps = () => {
                 </div>
             </div>
 
-            <MapContainer center={mapCenter} zoom={mapZoom} scrollWheelZoom={true} ref={mainRef}>
+            <MapContainer center={mapCenter} zoom={mapZoom} scrollWheelZoom={true} zoomControl={false} ref={mainRef}>
 
                 <TileLayer
                     attribution='&copy; <a href="https://www.google.com/help/legalnotices_maps/">Google</a> Maps'
