@@ -119,15 +119,7 @@ const Maps = () => {
             if (route != null) {
 
                 routeRef.current.addData(route);
-                if (route === jalurMerah) {
-
-                    routeRef.current.setStyle({ color: 'red' });
-
-                } else {
-
-                    routeRef.current.setStyle({ color: 'blue' });
-
-                }
+                
             }
         }
 
@@ -520,27 +512,33 @@ const Maps = () => {
                     url="http://mt0.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"
                 />
 
-                <GeoJSON data={route} ref={routeRef} style={{ color: 'red' }} />
+                {route === jalurMerah ?
+                    <GeoJSON data={route} ref={routeRef} style={{ color: 'red' }} /> :
+                    <GeoJSON data={route} ref={routeRef} style={{ color: 'blue' }} />}
 
                 {halte === "merah" ?
                     halteMerah.map(lokasi => (
+                        <>
 
-                        <Marker icon={busStopRed} position={[lokasi.coordinate[1], lokasi.coordinate[0]]}>
-                            <Popup>
-                                Halte <br></br>
-                                {lokasi.namaHalte}
-                            </Popup>
-                        </Marker>
-
-                    )) : halte === "biru" ?
-                        halteBiru.map(lokasi => (
-
-                            <Marker icon={busStopBlue} position={[lokasi.coordinate[1], lokasi.coordinate[0]]}>
+                            <Marker icon={busStopRed} position={[lokasi.coordinate[1], lokasi.coordinate[0]]}>
                                 <Popup>
                                     Halte <br></br>
                                     {lokasi.namaHalte}
                                 </Popup>
                             </Marker>
+                        </>
+
+                    )) : halte === "biru" ?
+                        halteBiru.map(lokasi => (
+                            <>
+
+                                <Marker icon={busStopBlue} position={[lokasi.coordinate[1], lokasi.coordinate[0]]}>
+                                    <Popup>
+                                        Halte <br></br>
+                                        {lokasi.namaHalte}
+                                    </Popup>
+                                </Marker>
+                            </>
 
                         )) : null
                 }
