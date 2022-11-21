@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
+import Cookies from 'js-cookie'
 
 import './Maps.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -39,6 +40,7 @@ import blueStopIcon from '../../assets/icons/bus-stop-blue.png';
 
 import * as mqtt from 'react-paho-mqtt';
 import axios from 'axios';
+import { CookieSharp } from '@mui/icons-material';
 
 let firstTimeSub = 0;
 
@@ -311,6 +313,10 @@ const Maps = () => {
 
     }
 
+    var handleMouseMove = () => {
+        console.log("maps moved");
+    }
+
     //Leaflet Icons
     const redBus = L.icon({
         iconUrl: redBusIcon,
@@ -356,7 +362,7 @@ const Maps = () => {
         <>
             {console.log(currentBus)}
 
-            <MapContainer center={mapCenter} zoom={mapZoom} scrollWheelZoom={true} zoomControl={false} ref={mainRef}>
+            <MapContainer center={mapCenter} zoom={mapZoom} scrollWheelZoom={true} zoomControl={false} onMouseMove={handleMouseMove} ref={mainRef}>
 
                 <TileLayer
                     attribution='&copy; <a href="https://www.google.com/help/legalnotices_maps/">Google</a> Maps'

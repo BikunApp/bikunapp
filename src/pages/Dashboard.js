@@ -21,9 +21,9 @@ const Dashboard = () => {
 
                     </div>
 
-                    {/* <div className="lg:hidden absolute bottom-0 z-[2000]">
+                    <div className="lg:hidden absolute bottom-0 z-[2000]">
                         <BottomDrawer />
-                    </div> */}
+                    </div>
 
                 </div>
                 <div className="lg:flex lg:w-1/3 h-screen w-screen hidden">

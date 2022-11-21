@@ -1,57 +1,82 @@
-import React, { useState } from 'react';
+import * as React from 'react';
+import { Global } from '@emotion/react';
+import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import BottomNavigation from '@mui/material/BottomNavigation';
-import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import RestoreIcon from '@mui/icons-material/Restore';
-import Backdrop from '@mui/material/Backdrop';
+import Skeleton from '@mui/material/Skeleton';
+import Typography from '@mui/material/Typography';
+import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 
-import RouteInfo from "../info/RouteInfo";
+const drawerBleeding = 56;
 
-//Icons
-import DirectionsIcon from '@mui/icons-material/Directions';
+const StyledBox = styled(Box)(({ theme }) => ({
+    backgroundColor: '#5038BC',
+}));
 
-export default function SimpleBottomNavigation() {
+function SwipeableEdgeDrawer(props) {
 
-    const [ruteOpen, setRuteOpen] = useState(false);
+    const [open, setOpen] = React.useState(false);
 
-    const handleInformasiRuteClose = () => {
+    const toggleDrawer = (newOpen) => () => {
 
-        setRuteOpen(false);
-
-    };
-
-    const handleInformaiRute = () => {
-
-        setRuteOpen(!ruteOpen);
+        setOpen(newOpen);
 
     };
 
     return (
         <>
-            <div className="flex">
-                <Box sx={{ width: '100vw' }}>
-                    <BottomNavigation
-                        showLabels
-                    >
-                        <BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
-                        <BottomNavigationAction label="Informasi Rute" onClick={handleInformaiRute} icon={<DirectionsIcon />} />
-                    </BottomNavigation>
-                </Box>
-            </div>
 
-            <Backdrop
-                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                open={ruteOpen}
-                onClick={handleInformasiRuteClose}
+            <Global
+                styles={{
+                    '.MuiDrawer-root > .MuiPaper-root': {
+                        height: `calc(20% - ${drawerBleeding}px)`,
+                        overflow: 'visible',
+                    },
+                }}
+            />
+
+            <SwipeableDrawer
+                anchor="bottom"
+                open={open}
+                onClose={toggleDrawer(false)}
+                onOpen={toggleDrawer(true)}
+                swipeAreaWidth={drawerBleeding}
+                disableSwipeToOpen={false}
+                disableBackdropTransition={true}
+                ModalProps={{
+                    keepMounted: true,
+                }}
             >
-                <div className="flex h-screen w-10/12 sm:w-4/5 md:w-3/5 items-center justify-center">
-                    <div className="py-4 w-full bg-white rounded-xl shadow-xl drop-shadow-sm">
 
-                        <RouteInfo />
+                <StyledBox
+                    sx={{
+                        position: 'absolute',
+                        top: -drawerBleeding,
+                        borderTopLeftRadius: 20,
+                        borderTopRightRadius: 20,
+                        visibility: 'visible',
+                        right: 10,
+                        left: 10,
+                    }}
+                >
+                    <Typography sx={{ p: 2, color: 'white' }}>51 results</Typography>
+                </StyledBox>
 
-                    </div>
-                </div>
-            </Backdrop>
+                <StyledBox
+                    sx={{
+                        position: 'absolute',
+                        px: 2,
+                        pb: 2,
+                        height: '100%',
+                        overflow: 'auto',
+                        right: 10,
+                        left: 10
+                    }}
+                >
+                    <Skeleton variant="rectangular" height="100%" />
+                </StyledBox>
+            </SwipeableDrawer>
         </>
     );
 }
+
+export default SwipeableEdgeDrawer;

@@ -12,6 +12,7 @@ import About from '../info/About';
 // Material Icons
 import RouteIcon from '@mui/icons-material/Route';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
 
 function ResponsiveAppBar() {
 
