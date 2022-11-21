@@ -514,8 +514,8 @@ const Maps = () => {
                 />
 
                 {route === jalurMerah ?
-                    <GeoJSON data={route} ref={routeRef} style={{ color: 'red' }} /> :
-                    <GeoJSON data={route} ref={routeRef} style={{ color: 'blue' }} />}
+                    <GeoJSON data={route} ref={routeRef} style={{ color: '#c424a3' }} /> :
+                    <GeoJSON data={route} ref={routeRef} style={{ color: '#64e6fb' }} />}
 
                 {halte === "merah" ?
                     halteMerah.map(lokasi => (
