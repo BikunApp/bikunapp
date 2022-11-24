@@ -20,7 +20,7 @@ const Dashboard = () => {
                         <AppBar />
                     </div>
 
-                    <div className="absolute z-[1001] lg:hidden  bottom-0 ">
+                    <div className="absolute lg:hidden bottom-0 ">
                         <BottomDrawer />
                     </div>
 

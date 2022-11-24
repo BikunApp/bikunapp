@@ -66,13 +66,13 @@ function ResponsiveAppBar() {
                         </Toolbar>
                     </Container>
                 </AppBar>
-
+                
                 <Backdrop
-                    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1000 }}
                     open={ruteOpen}
                     onClick={handleInformasiRuteClose}
                 >
-                    <div className="flex h-screen w-10/12 sm:w-4/5 md:w-3/5 items-center justify-center">
+                    <div className="flex h-screen w-10/12 sm:w-6/12 md:w-2/5 items-center justify-center">
                         <div className="py-4 w-full bg-white rounded-xl shadow-xl drop-shadow-sm">
 
                             <RouteInfo />
