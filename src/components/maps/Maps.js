@@ -55,7 +55,6 @@ const Maps = (props) => {
     useEffect(() => {
 
         _init();
-        console.log(process.env.REACT_APP_MQTT_ADDRESS)
 
         //Change displayed route
         if (routeRef.current) {
