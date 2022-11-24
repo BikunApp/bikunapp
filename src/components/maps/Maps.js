@@ -1,6 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
-import Cookies from 'js-cookie'
 
 import './Maps.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -14,9 +13,6 @@ import {
     GeoJSON,
 } from 'react-leaflet'
 import L from 'leaflet';
-
-//MUI material
-import Button from '@mui/material/Button';
 
 //GeoJSON rute bikun
 import jalurMerah from '../../data/JalurBikunMerah.json';
@@ -36,9 +32,9 @@ import axios from 'axios';
 
 let firstTimeSub = 0;
 
-const Maps = () => {
+const Maps = (props) => {
 
-    const mainRef = useRef();
+    let mainRef = props.props;
 
     const mapCenter = [-6.3594334, 106.8275797];
     const mapZoom = 15;
@@ -297,12 +293,6 @@ const Maps = () => {
             setHalte(null);
 
         }
-    }
-
-    var handleResetView = (e) => {
-
-        mainRef.current.setView(mapCenter, mapZoom);
-
     }
 
     var handleMouseMove = () => {

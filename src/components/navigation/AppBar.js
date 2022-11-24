@@ -14,7 +14,12 @@ import RouteIcon from '@mui/icons-material/Route';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 
-function ResponsiveAppBar() {
+function ResponsiveAppBar(props) {
+
+    let mainRef = props.props;
+
+    const mapCenter = [-6.3594334, 106.8275797];
+    const mapZoom = 15;
 
     const [ruteOpen, setRuteOpen] = useState(false);
     const [aboutOpen, setAboutOpen] = useState(false);
@@ -43,6 +48,12 @@ function ResponsiveAppBar() {
 
     }
 
+    var handleResetView = (e) => {
+
+        mainRef.current.setView(mapCenter, mapZoom);
+
+    }
+
     return (
 
         <>
@@ -60,13 +71,14 @@ function ResponsiveAppBar() {
                                             <RouteIcon fontSize="large" style={{ color: '#5038bc' }} onClick={handleInformaiRute} />
                                         </div>
                                         <InfoOutlinedIcon fontSize="large" style={{ color: '#5038bc' }} onClick={handleAbout} />
+                                        <RestartAltIcon fontSize="large" style={{ color: '#5038bc' }} onClick={handleResetView} />
                                     </div>
                                 </div>
                             </div>
                         </Toolbar>
                     </Container>
                 </AppBar>
-                
+
                 <Backdrop
                     sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1000 }}
                     open={ruteOpen}

@@ -1,43 +1,19 @@
-// import { useEffect, useState } from 'react';
-// import io from 'socket.io-client';
+import Button from '@mui/material/Button';
 
-// const socket = io('http://localhost:4000', {
-//     withCredentials: true
-// });
+const TestPage = (testVal) => {
 
-// const TestPage = () => {
+    let value = testVal.props;
+    const handleTestVal = () => {
+        value.current = value.current + 1;
+        console.log(value);
+    }
 
-//     const [theSocketMessage, setTheSocketMessage] = useState("");
+    return (
+        <>
+            <Button variant="outlined" onClick={handleTestVal}>Outlined</Button>
+        </>
+    )
 
-//     // connection with server
-//     socket.on('connect', (test) => {
+}
 
-//         console.log('Connected to Server', socket.id)
-
-//     });
-
-//     socket.on('broadcast', (message) => {
-//         setTheSocketMessage(message.description);
-//     });
-
-
-//     socket.on('disconnect', function () {
-//         console.log('Disconnect from server')
-//     });
-
-
-//     return (
-//         <>
-//             <div>
-//                 {theSocketMessage}
-//             </div>
-
-
-
-
-
-//         </>
-//     );
-// };
-
-// export default TestPage;
+export default TestPage;
