@@ -26,13 +26,6 @@ import jalurBiru from '../../data/JalurBikunBiru.json';
 import halteMerah from '../../data/halteMerah.json';
 import halteBiru from '../../data/halteBiru.json';
 
-//Icons
-import RouteIcon from '@mui/icons-material/Route';
-import ForkLeftIcon from '@mui/icons-material/ForkLeft';
-import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
-import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-
 import redBusIcon from '../../assets/icons/bus-icon-red.png';
 import blueBusIcon from '../../assets/icons/bus-icon-blue.png';
 import redStopIcon from '../../assets/icons/bus-stop-red.png';
@@ -40,7 +33,6 @@ import blueStopIcon from '../../assets/icons/bus-stop-blue.png';
 
 import * as mqtt from 'react-paho-mqtt';
 import axios from 'axios';
-import { CookieSharp } from '@mui/icons-material';
 
 let firstTimeSub = 0;
 
@@ -48,7 +40,7 @@ const Maps = () => {
 
     const mainRef = useRef();
 
-    const mapCenter = [-6.3616334, 106.8275797];
+    const mapCenter = [-6.3594334, 106.8275797];
     const mapZoom = 15;
 
     const routeRef = useRef();

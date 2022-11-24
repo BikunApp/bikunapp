@@ -13,15 +13,14 @@ const Dashboard = () => {
                 <div className="lg:flex lg:w-1/3 hidden">
                     tes page
                 </div>
-                <div className="flex lg:w-1/3 w-screen">
+                <div className="flex lg:w-1/3 w-screen justify-center">
                     <Maps />
 
-                    <div className="lg:hidden absolute z-[1001] w-full">
+                    <div className="absolute z-[1001] lg:w-1/3 sm:w-4/5 md:w-3/5 w-full">
                         <AppBar />
-
                     </div>
 
-                    <div className="lg:hidden absolute bottom-0 z-[2000]">
+                    <div className="absolute z-[1001] lg:hidden  bottom-0 ">
                         <BottomDrawer />
                     </div>
 
