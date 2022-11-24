@@ -83,14 +83,14 @@ const Maps = (props) => {
             }
         }
 
-        //checkBusTimeout();
+        checkBusTimeout();
 
     }, [route, routeRef, halte, currentBus]);
 
 
     const _init = () => {
 
-        const c = mqtt.connect("mqtt.flespi.io", Number(80), "mqtt", _onConnectionLost, _onMessageArrived); // mqtt.connect(host, port, clientId, _onConnectionLost, _onMessageArrived)
+        const c = mqtt.connect("mqtt.flespi.io", Number(80), Math.random().toString(16).substr(2, 14), _onConnectionLost, _onMessageArrived); // mqtt.connect(host, port, clientId, _onConnectionLost, _onMessageArrived)
         setClient(c);
 
     }
@@ -184,7 +184,7 @@ const Maps = (props) => {
 
         setCurrentBus(busDataArray);
 
-        //checkBusTimeout();
+        checkBusTimeout();
 
     }
 
@@ -339,8 +339,6 @@ const Maps = (props) => {
 
     return (
         <>
-            {console.log(currentBus)}
-
             <MapContainer center={mapCenter} zoom={mapZoom} scrollWheelZoom={true} zoomControl={false} ref={mainRef}>
 
                 <TileLayer
@@ -356,7 +354,6 @@ const Maps = (props) => {
                 {halte === "merah" ?
                     halteMerah.map(lokasi => (
                         <>
-
                             <Marker icon={busStopRed} position={[lokasi.coordinate[1], lokasi.coordinate[0]]}>
                                 <Popup>
                                     Halte <br></br>
@@ -368,7 +365,6 @@ const Maps = (props) => {
                     )) : halte === "biru" ?
                         halteBiru.map(lokasi => (
                             <>
-
                                 <Marker icon={busStopBlue} position={[lokasi.coordinate[1], lokasi.coordinate[0]]}>
                                     <Popup>
                                         Halte <br></br>
@@ -404,7 +400,9 @@ const Maps = (props) => {
             />
             {/* Same as */}
             <ToastContainer />
+
             {client !== null ? firstTimeSub === 0 ? _onSubscribe() : null : null}
+
         </>
     )
 }
