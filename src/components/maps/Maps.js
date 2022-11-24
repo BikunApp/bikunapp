@@ -55,6 +55,7 @@ const Maps = (props) => {
     useEffect(() => {
 
         _init();
+        console.log(process.env.REACT_APP_MQTT_ADDRESS)
 
         //Change displayed route
         if (routeRef.current) {
@@ -90,7 +91,7 @@ const Maps = (props) => {
 
     const _init = () => {
 
-        const c = mqtt.connect("mqtt.flespi.io", Number(80), Math.random().toString(16).substr(2, 14), _onConnectionLost, _onMessageArrived); // mqtt.connect(host, port, clientId, _onConnectionLost, _onMessageArrived)
+        const c = mqtt.connect(process.env.REACT_APP_MQTT_ADDRESS, Number(process.env.REACT_APP_MQTT_PORT), Math.random().toString(16).substr(2, 14), _onConnectionLost, _onMessageArrived); // mqtt.connect(host, port, clientId, _onConnectionLost, _onMessageArrived)
         setClient(c);
 
     }
@@ -122,7 +123,7 @@ const Maps = (props) => {
     // called when subscribing topic(s)
     const _onSubscribe = () => {
         client.connect({
-            userName: "ryzDiqhw7pSOtWxB15MjrMn2StWFFF8U4ylaMruKGbmYVHpND1WUC9LkrvNU0MDS",
+            userName: process.env.REACT_APP_MQTT_USERNAME,
             useSSL: false,
             onSuccess: () => {
                 for (var i = 0; i < _topic.length; i++) {
@@ -217,7 +218,7 @@ const Maps = (props) => {
         axios({
 
             method: 'get',
-            url: 'https://router.project-osrm.org/table/v1/bike/' + coorString + '.json',
+            url: process.env.REACT_APP_OSRM_ADDRESS + coorString + '.json',
             responseType: 'json'
 
         }).then(function (response) {
