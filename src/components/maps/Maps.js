@@ -83,7 +83,7 @@ const Maps = (props) => {
             }
         }
 
-        checkBusTimeout();
+        //checkBusTimeout();
 
     }, [route, routeRef, halte, currentBus]);
 
@@ -153,9 +153,9 @@ const Maps = (props) => {
 
         }
 
-        calculateETA(coorString);
+        // calculateETA(coorString);
 
-        let busDataArray = currentBus;
+        let busDataArray = [...currentBus];
 
         if (busDataArray.length > 0) {
             let idNotExist = 1;
@@ -184,14 +184,14 @@ const Maps = (props) => {
 
         setCurrentBus(busDataArray);
 
-        checkBusTimeout();
+        //checkBusTimeout();
 
     }
 
     // check if last time bus send data not more than 1 minute
     var checkBusTimeout = () => {
 
-        let busDataArray = currentBus;
+        let busDataArray = [...currentBus];
 
         // console.log("Arr: ")
         // console.log(busDataArray.length > 0 ? new Date(busDataArray[0].lastUpdate).getTime() : null);
@@ -238,6 +238,7 @@ const Maps = (props) => {
             console.log("halte" + theHalte + " dalam waktu " + nearest + " detik");
 
         })
+
     }
 
     var handleChangeRoute = (e) => {
@@ -295,10 +296,6 @@ const Maps = (props) => {
         }
     }
 
-    var handleMouseMove = () => {
-        console.log("maps moved");
-    }
-
     //Leaflet Icons
     const redBus = L.icon({
         iconUrl: redBusIcon,
@@ -344,7 +341,7 @@ const Maps = (props) => {
         <>
             {console.log(currentBus)}
 
-            <MapContainer center={mapCenter} zoom={mapZoom} scrollWheelZoom={true} zoomControl={false} onMouseMove={handleMouseMove} ref={mainRef}>
+            <MapContainer center={mapCenter} zoom={mapZoom} scrollWheelZoom={true} zoomControl={false} ref={mainRef}>
 
                 <TileLayer
                     attribution='&copy; <a href="https://www.google.com/help/legalnotices_maps/">Google</a> Maps'
@@ -390,6 +387,7 @@ const Maps = (props) => {
                                 {busses.busColor === "merah" ? "Bus jalur merah" : "Bus jalur biru"} <br></br>
                             </Popup>
                         </Marker>))}
+
             </MapContainer>
 
             <ToastContainer
