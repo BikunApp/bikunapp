@@ -3,6 +3,7 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Container from '@mui/material/Container';
 import Backdrop from '@mui/material/Backdrop';
+import IconButton from '@mui/material/IconButton';
 
 import AppLogo from '../../assets/app-logo.png';
 
@@ -68,10 +69,16 @@ function ResponsiveAppBar(props) {
                                 <div className="absolute right-0 space-x-2">
                                     <div className="flex flex-row">
                                         <div className="lg:hidden">
-                                            <RouteIcon fontSize="large" style={{ color: '#5038bc' }} onClick={handleInformaiRute} />
+                                            <IconButton aria-label="Informasi Rute">
+                                                <RouteIcon fontSize="large" style={{ color: '#5038bc' }} onClick={handleInformaiRute} />
+                                            </IconButton>
                                         </div>
-                                        <InfoOutlinedIcon fontSize="large" style={{ color: '#5038bc' }} onClick={handleAbout} />
-                                        <RestartAltIcon fontSize="large" style={{ color: '#5038bc' }} onClick={handleResetView} />
+                                        <IconButton aria-label="Tentang">
+                                            <InfoOutlinedIcon fontSize="large" style={{ color: '#5038bc' }} onClick={handleAbout} />
+                                        </IconButton>
+                                        <IconButton aria-label="Reset Tampilan">
+                                            <RestartAltIcon fontSize="large" style={{ color: '#5038bc' }} onClick={handleResetView} />
+                                        </IconButton>
                                     </div>
                                 </div>
                             </div>

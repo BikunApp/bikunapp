@@ -2,6 +2,7 @@ import React, { createRef } from 'react';
 import Maps from "../components/maps/Maps";
 import RouteInfo from "../components/info/RouteInfo";
 
+
 // Components
 import BottomDrawer from "../components/navigation/BottomDrawer";
 import AppBar from '../components/navigation/AppBar';
