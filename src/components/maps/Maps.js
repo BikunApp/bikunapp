@@ -54,7 +54,7 @@ const Maps = (props) => {
 
     useEffect(() => {
 
-        _init();
+        // _init();
 
         //Change displayed route
         if (routeRef.current) {
@@ -88,105 +88,105 @@ const Maps = (props) => {
     }, [route, routeRef, halte, currentBus]);
 
 
-    const _init = () => {
+    // const _init = () => {
 
-        const c = mqtt.connect(process.env.REACT_APP_MQTT_ADDRESS, Number(process.env.REACT_APP_MQTT_PORT), Math.random().toString(16).substr(2, 14), _onConnectionLost, _onMessageArrived); // mqtt.connect(host, port, clientId, _onConnectionLost, _onMessageArrived)
-        setClient(c);
+    //     const c = mqtt.connect(process.env.REACT_APP_MQTT_ADDRESS, Number(process.env.REACT_APP_MQTT_PORT), Math.random().toString(16).substr(2, 14), _onConnectionLost, _onMessageArrived); // mqtt.connect(host, port, clientId, _onConnectionLost, _onMessageArrived)
+    //     setClient(c);
 
-    }
+    // }
 
-    // called when client lost connection
-    const _onConnectionLost = responseObject => {
-        if (responseObject.errorCode !== 0) {
+    // // called when client lost connection
+    // const _onConnectionLost = responseObject => {
+    //     if (responseObject.errorCode !== 0) {
 
-            console.log("onConnectionLost: " + responseObject.errorMessage);
+    //         console.log("onConnectionLost: " + responseObject.errorMessage);
 
-        }
+    //     }
 
-        console.log("connecting again");
-        firstTimeSub = 0;
-        _init();
-    }
+    //     console.log("connecting again");
+    //     firstTimeSub = 0;
+    //     _init();
+    // }
 
-    // called when messages arrived
-    const _onMessageArrived = message => {
+    // // called when messages arrived
+    // const _onMessageArrived = message => {
 
-        // var jsonMes = JSON.parse(message.payloadString);
-        // var arrMes = Object.keys(message.payloadString);
-        console.log("onMessageArrived(" + Date.now() + "): " + message.payloadString);
+    //     // var jsonMes = JSON.parse(message.payloadString);
+    //     // var arrMes = Object.keys(message.payloadString);
+    //     console.log("onMessageArrived(" + Date.now() + "): " + message.payloadString);
 
-        parseIncomingMessage(message.payloadString);
+    //     parseIncomingMessage(message.payloadString);
 
-    }
+    // }
 
-    // called when subscribing topic(s)
-    const _onSubscribe = () => {
-        client.connect({
-            userName: process.env.REACT_APP_MQTT_USERNAME,
-            useSSL: false,
-            onSuccess: () => {
-                for (var i = 0; i < _topic.length; i++) {
-                    client.subscribe(_topic[i], _options);
-                }
-            }
-        }); // called when the client connects
+    // // called when subscribing topic(s)
+    // const _onSubscribe = () => {
+    //     client.connect({
+    //         userName: process.env.REACT_APP_MQTT_USERNAME,
+    //         useSSL: false,
+    //         onSuccess: () => {
+    //             for (var i = 0; i < _topic.length; i++) {
+    //                 client.subscribe(_topic[i], _options);
+    //             }
+    //         }
+    //     }); // called when the client connects
 
-        firstTimeSub++;
-    }
+    //     firstTimeSub++;
+    // }
 
-    // Parse the incoming message from IoT
-    var parseIncomingMessage = (message) => {
+    // // Parse the incoming message from IoT
+    // var parseIncomingMessage = (message) => {
 
-        let splitMessage = message.split(";");
-        let busId = splitMessage[0];
-        let busStatus = splitMessage[1];
-        let busColor = splitMessage[2] == '0' ? "merah" : "biru";
-        let busLat = splitMessage[3];
-        let busLong = splitMessage[4];
+    //     let splitMessage = message.split(";");
+    //     let busId = splitMessage[0];
+    //     let busStatus = splitMessage[1];
+    //     let busColor = splitMessage[2] == '0' ? "merah" : "biru";
+    //     let busLat = splitMessage[3];
+    //     let busLong = splitMessage[4];
 
-        let busData = JSON.parse('{ "id": ' + busId + ', "status": ' + busStatus + ', "color": "' + busColor + '", "coordinate": [' + busLat + ', ' + busLong + '], "lastUpdate": ' + Date.now() + '}');
+    //     let busData = JSON.parse('{ "id": ' + busId + ', "status": ' + busStatus + ', "color": "' + busColor + '", "coordinate": [' + busLat + ', ' + busLong + '], "lastUpdate": ' + Date.now() + '}');
 
-        let coorString = busLong + "," + busLat;
-        for (let i = 0; i < halteBiru.length; i++) {
+    //     let coorString = busLong + "," + busLat;
+    //     for (let i = 0; i < halteBiru.length; i++) {
 
-            coorString = coorString + ";" + halteBiru[i].coordinate[0] + "," + halteBiru[i].coordinate[1];
+    //         coorString = coorString + ";" + halteBiru[i].coordinate[0] + "," + halteBiru[i].coordinate[1];
 
-        }
+    //     }
 
-        // calculateETA(coorString);
+    //     // calculateETA(coorString);
 
-        let busDataArray = [...currentBus];
+    //     let busDataArray = [...currentBus];
 
-        if (busDataArray.length > 0) {
-            let idNotExist = 1;
-            for (let i = 0; i < busDataArray.length; i++) {
+    //     if (busDataArray.length > 0) {
+    //         let idNotExist = 1;
+    //         for (let i = 0; i < busDataArray.length; i++) {
 
-                if (busDataArray[i].id == busData.id) {
+    //             if (busDataArray[i].id == busData.id) {
 
-                    busDataArray.splice(i, 1);
-                    busDataArray.push(busData);
-                    idNotExist = 0;
-                    break;
+    //                 busDataArray.splice(i, 1);
+    //                 busDataArray.push(busData);
+    //                 idNotExist = 0;
+    //                 break;
 
-                }
-            }
+    //             }
+    //         }
 
-            if (idNotExist == 1) {
+    //         if (idNotExist == 1) {
 
-                busDataArray.push(busData);
+    //             busDataArray.push(busData);
 
-            }
+    //         }
 
-        } else {
+    //     } else {
 
-            busDataArray.push(busData);
-        }
+    //         busDataArray.push(busData);
+    //     }
 
-        setCurrentBus(busDataArray);
+    //     setCurrentBus(busDataArray);
 
-        checkBusTimeout();
+    //     checkBusTimeout();
 
-    }
+    // }
 
     // check if last time bus send data not more than 1 minute
     var checkBusTimeout = () => {
@@ -401,7 +401,7 @@ const Maps = (props) => {
             {/* Same as */}
             <ToastContainer />
 
-            {client !== null ? firstTimeSub === 0 ? _onSubscribe() : null : null}
+            {/* {client !== null ? firstTimeSub === 0 ? _onSubscribe() : null : null} */}
 
         </>
     )
