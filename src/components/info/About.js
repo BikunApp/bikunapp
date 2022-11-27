@@ -1,52 +1,86 @@
-import logoUI from "../../assets/universitas-indonesia.png";
+import {
+  DEV_INFORMATION_DATA,
+  SUPERVISOR_INFORMATION_DATA,
+} from "../../constants";
+import { TeamInfoCard } from "../elements";
 
 const About = () => {
   return (
-    <>
-      <div className="flex flex-col ">
-        <p className="text-center text-black text-lg lg:text-xl font-poppins font-medium tracking-wide">
-          Direktorat Operasi dan Pemeliharaan Fasilitas Universitas Indonesia
+    <section className="text-black px-6 py-4 w-full flex flex-col gap-8 z-50">
+      <article className="flex flex-col gap-2">
+        <header className="text-poppins-h4 font-bold">
+          <h4>What is Bikun Tracker?</h4>
+        </header>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut neque
+          risus, ullamcorper sit amet nisi a, rhoncus rutrum massa. Fusce sit
+          amet felis mauris. Suspendisse potenti. Cras gravida malesuada
+          sagittis. Praesent bibendum purus sit amet libero mollis gravida.
+          Pellentesque purus nisi, lacinia sed pulvinar at, porta eu turpis.
         </p>
-
-        <br></br>
-
-        <img src={logoUI} className="w-1/4 self-center"></img>
-
-        <br></br>
-        <br></br>
-
-        <p className="text-center text-black text-xl fonr-sans font-medium">
-          Tim Pengembang
-        </p>
-
-        <br></br>
-
-        <div className="flex flex-row justify-center space-x-5">
-          <div className="">
-            <p className="text-left text-black text-md md:text-lg font-poppins font-normal">
-              Ariq Pradipa Santoso
-            </p>
-            <p className="text-left text-black text-md md:text-lg font-poppins font-normal">
-              Muhammad Naufal Faza
-            </p>
-            <p className="text-left text-black text-md md:text-lg font-poppins font-normal">
-              Yehezkiel Jonatan
-            </p>
-          </div>
-          <div className="">
-            <p className="text-right text-black text-md md:text-lg font-poppins font-normal">
-              Teknik Komputer
-            </p>
-            <p className="text-right text-black text-md md:text-lg font-poppins font-normal">
-              Teknik Komputer
-            </p>
-            <p className="text-right text-black text-md md:text-lg font-poppins font-normal">
-              Teknik Komputer
-            </p>
-          </div>
+      </article>
+      <section className="flex flex-col gap-2">
+        <header className="text-poppins-h4 font-bold">
+          <h4>Development Team</h4>
+        </header>
+        <div className="flex flex-col gap-4">
+          {DEV_INFORMATION_DATA.map((data, index) => (
+            <div key={data?.name}>
+              <TeamInfoCard
+                name={data?.name}
+                faculty={data?.faculty}
+                photo={data?.photo}
+                role={data?.role}
+                team={data?.team}
+                year={data?.year}
+                githubLink={data?.githubLink}
+                linkedinLink={data?.linkedinLink}
+                websiteLink={data?.websiteLink}
+              />
+            </div>
+          ))}
         </div>
-      </div>
-    </>
+      </section>
+      <section className="flex flex-col gap-2">
+        <header className="text-poppins-h4 font-bold">
+          <h4>Supervisor</h4>
+        </header>
+        <div className="flex flex-col gap-4">
+          {SUPERVISOR_INFORMATION_DATA.map((data, index) => (
+            <div key={data?.name}>
+              <TeamInfoCard
+                name={data?.name}
+                faculty={data?.faculty}
+                photo={data?.photo}
+                role={data?.role}
+                team={data?.team}
+                year={data?.year}
+                githubLink={data?.githubLink}
+                linkedinLink={data?.linkedinLink}
+                websiteLink={data?.websiteLink}
+              />
+            </div>
+          ))}
+        </div>
+      </section>
+      <section>
+        <header className="text-poppins-h4 font-bold">
+          <h4>Supported By</h4>
+          <div className="flex items-center justify-center">
+            <img
+              src={`${process.env.PUBLIC_URL}/distp.png`}
+              alt="distp"
+              width={160}
+            />
+            <img
+              src={`${process.env.PUBLIC_URL}/dopf.png`}
+              alt="dopf"
+              width={160}
+            />
+          </div>
+        </header>
+      </section>
+    </section>
   );
 };
 
