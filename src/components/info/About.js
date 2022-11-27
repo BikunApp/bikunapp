@@ -47,7 +47,7 @@ const About = () => {
         </header>
         <div className="flex flex-col gap-4">
           {SUPERVISOR_INFORMATION_DATA.map((data, index) => (
-            <div key={data?.name}>
+            <div key={data?.name} className="p-1">
               <TeamInfoCard
                 name={data?.name}
                 faculty={data?.faculty}

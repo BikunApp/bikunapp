@@ -318,31 +318,29 @@ const Maps = (props) => {
 
         {halte === "merah"
           ? halteMerah.map((lokasi) => (
-              <>
-                <Marker
-                  icon={busStopRed}
-                  position={[lokasi.coordinate[1], lokasi.coordinate[0]]}
-                >
-                  <Popup>
-                    Halte <br></br>
-                    {lokasi.namaHalte}
-                  </Popup>
-                </Marker>
-              </>
+              <Marker
+                icon={busStopRed}
+                position={[lokasi.coordinate[1], lokasi.coordinate[0]]}
+                key={lokasi.namaHalte}
+              >
+                <Popup>
+                  Halte <br></br>
+                  {lokasi.namaHalte}
+                </Popup>
+              </Marker>
             ))
           : halte === "biru"
           ? halteBiru.map((lokasi) => (
-              <>
-                <Marker
-                  icon={busStopBlue}
-                  position={[lokasi.coordinate[1], lokasi.coordinate[0]]}
-                >
-                  <Popup>
-                    Halte <br></br>
-                    {lokasi.namaHalte}
-                  </Popup>
-                </Marker>
-              </>
+              <Marker
+                icon={busStopBlue}
+                position={[lokasi.coordinate[1], lokasi.coordinate[0]]}
+                key={lokasi.namaHalte}
+              >
+                <Popup>
+                  Halte <br></br>
+                  {lokasi.namaHalte}
+                </Popup>
+              </Marker>
             ))
           : null}
 
@@ -352,6 +350,7 @@ const Maps = (props) => {
               <Marker
                 icon={busses.busColor === "merah" ? redBus : blueBus}
                 position={busses.coordinate}
+                key={busses.coordinate}
               >
                 <Popup>
                   {busses.busColor === "merah"

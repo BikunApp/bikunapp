@@ -51,26 +51,26 @@ function ResponsiveAppBar(props) {
             <div className="">
               <div className="flex flex-row">
                 <div className="lg:hidden">
-                  <IconButton aria-label="Informasi Rute">
-                    <RouteIcon
-                      fontSize="large"
-                      style={{ color: "#5038bc" }}
-                      onClick={handleInformaiRute}
-                    />
+                  <IconButton
+                    aria-label="Informasi Rute"
+                    onClick={handleInformaiRute}
+                  >
+                    <RouteIcon fontSize="large" style={{ color: "#5038bc" }} />
                   </IconButton>
                 </div>
-                <IconButton aria-label="Tentang">
+                <IconButton aria-label="Tentang" onClick={handleAbout}>
                   <InfoOutlinedIcon
                     fontSize="large"
                     style={{ color: "#5038bc" }}
-                    onClick={handleAbout}
                   />
                 </IconButton>
-                <IconButton aria-label="Reset Tampilan">
+                <IconButton
+                  aria-label="Reset Tampilan"
+                  onClick={handleResetView}
+                >
                   <RestartAltIcon
                     fontSize="large"
                     style={{ color: "#5038bc" }}
-                    onClick={handleResetView}
                   />
                 </IconButton>
               </div>

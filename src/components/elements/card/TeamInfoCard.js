@@ -15,9 +15,9 @@ export const TeamInfoCard = ({
     <section className="shadow-cardTeam flex justify-between gap-6 rounded-lg p-4 overflow-auto">
       <section className="flex gap-3">
         <div className="flex items-center justify-center h-full">
-          <div class="relative md:w-24 md:h-24 w-12 h-12">
+          <div className="relative md:w-24 md:h-24 w-12 h-12">
             <img
-              class="rounded-full border border-gray-100 shadow-sm"
+              className="rounded-full border border-gray-100 shadow-sm"
               src={
                 photo
                   ? process.env.PUBLIC_URL + photo
