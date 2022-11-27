@@ -24,6 +24,10 @@
   color: white;
 }
 
+.leaflet-container {
+  max-width: 640px;
+}
+
 .App-link {
   color: #61dafb;
 }

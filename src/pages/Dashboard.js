@@ -12,21 +12,21 @@ let mainRef = createRef();
 const Dashboard = () => {
   return (
     <>
-      <div className="flex flex-rows min-h-screen w-screen font-poppins">
-        <div className="lg:flex lg:w-1/3 hidden"></div>
-        <div className="flex lg:w-1/3 w-screen justify-center">
+      <div className="flex justify-center min-h-screen">
+        <div className="flex flex-col min-h-screen w-full max-w-screen-sm font-poppins">
+          <AppBar props={mainRef} />
           <Maps props={mainRef} />
 
-          <div className="absolute z-[5001] lg:w-1/3 w-full">
-            <AppBar props={mainRef} />
-          </div>
+          {/* <div className="flex lg:w-1/3 w-screen justify-center">
+          <div className="absolute z-[5001] lg:w-1/3 w-full"></div>
 
-          {/* <div className="absolute lg:hidden bottom-0 ">
+          <div className="absolute lg:hidden bottom-0 ">
             <BottomDrawer />
-          </div> */}
+          </div>
         </div>
         <div className="lg:flex lg:w-1/3 h-screen w-screen hidden">
           <RouteInfo />
+        </div> */}
         </div>
       </div>
     </>

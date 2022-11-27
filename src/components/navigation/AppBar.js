@@ -42,68 +42,68 @@ function ResponsiveAppBar(props) {
 
   return (
     <>
-      <div className="w-full">
-        <AppBar position="fixed" style={{ backgroundColor: "white" }}>
-          <Container maxHeight="sm">
-            <Toolbar disableGutters>
-              <div className="flex flex-row w-full items-center">
-                <div className="flex justify-center items-center w-2/4 p-2">
-                  <img src={AppLogo} alt="App Logo" width={200} />
+      <nav className="z-[2000] bg-white w-full max-w-screen-sm max-h-max flex flex-col fixed shadow-2xl">
+        <div className="flex justify-between gap-4">
+          <div className="flex flex-row w-full justify-between items-center px-3">
+            <div className="flex justify-center items-center ">
+              <img src={AppLogo} alt="App Logo" width={160} />
+            </div>
+            <div className="">
+              <div className="flex flex-row">
+                <div className="lg:hidden">
+                  <IconButton aria-label="Informasi Rute">
+                    <RouteIcon
+                      fontSize="large"
+                      style={{ color: "#5038bc" }}
+                      onClick={handleInformaiRute}
+                    />
+                  </IconButton>
                 </div>
-                <div className="absolute right-0 space-x-2">
-                  <div className="flex flex-row">
-                    <div className="lg:hidden">
-                      <IconButton aria-label="Informasi Rute">
-                        <RouteIcon
-                          fontSize="large"
-                          style={{ color: "#5038bc" }}
-                          onClick={handleInformaiRute}
-                        />
-                      </IconButton>
-                    </div>
-                    <IconButton aria-label="Tentang">
-                      <InfoOutlinedIcon
-                        fontSize="large"
-                        style={{ color: "#5038bc" }}
-                        onClick={handleAbout}
-                      />
-                    </IconButton>
-                    <IconButton aria-label="Reset Tampilan">
-                      <RestartAltIcon
-                        fontSize="large"
-                        style={{ color: "#5038bc" }}
-                        onClick={handleResetView}
-                      />
-                    </IconButton>
-                  </div>
-                </div>
+                <IconButton aria-label="Tentang">
+                  <InfoOutlinedIcon
+                    fontSize="large"
+                    style={{ color: "#5038bc" }}
+                    onClick={handleAbout}
+                  />
+                </IconButton>
+                <IconButton aria-label="Reset Tampilan">
+                  <RestartAltIcon
+                    fontSize="large"
+                    style={{ color: "#5038bc" }}
+                    onClick={handleResetView}
+                  />
+                </IconButton>
               </div>
-            </Toolbar>
-          </Container>
-        </AppBar>
-
-        <Backdrop
-          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1000 }}
-          open={ruteOpen}
-          onClick={handleInformasiRuteClose}
-        >
-          <div className="flex h-screen w-10/12 sm:w-6/12 md:w-2/5 items-center justify-center">
-            <div className="py-4 w-full bg-white rounded-xl shadow-xl drop-shadow-sm">
-              <RouteInfo />
             </div>
           </div>
-        </Backdrop>
-
+        </div>
         <div
           className={`${
-            aboutOpen ? "flex" : "hidden"
-          } lg:h-2/3 md:mt-16 mt-10 bg-white min-w-full`}
+            aboutOpen
+              ? "flex z-[10000] max-w-screen-sm bg-white overflow-auto"
+              : "hidden"
+          }`}
         >
-          <div className="bg-white py-5 w-full overflow-auto">
+          <div
+            className="py-5 w-full overflow-auto"
+            style={{ maxHeight: "2000px" }}
+          >
             <About />
           </div>
         </div>
-      </div>
+      </nav>
+
+      <Backdrop
+        sx={{ color: "#fff", zIndex: 20001 }}
+        open={ruteOpen}
+        onClick={handleInformasiRuteClose}
+      >
+        <div className="flex h-screen w-10/12 sm:w-6/12 md:w-2/5 items-center justify-center">
+          <div className="py-4 w-full bg-white rounded-xl shadow-xl drop-shadow-sm">
+            <RouteInfo />
+          </div>
+        </div>
+      </Backdrop>
     </>
   );
 }

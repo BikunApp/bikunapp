@@ -6,7 +6,10 @@ import { TeamInfoCard } from "../elements";
 
 const About = () => {
   return (
-    <section className="text-black px-6 py-4 w-full flex flex-col gap-8 z-50">
+    <section
+      className="text-black px-6 py-4 w-full flex flex-col gap-8 z-50 bg-white"
+      style={{ height: "3000px" }}
+    >
       <article className="flex flex-col gap-2">
         <header className="text-poppins-h4 font-bold">
           <h4>What is Bikun Tracker?</h4>
@@ -25,7 +28,7 @@ const About = () => {
         </header>
         <div className="flex flex-col gap-4">
           {DEV_INFORMATION_DATA.map((data, index) => (
-            <div key={data?.name}>
+            <div key={data?.name} className="p-1">
               <TeamInfoCard
                 name={data?.name}
                 faculty={data?.faculty}
