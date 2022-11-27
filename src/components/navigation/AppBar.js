@@ -42,7 +42,7 @@ function ResponsiveAppBar(props) {
 
   return (
     <>
-      <nav className="z-[2000] bg-white w-full max-w-screen-sm max-h-max flex flex-col fixed shadow-2xl">
+      <nav className="z-[2000] bg-white w-full max-w-screen-sm max-h-screen flex flex-col fixed shadow-2xl">
         <div className="flex justify-between gap-4">
           <div className="flex flex-row w-full justify-between items-center px-3">
             <div className="flex justify-center items-center ">
@@ -84,10 +84,7 @@ function ResponsiveAppBar(props) {
               : "hidden"
           }`}
         >
-          <div
-            className="py-5 w-full overflow-auto"
-            style={{ maxHeight: "2000px" }}
-          >
+          <div className="py-5 w-full overflow-auto">
             <About />
           </div>
         </div>

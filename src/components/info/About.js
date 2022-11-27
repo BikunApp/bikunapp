@@ -6,10 +6,7 @@ import { TeamInfoCard } from "../elements";
 
 const About = () => {
   return (
-    <section
-      className="text-black px-6 py-4 w-full flex flex-col gap-8 z-50 bg-white"
-      style={{ height: "3000px" }}
-    >
+    <section className="text-black px-6 py-4 w-full flex flex-col gap-8 z-50 bg-white">
       <article className="flex flex-col gap-2">
         <header className="text-poppins-h4 font-bold">
           <h4>What is Bikun Tracker?</h4>
