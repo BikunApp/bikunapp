@@ -43,6 +43,7 @@ const Maps = (props) => {
   const _options = {};
 
   useEffect(() => {
+
     _init();
 
     //Change displayed route
@@ -86,11 +87,24 @@ const Maps = (props) => {
   const _onConnectionLost = (responseObject) => {
     if (responseObject.errorCode !== 0) {
       console.log("onConnectionLost: " + responseObject.errorMessage);
+
+      toast.error('Connection lost, please check your internet connection.', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     }
 
-    console.log("connecting again");
-    firstTimeSub = 0;
-    _init();
+    console.log("reconnecting...");
+
+    // firstTimeSub = 0;
+    // _init();
+
   };
 
   // called when messages arrived
@@ -111,6 +125,7 @@ const Maps = (props) => {
     client.connect({
       userName: process.env.REACT_APP_MQTT_USERNAME,
       useSSL: false,
+      reconnect: true,
       onSuccess: () => {
         for (var i = 0; i < _topic.length; i++) {
           client.subscribe(_topic[i], _options);
