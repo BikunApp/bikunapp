@@ -152,16 +152,11 @@ const Maps = (props) => {
     let coorString = busLong + "," + busLat;
     for (let i = 0; i < halteBiru.length; i++) {
 
-      coorString =
-        coorString +
-        ";" +
-        halteBiru[i].coordinate[0] +
-        "," +
-        halteBiru[i].coordinate[1];
+      coorString = coorString + ";" + halteBiru[i].coordinate[0] + "," + halteBiru[i].coordinate[1];
 
     }
 
-    // calculateETA(coorString);
+    calculateETA(coorString);
 
     let busDataArray = [...currentBus];
 
@@ -213,9 +208,11 @@ const Maps = (props) => {
 
   var calculateETA = (coorString) => {
 
+    const URI = process.env.REACT_APP_OSRM_ADDRESSES + "/table/v1/car/" + coorString + ".json";
+
     axios({
       method: "get",
-      url: process.env.REACT_APP_OSRM_ADDRESS + "/table/v1/car/" + coorString + ".json",
+      url: URI,
       responseType: "json",
     }).then(function (response) {
       console.log(response.data);
@@ -230,7 +227,7 @@ const Maps = (props) => {
 
       console.log("halte" + theHalte + " dalam waktu " + nearest + " detik");
     });
-    
+
   };
 
   var handleChangeRoute = (e) => {
@@ -319,7 +316,8 @@ const Maps = (props) => {
       >
         <TileLayer
           attribution='&copy; <a href="https://www.google.com/help/legalnotices_maps/">Google</a> Maps'
-          url="https://mt0.google.com/vt?lyrs=m&x={x}&y={y}&z={z}"
+          url="https://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}"
+          subdomains={["mt0", "mt1", "mt2", "mt3"]}
         // className='map-tiles'
         />
 
