@@ -1,410 +1,386 @@
-import { useEffect, useState, useRef } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import { useEffect, useState, useRef } from "react";
+import { ToastContainer, toast } from "react-toastify";
 
-import './Maps.css';
-import 'react-toastify/dist/ReactToastify.css';
+import "./Maps.css";
+import "react-toastify/dist/ReactToastify.css";
 
 //Leaflet maps
-import {
-    MapContainer,
-    TileLayer,
-    Marker,
-    Popup,
-    GeoJSON,
-} from 'react-leaflet'
-import L from 'leaflet';
+import { MapContainer, TileLayer, Marker, Popup, GeoJSON } from "react-leaflet";
+import L from "leaflet";
 
 //GeoJSON rute bikun
-import jalurMerah from '../../data/JalurBikunMerah.json';
-import jalurBiru from '../../data/JalurBikunBiru.json';
+import jalurMerah from "../../data/JalurBikunMerah.json";
+import jalurBiru from "../../data/JalurBikunBiru.json";
 
 //Lokasi halte bikun
-import halteMerah from '../../data/halteMerah.json';
-import halteBiru from '../../data/halteBiru.json';
+import halteMerah from "../../data/halteMerah.json";
+import halteBiru from "../../data/halteBiru.json";
 
-import redBusIcon from '../../assets/icons/bus-icon-red.png';
-import blueBusIcon from '../../assets/icons/bus-icon-blue.png';
-import redStopIcon from '../../assets/icons/bus-stop-red.png';
-import blueStopIcon from '../../assets/icons/bus-stop-blue.png';
+import redBusIcon from "../../assets/icons/bus-icon-red.png";
+import blueBusIcon from "../../assets/icons/bus-icon-blue.png";
+import redStopIcon from "../../assets/icons/bus-stop-red.png";
+import blueStopIcon from "../../assets/icons/bus-stop-blue.png";
 
-import * as mqtt from 'react-paho-mqtt';
-import axios from 'axios';
+import * as mqtt from "react-paho-mqtt";
+import axios from "axios";
 
 let firstTimeSub = 0;
 
 const Maps = (props) => {
+  let mainRef = props.props;
 
-    let mainRef = props.props;
+  const mapCenter = [-6.3594334, 106.8275797];
+  const mapZoom = 15;
 
-    const mapCenter = [-6.3594334, 106.8275797];
-    const mapZoom = 15;
+  const routeRef = useRef();
+  const [route, setRoute] = useState(jalurMerah);
+  const [halte, setHalte] = useState("merah");
 
-    const routeRef = useRef();
-    const [route, setRoute] = useState(jalurMerah);
-    const [halte, setHalte] = useState("merah");
+  const [currentBus, setCurrentBus] = useState([]);
 
-    const [currentBus, setCurrentBus] = useState([]);
+  //bus location
+  // const [theSocketMessage, setTheSocketMessage] = useState(null);
 
-    //bus location
-    // const [theSocketMessage, setTheSocketMessage] = useState(null);
+  const [client, setClient] = useState(null);
+  const _topic = ["bikun"];
+  const _options = {};
 
-    const [client, setClient] = useState(null);
-    const _topic = ["bikun"];
-    const _options = {};
+  useEffect(() => {
+    _init();
 
-    useEffect(() => {
+    //Change displayed route
+    if (routeRef.current) {
+      routeRef.current.clearLayers();
+      if (route != null) {
+        routeRef.current.addData(route);
+      }
+    }
 
-        _init();
-
-        //Change displayed route
-        if (routeRef.current) {
-
-            routeRef.current.clearLayers();
-            if (route != null) {
-
-                routeRef.current.addData(route);
-
-            }
+    if (halte !== null) {
+      if (route !== null) {
+        if (route == jalurMerah) {
+          setHalte("merah");
+        } else {
+          setHalte("biru");
         }
-
-        if (halte !== null) {
-
-            if (route !== null) {
-
-                if (route == jalurMerah) {
-
-                    setHalte("merah");
-
-                } else {
-
-                    setHalte("biru");
-
-                }
-            }
-        }
+      }
+    }
 
         //checkBusTimeout();
 
     }, [route, routeRef, halte, currentBus]);
 
+  const _init = () => {
+    const c = mqtt.connect(
+      process.env.REACT_APP_MQTT_ADDRESS,
+      Number(process.env.REACT_APP_MQTT_PORT),
+      Math.random().toString(16).substr(2, 14),
+      _onConnectionLost,
+      _onMessageArrived
+    ); // mqtt.connect(host, port, clientId, _onConnectionLost, _onMessageArrived)
+    setClient(c);
+  };
 
-    const _init = () => {
-
-        const c = mqtt.connect(process.env.REACT_APP_MQTT_ADDRESS, Number(process.env.REACT_APP_MQTT_PORT), Math.random().toString(16).substr(2, 14), _onConnectionLost, _onMessageArrived); // mqtt.connect(host, port, clientId, _onConnectionLost, _onMessageArrived)
-        setClient(c);
-
+  // called when client lost connection
+  const _onConnectionLost = (responseObject) => {
+    if (responseObject.errorCode !== 0) {
+      console.log("onConnectionLost: " + responseObject.errorMessage);
     }
 
-    // called when client lost connection
-    const _onConnectionLost = responseObject => {
-        if (responseObject.errorCode !== 0) {
+    console.log("connecting again");
+    firstTimeSub = 0;
+    _init();
+  };
 
-            console.log("onConnectionLost: " + responseObject.errorMessage);
+  // called when messages arrived
+  const _onMessageArrived = (message) => {
+    // var jsonMes = JSON.parse(message.payloadString);
+    // var arrMes = Object.keys(message.payloadString);
+    console.log(
+      "onMessageArrived(" + Date.now() + "): " + message.payloadString
+    );
 
+    parseIncomingMessage(message.payloadString);
+  };
+
+  // called when subscribing topic(s)
+  const _onSubscribe = () => {
+    client.connect({
+      userName: process.env.REACT_APP_MQTT_USERNAME,
+      useSSL: false,
+      onSuccess: () => {
+        for (var i = 0; i < _topic.length; i++) {
+          client.subscribe(_topic[i], _options);
         }
+      },
+    }); // called when the client connects
 
-        console.log("connecting again");
-        firstTimeSub = 0;
-        _init();
+    firstTimeSub++;
+  };
+
+  // Parse the incoming message from IoT
+  var parseIncomingMessage = (message) => {
+    let splitMessage = message.split(";");
+    let busId = splitMessage[0];
+    let busStatus = splitMessage[1];
+    let busColor = splitMessage[2] == "0" ? "merah" : "biru";
+    let busLat = splitMessage[3];
+    let busLong = splitMessage[4];
+
+    let busData = JSON.parse(
+      '{ "id": ' +
+        busId +
+        ', "status": ' +
+        busStatus +
+        ', "color": "' +
+        busColor +
+        '", "coordinate": [' +
+        busLat +
+        ", " +
+        busLong +
+        '], "lastUpdate": ' +
+        Date.now() +
+        "}"
+    );
+
+    let coorString = busLong + "," + busLat;
+    for (let i = 0; i < halteBiru.length; i++) {
+      coorString =
+        coorString +
+        ";" +
+        halteBiru[i].coordinate[0] +
+        "," +
+        halteBiru[i].coordinate[1];
     }
 
-    // called when messages arrived
-    const _onMessageArrived = message => {
+    // calculateETA(coorString);
 
-        // var jsonMes = JSON.parse(message.payloadString);
-        // var arrMes = Object.keys(message.payloadString);
-        console.log("onMessageArrived(" + Date.now() + "): " + message.payloadString);
+    let busDataArray = [...currentBus];
 
-        parseIncomingMessage(message.payloadString);
-
-    }
-
-    // called when subscribing topic(s)
-    const _onSubscribe = () => {
-        client.connect({
-            userName: process.env.REACT_APP_MQTT_USERNAME,
-            useSSL: false,
-            onSuccess: () => {
-                for (var i = 0; i < _topic.length; i++) {
-                    client.subscribe(_topic[i], _options);
-                }
-            }
-        }); // called when the client connects
-
-        firstTimeSub++;
-    }
-
-    // Parse the incoming message from IoT
-    var parseIncomingMessage = (message) => {
-
-        let splitMessage = message.split(";");
-        let busId = splitMessage[0];
-        let busStatus = splitMessage[1];
-        let busColor = splitMessage[2] == '0' ? "merah" : "biru";
-        let busLat = splitMessage[3];
-        let busLong = splitMessage[4];
-
-        let busData = JSON.parse('{ "id": ' + busId + ', "status": ' + busStatus + ', "color": "' + busColor + '", "coordinate": [' + busLat + ', ' + busLong + '], "lastUpdate": ' + Date.now() + '}');
-
-        let coorString = busLong + "," + busLat;
-        for (let i = 0; i < halteBiru.length; i++) {
-
-            coorString = coorString + ";" + halteBiru[i].coordinate[0] + "," + halteBiru[i].coordinate[1];
-
+    if (busDataArray.length > 0) {
+      let idNotExist = 1;
+      for (let i = 0; i < busDataArray.length; i++) {
+        if (busDataArray[i].id == busData.id) {
+          busDataArray.splice(i, 1);
+          busDataArray.push(busData);
+          idNotExist = 0;
+          break;
         }
+      }
 
-        // calculateETA(coorString);
+      if (idNotExist == 1) {
+        busDataArray.push(busData);
+      }
+    } else {
+      busDataArray.push(busData);
+    }
 
-        let busDataArray = [...currentBus];
+    setCurrentBus(busDataArray);
 
-        if (busDataArray.length > 0) {
-            let idNotExist = 1;
-            for (let i = 0; i < busDataArray.length; i++) {
+    checkBusTimeout();
+  };
 
-                if (busDataArray[i].id == busData.id) {
+  // check if last time bus send data not more than 1 minute
+  var checkBusTimeout = () => {
+    let busDataArray = [...currentBus];
 
-                    busDataArray.splice(i, 1);
-                    busDataArray.push(busData);
-                    idNotExist = 0;
-                    break;
+    // console.log("Arr: ")
+    // console.log(busDataArray.length > 0 ? new Date(busDataArray[0].lastUpdate).getTime() : null);
 
-                }
-            }
-
-            if (idNotExist == 1) {
-
-                busDataArray.push(busData);
-
-            }
-
-        } else {
-
-            busDataArray.push(busData);
+    if (busDataArray.length > 0) {
+      for (let i = 0; i <= busDataArray.length; i++) {
+        if (
+          Date.now() - new Date(busDataArray[0].lastUpdate).getTime() >
+          60000
+        ) {
+          busDataArray.splice(i, 1);
         }
+      }
 
-        setCurrentBus(busDataArray);
-
-        checkBusTimeout();
-
+      setCurrentBus(busDataArray);
     }
+  };
 
-    // check if last time bus send data not more than 1 minute
-    var checkBusTimeout = () => {
-
-        let busDataArray = [...currentBus];
-
-        // console.log("Arr: ")
-        // console.log(busDataArray.length > 0 ? new Date(busDataArray[0].lastUpdate).getTime() : null);
-
-        if (busDataArray.length > 0) {
-            for (let i = 0; i <= busDataArray.length; i++) {
-
-
-                if ((Date.now() - new Date(busDataArray[0].lastUpdate).getTime()) > 60000) {
-
-                    busDataArray.splice(i, 1);
-
-                }
-
-            }
-
-            setCurrentBus(busDataArray);
-
+  var calculateETA = (coorString) => {
+    axios({
+      method: "get",
+      url: process.env.REACT_APP_OSRM_ADDRESS + coorString + ".json",
+      responseType: "json",
+    }).then(function (response) {
+      console.log(response.data);
+      let nearest = response.data.durations[0][1];
+      let theHalte;
+      for (let i = 1; i < response.data.durations[0].length; i++) {
+        if (nearest > response.data.durations[0][i]) {
+          theHalte = halteBiru[i - 1].namaHalte;
+          nearest = response.data.durations[0][i];
         }
-    }
+      }
 
-    var calculateETA = (coorString) => {
-        axios({
-
-            method: 'get',
-            url: process.env.REACT_APP_OSRM_ADDRESS + coorString + '.json',
-            responseType: 'json'
-
-        }).then(function (response) {
-
-            console.log(response.data);
-            let nearest = response.data.durations[0][1];
-            let theHalte;
-            for (let i = 1; i < response.data.durations[0].length; i++) {
-
-                if (nearest > response.data.durations[0][i]) {
-
-                    theHalte = halteBiru[i - 1].namaHalte;
-                    nearest = response.data.durations[0][i];
-
-                }
-            }
-
-            console.log("halte" + theHalte + " dalam waktu " + nearest + " detik");
-
-        })
-
-    }
-
-    var handleChangeRoute = (e) => {
-
-        if (route === jalurMerah) {
-
-            setRoute(jalurBiru);
-            if (halte != null) {
-
-                setHalte("biru");
-
-            }
-
-        } else {
-
-            setRoute(jalurMerah);
-            if (halte != null) {
-
-                setHalte("merah");
-
-            }
-        }
-    }
-
-    var handleRoute = (e) => {
-
-        if (route === null) {
-
-            setRoute(jalurMerah);
-
-        } else {
-
-            setRoute(null);
-
-        }
-    }
-
-    var handleHalte = (e) => {
-
-        if (halte === null) {
-
-            if (route === jalurMerah) {
-
-                setHalte("merah");
-
-            } else {
-
-                setHalte("biru");
-
-            }
-        } else {
-
-            setHalte(null);
-
-        }
-    }
-
-    //Leaflet Icons
-    const redBus = L.icon({
-        iconUrl: redBusIcon,
-        iconSize: [32, 32],
-        iconAnchor: [15, 20],
-        popupAnchor: [4, -24],
-        shadowUrl: null,
-        shadowSize: null,
-        shadowAnchor: null
+      console.log("halte" + theHalte + " dalam waktu " + nearest + " detik");
     });
+  };
 
-    const blueBus = L.icon({
-        iconUrl: blueBusIcon,
-        iconSize: [32, 32],
-        iconAnchor: [15, 20],
-        popupAnchor: [4, -24],
-        shadowUrl: null,
-        shadowSize: null,
-        shadowAnchor: null
-    });
+  var handleChangeRoute = (e) => {
+    if (route === jalurMerah) {
+      setRoute(jalurBiru);
+      if (halte != null) {
+        setHalte("biru");
+      }
+    } else {
+      setRoute(jalurMerah);
+      if (halte != null) {
+        setHalte("merah");
+      }
+    }
+  };
 
-    const busStopRed = L.icon({
-        iconUrl: redStopIcon,
-        iconSize: [35, 35],
-        iconAnchor: [17, 30],
-        popupAnchor: [2, -24],
-        shadowUrl: null,
-        shadowSize: null,
-        shadowAnchor: null
-    });
+  var handleRoute = (e) => {
+    if (route === null) {
+      setRoute(jalurMerah);
+    } else {
+      setRoute(null);
+    }
+  };
 
-    const busStopBlue = L.icon({
-        iconUrl: blueStopIcon,
-        iconSize: [35, 35],
-        iconAnchor: [17, 30],
-        popupAnchor: [2, -24],
-        shadowUrl: null,
-        shadowSize: null,
-        shadowAnchor: null
-    });
+  var handleHalte = (e) => {
+    if (halte === null) {
+      if (route === jalurMerah) {
+        setHalte("merah");
+      } else {
+        setHalte("biru");
+      }
+    } else {
+      setHalte(null);
+    }
+  };
 
-    return (
-        <>
-            <MapContainer center={mapCenter} zoom={mapZoom} scrollWheelZoom={true} zoomControl={false} ref={mainRef}>
+  //Leaflet Icons
+  const redBus = L.icon({
+    iconUrl: redBusIcon,
+    iconSize: [32, 32],
+    iconAnchor: [15, 20],
+    popupAnchor: [4, -24],
+    shadowUrl: null,
+    shadowSize: null,
+    shadowAnchor: null,
+  });
 
-                <TileLayer
-                    attribution='&copy; <a href="https://www.google.com/help/legalnotices_maps/">Google</a> Maps'
-                    url="https://mt0.google.com/vt?lyrs=m&x={x}&y={y}&z={z}"
-                // className='map-tiles'
-                />
+  const blueBus = L.icon({
+    iconUrl: blueBusIcon,
+    iconSize: [32, 32],
+    iconAnchor: [15, 20],
+    popupAnchor: [4, -24],
+    shadowUrl: null,
+    shadowSize: null,
+    shadowAnchor: null,
+  });
 
-                {route === jalurMerah ?
-                    <GeoJSON data={route} ref={routeRef} style={{ color: '#c424a3' }} /> :
-                    <GeoJSON data={route} ref={routeRef} style={{ color: '#64e6fb' }} />}
+  const busStopRed = L.icon({
+    iconUrl: redStopIcon,
+    iconSize: [35, 35],
+    iconAnchor: [17, 30],
+    popupAnchor: [2, -24],
+    shadowUrl: null,
+    shadowSize: null,
+    shadowAnchor: null,
+  });
 
-                {halte === "merah" ?
-                    halteMerah.map(lokasi => (
-                        <>
-                            <Marker icon={busStopRed} position={[lokasi.coordinate[1], lokasi.coordinate[0]]}>
-                                <Popup>
-                                    Halte <br></br>
-                                    {lokasi.namaHalte}
-                                </Popup>
-                            </Marker>
-                        </>
+  const busStopBlue = L.icon({
+    iconUrl: blueStopIcon,
+    iconSize: [35, 35],
+    iconAnchor: [17, 30],
+    popupAnchor: [2, -24],
+    shadowUrl: null,
+    shadowSize: null,
+    shadowAnchor: null,
+  });
 
-                    )) : halte === "biru" ?
-                        halteBiru.map(lokasi => (
-                            <>
-                                <Marker icon={busStopBlue} position={[lokasi.coordinate[1], lokasi.coordinate[0]]}>
-                                    <Popup>
-                                        Halte <br></br>
-                                        {lokasi.namaHalte}
-                                    </Popup>
-                                </Marker>
-                            </>
+  return (
+    <>
+      <MapContainer
+        center={mapCenter}
+        zoom={mapZoom}
+        scrollWheelZoom={true}
+        zoomControl={false}
+        ref={mainRef}
+      >
+        <TileLayer
+          attribution='&copy; <a href="https://www.google.com/help/legalnotices_maps/">Google</a> Maps'
+          url="https://mt0.google.com/vt?lyrs=m&x={x}&y={y}&z={z}"
+          // className='map-tiles'
+        />
 
-                        )) : null
-                }
+        {route === jalurMerah ? (
+          <GeoJSON data={route} ref={routeRef} style={{ color: "#c424a3" }} />
+        ) : (
+          <GeoJSON data={route} ref={routeRef} style={{ color: "#64e6fb" }} />
+        )}
 
-                {currentBus === null ? null :
-                    currentBus.map(busses => (
-                        <Marker icon={busses.busColor === "merah" ? redBus : blueBus} position={busses.coordinate}>
-                            <Popup>
-                                {busses.busColor === "merah" ? "Bus jalur merah" : "Bus jalur biru"} <br></br>
-                            </Popup>
-                        </Marker>))}
+        {halte === "merah"
+          ? halteMerah.map((lokasi) => (
+              <Marker
+                icon={busStopRed}
+                position={[lokasi.coordinate[1], lokasi.coordinate[0]]}
+                key={lokasi.namaHalte}
+              >
+                <Popup>
+                  Halte <br></br>
+                  {lokasi.namaHalte}
+                </Popup>
+              </Marker>
+            ))
+          : halte === "biru"
+          ? halteBiru.map((lokasi) => (
+              <Marker
+                icon={busStopBlue}
+                position={[lokasi.coordinate[1], lokasi.coordinate[0]]}
+                key={lokasi.namaHalte}
+              >
+                <Popup>
+                  Halte <br></br>
+                  {lokasi.namaHalte}
+                </Popup>
+              </Marker>
+            ))
+          : null}
 
-            </MapContainer>
+        {currentBus === null
+          ? null
+          : currentBus.map((busses) => (
+              <Marker
+                icon={busses.busColor === "merah" ? redBus : blueBus}
+                position={busses.coordinate}
+                key={busses.coordinate}
+              >
+                <Popup>
+                  {busses.busColor === "merah"
+                    ? "Bus jalur merah"
+                    : "Bus jalur biru"}{" "}
+                  <br></br>
+                </Popup>
+              </Marker>
+            ))}
+      </MapContainer>
 
-            <ToastContainer
-                position="top-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-            />
-            {/* Same as */}
-            <ToastContainer />
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+      {/* Same as */}
+      <ToastContainer />
 
-            {client !== null ? firstTimeSub === 0 ? _onSubscribe() : null : null}
-
-        </>
-    )
-}
+      {client !== null ? (firstTimeSub === 0 ? _onSubscribe() : null) : null}
+    </>
+  );
+};
 
 export default Maps;
