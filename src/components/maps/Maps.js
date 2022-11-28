@@ -83,7 +83,7 @@ const Maps = (props) => {
             }
         }
 
-        checkBusTimeout();
+        //checkBusTimeout();
 
     }, [route, routeRef, halte, currentBus]);
 
