@@ -7,9 +7,6 @@ import { BikunCard } from "../../elements";
 
 export const Carousel = ({ data, isBikun }) => {
   console.log(data);
-  const bikunData = isBikun
-    ? data?.sort((a, b) => a?.detail?.eta - b?.detail?.eta)
-    : [];
   return (
     <Swiper
       spaceBetween={280}
@@ -26,28 +23,30 @@ export const Carousel = ({ data, isBikun }) => {
           spaceBetween: 80,
         },
         640: {
-          spaceBetween: 50,
+          slidesPerView: 2,
+          spaceBetween: 10,
         },
         768: {
           width: 768,
           slidesPerView: 2,
-          spaceBetween: 100,
+          spaceBetween: 20,
         },
         1200: {
-          width: 768,
-          slidesPerView: 3,
-          spaceBetween: 100,
+          slidesPerView: 2,
+          spaceBetween: 20,
         },
       }}
       className="p-3"
       onSlideChange={() => console.log("slide change")}
     >
       {isBikun
-        ? bikunData?.map((slide, index) => (
-            <SwiperSlide key={index}>
-              <BikunCard data={slide} />
-            </SwiperSlide>
-          ))
+        ? data
+            ?.sort((a, b) => a?.detail?.eta - b?.detail?.eta)
+            .map((slide) => (
+              <SwiperSlide key={slide?.namaBikun}>
+                <BikunCard data={slide} />
+              </SwiperSlide>
+            ))
         : data?.map((slide, index) => (
             <SwiperSlide key={index}>{slide?.name}</SwiperSlide>
           ))}

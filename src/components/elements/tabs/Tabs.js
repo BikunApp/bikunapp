@@ -55,7 +55,7 @@ export const CustomTabs = ({ data, isBikun }) => {
       {data?.map((panel, index) => (
         <TabPanel value={value} index={index}>
           {isBikun ? (
-            <Box key={index} sx={{ p: 2 }}>
+            <Box sx={{ p: 2 }}>
               <Carousel data={data[index]?.content} isBikun={true} />
             </Box>
           ) : (
