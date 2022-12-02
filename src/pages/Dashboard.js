@@ -3,11 +3,7 @@ import Maps from "../components/maps/Maps";
 import RouteInfo from "../components/info/RouteInfo";
 
 // Components
-import {
-  ResponsiveAppBar,
-  CustomBottomDrawer,
-  SwipeableEdgeDrawer,
-} from "../components/navigation";
+import { ResponsiveAppBar, CustomBottomDrawer } from "../components/navigation";
 //import TestPage from '../components/TestPage';
 
 let mainRef = createRef();
@@ -23,7 +19,7 @@ const Dashboard = () => {
           <CustomBottomDrawer />
         </div>
 
-        <div className="lg:flex w-1/3 justify-center items-center hidden">
+        <div className="lg:flex lg:w-1/3 w-0 justify-center items-center hidden">
           <RouteInfo />
         </div>
       </div>

@@ -12,8 +12,34 @@ export const Carousel = ({ data, isBikun }) => {
     : [];
   return (
     <Swiper
-      spaceBetween={50}
-      slidesPerView={1}
+      spaceBetween={280}
+      slidesPerView={2}
+      breakpoints={{
+        // when window width is >= 768px
+        360: {
+          spaceBetween: 240,
+        },
+        480: {
+          spaceBetween: 128,
+        },
+        560: {
+          spaceBetween: 80,
+        },
+        640: {
+          spaceBetween: 50,
+        },
+        768: {
+          width: 768,
+          slidesPerView: 2,
+          spaceBetween: 100,
+        },
+        1200: {
+          width: 768,
+          slidesPerView: 3,
+          spaceBetween: 100,
+        },
+      }}
+      className="p-3"
       onSlideChange={() => console.log("slide change")}
     >
       {isBikun
