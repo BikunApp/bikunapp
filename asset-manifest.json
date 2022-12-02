@@ -1,27 +1,26 @@
 {
   "files": {
-    "main.css": "/bikunapp/static/css/main.dd4098d5.css",
-    "main.js": "/bikunapp/static/js/main.3f0560e9.js",
-    "static/css/345.fd6f43ce.chunk.css": "/bikunapp/static/css/345.fd6f43ce.chunk.css",
-    "static/js/345.6f122279.chunk.js": "/bikunapp/static/js/345.6f122279.chunk.js",
+    "main.css": "/bikunapp/static/css/main.363f95a5.css",
+    "main.js": "/bikunapp/static/js/main.7248bade.js",
+    "static/css/824.e091c15d.chunk.css": "/bikunapp/static/css/824.e091c15d.chunk.css",
+    "static/js/824.1f13fd53.chunk.js": "/bikunapp/static/js/824.1f13fd53.chunk.js",
     "static/js/787.11313f1a.chunk.js": "/bikunapp/static/js/787.11313f1a.chunk.js",
-    "static/js/752.92ce2b02.chunk.js": "/bikunapp/static/js/752.92ce2b02.chunk.js",
+    "static/js/738.3adb0cba.chunk.js": "/bikunapp/static/js/738.3adb0cba.chunk.js",
     "static/media/rute-bikun-only.png": "/bikunapp/static/media/rute-bikun-only.90a3827ef956d72cf681.png",
     "static/media/bus-icon-red.png": "/bikunapp/static/media/bus-icon-red.a1e1eccd116c8e43019d.png",
     "static/media/bus-icon-blue.png": "/bikunapp/static/media/bus-icon-blue.49eb66e0cf2d2c18132a.png",
-    "static/media/universitas-indonesia.png": "/bikunapp/static/media/universitas-indonesia.14b1176f0d5648cc3fa5.png",
     "static/media/bus-stop-blue.png": "/bikunapp/static/media/bus-stop-blue.4b8c91a97c09f8bd012d.png",
     "static/media/bus-stop-red.png": "/bikunapp/static/media/bus-stop-red.f5708adec2129d64db87.png",
     "index.html": "/bikunapp/index.html",
-    "main.dd4098d5.css.map": "/bikunapp/static/css/main.dd4098d5.css.map",
-    "main.3f0560e9.js.map": "/bikunapp/static/js/main.3f0560e9.js.map",
-    "345.fd6f43ce.chunk.css.map": "/bikunapp/static/css/345.fd6f43ce.chunk.css.map",
-    "345.6f122279.chunk.js.map": "/bikunapp/static/js/345.6f122279.chunk.js.map",
+    "main.363f95a5.css.map": "/bikunapp/static/css/main.363f95a5.css.map",
+    "main.7248bade.js.map": "/bikunapp/static/js/main.7248bade.js.map",
+    "824.e091c15d.chunk.css.map": "/bikunapp/static/css/824.e091c15d.chunk.css.map",
+    "824.1f13fd53.chunk.js.map": "/bikunapp/static/js/824.1f13fd53.chunk.js.map",
     "787.11313f1a.chunk.js.map": "/bikunapp/static/js/787.11313f1a.chunk.js.map",
-    "752.92ce2b02.chunk.js.map": "/bikunapp/static/js/752.92ce2b02.chunk.js.map"
+    "738.3adb0cba.chunk.js.map": "/bikunapp/static/js/738.3adb0cba.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.dd4098d5.css",
-    "static/js/main.3f0560e9.js"
+    "static/css/main.363f95a5.css",
+    "static/js/main.7248bade.js"
   ]
 }
