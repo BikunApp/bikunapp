@@ -1,7 +1,4 @@
 import React, { useState } from "react";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import Container from "@mui/material/Container";
 import Backdrop from "@mui/material/Backdrop";
 import IconButton from "@mui/material/IconButton";
 
@@ -15,7 +12,7 @@ import RouteIcon from "@mui/icons-material/Route";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 
-function ResponsiveAppBar(props) {
+export const ResponsiveAppBar = (props) => {
   let mainRef = props.props;
 
   const mapCenter = [-6.3594334, 106.8275797];
@@ -103,6 +100,6 @@ function ResponsiveAppBar(props) {
       </Backdrop>
     </>
   );
-}
+};
 
 export default ResponsiveAppBar;
