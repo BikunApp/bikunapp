@@ -147,6 +147,12 @@ const Maps = (props) => {
     let busLat = splitMessage[3];
     let busLong = splitMessage[4];
 
+    if(busLat === "" || busLong === "") {
+
+      return;
+
+    }
+
     let busData = JSON.parse(
       '{ "id": ' +
       busId +
@@ -171,7 +177,7 @@ const Maps = (props) => {
 
     }
 
-    calculateETA(coorString);
+    //calculateETA(coorString);
 
     let busDataArray = [...currentBus];
 
