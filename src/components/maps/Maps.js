@@ -43,7 +43,6 @@ const Maps = (props) => {
   const _options = {};
 
   useEffect(() => {
-
     _init();
 
   }, []);
@@ -70,22 +69,18 @@ const Maps = (props) => {
     }
 
     //checkBusTimeout();
-
   }, [route, routeRef, halte, currentBus]);
 
   const _init = () => {
     const c = mqtt.connect(
-
-      process.env.REACT_APP_MQTT_ADDRESS,       // mqtt broker address
-      Number(process.env.REACT_APP_MQTT_PORT),  // mqtt broker port
+      process.env.REACT_APP_MQTT_ADDRESS, // mqtt broker address
+      Number(process.env.REACT_APP_MQTT_PORT), // mqtt broker port
       Math.random().toString(16).substr(2, 14), // client id
-      _onConnectionLost,                        // connection lost callback
-      _onMessageArrived                         // message arrived callback
-
+      _onConnectionLost, // connection lost callback
+      _onMessageArrived // message arrived callback
     ); // mqtt.connect(host, port, clientId, _onConnectionLost, _onMessageArrived)
 
     setClient(c);
-
   };
 
   // called when client lost connection
@@ -93,23 +88,22 @@ const Maps = (props) => {
     if (responseObject.errorCode !== 0) {
       console.log("onConnectionLost: " + responseObject.errorMessage);
 
-      toast.error('Connection lost, please check your internet connection.', {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
+      // toast.error('Connection lost, please check your internet connection.', {
+      //   position: "top-right",
+      //   autoClose: 5000,
+      //   hideProgressBar: true,
+      //   closeOnClick: true,
+      //   pauseOnHover: true,
+      //   draggable: true,
+      //   progress: undefined,
+      //   theme: "colored",
+      // });
     }
 
     console.log("reconnecting...");
 
     // firstTimeSub = 0;
     // _init();
-
   };
 
   // called when messages arrived
@@ -121,12 +115,10 @@ const Maps = (props) => {
     );
 
     parseIncomingMessage(message.payloadString);
-
   };
 
   // called when subscribing topic(s)
   const _onSubscribe = () => {
-
     client.connect({
       userName: process.env.REACT_APP_MQTT_USERNAME,
       useSSL: Boolean(Number(process.env.REACT_APP_MQTT_SSL)),
@@ -139,12 +131,10 @@ const Maps = (props) => {
     }); // called when the client connects
 
     firstTimeSub++;
-
   };
 
   // Parse the incoming message from IoT
   var parseIncomingMessage = (message) => {
-
     let splitMessage = message.split(";");
     let busId = splitMessage[0];
     let busStatus = splitMessage[1];
@@ -160,26 +150,28 @@ const Maps = (props) => {
 
     let busData = JSON.parse(
       '{ "id": ' +
-      busId +
-      ', "status": ' +
-      busStatus +
-      ', "color": "' +
-      busColor +
-      '", "coordinate": [' +
-      busLat +
-      ", " +
-      busLong +
-      '], "lastUpdate": ' +
-      Date.now() +
-      "}"
-
+        busId +
+        ', "status": ' +
+        busStatus +
+        ', "color": "' +
+        busColor +
+        '", "coordinate": [' +
+        busLat +
+        ", " +
+        busLong +
+        '], "lastUpdate": ' +
+        Date.now() +
+        "}"
     );
 
     let coorString = busLong + "," + busLat;
     for (let i = 0; i < halteBiru.length; i++) {
-
-      coorString = coorString + ";" + halteBiru[i].coordinate[0] + "," + halteBiru[i].coordinate[1];
-
+      coorString =
+        coorString +
+        ";" +
+        halteBiru[i].coordinate[0] +
+        "," +
+        halteBiru[i].coordinate[1];
     }
 
     //calculateETA(coorString);
@@ -207,7 +199,6 @@ const Maps = (props) => {
     setCurrentBus(busDataArray);
 
     checkBusTimeout();
-
   };
 
   // check if last time bus send data not more than 1 minute
@@ -220,21 +211,23 @@ const Maps = (props) => {
     if (busDataArray.length > 0) {
       for (let i = 0; i <= busDataArray.length; i++) {
         if (
-          Date.now() - new Date(busDataArray[0].lastUpdate).getTime() > 60000) {
-
+          Date.now() - new Date(busDataArray[0].lastUpdate).getTime() >
+          60000
+        ) {
           busDataArray.splice(i, 1);
-
         }
       }
 
       setCurrentBus(busDataArray);
-
     }
   };
 
   var calculateETA = (coorString) => {
-
-    const URI = process.env.REACT_APP_OSRM_ADDRESSES + "/table/v1/car/" + coorString + ".json";
+    const URI =
+      process.env.REACT_APP_OSRM_ADDRESSES +
+      "/table/v1/car/" +
+      coorString +
+      ".json";
 
     axios({
       method: "get",
@@ -253,7 +246,6 @@ const Maps = (props) => {
 
       console.log("halte" + theHalte + " dalam waktu " + nearest + " detik");
     });
-
   };
 
   var handleChangeRoute = (e) => {
@@ -344,7 +336,7 @@ const Maps = (props) => {
           attribution='&copy; <a href="https://www.google.com/help/legalnotices_maps/">Google</a> Maps'
           url="https://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}"
           subdomains={["mt0", "mt1", "mt2", "mt3"]}
-        // className='map-tiles'
+          // className='map-tiles'
         />
 
         {route === jalurMerah ? (
@@ -355,19 +347,19 @@ const Maps = (props) => {
 
         {halte === "merah"
           ? halteMerah.map((lokasi) => (
-            <Marker
-              icon={busStopRed}
-              position={[lokasi.coordinate[1], lokasi.coordinate[0]]}
-              key={lokasi.namaHalte}
-            >
-              <Popup>
-                Halte <br></br>
-                {lokasi.namaHalte}
-              </Popup>
-            </Marker>
-          ))
+              <Marker
+                icon={busStopRed}
+                position={[lokasi.coordinate[1], lokasi.coordinate[0]]}
+                key={lokasi.namaHalte}
+              >
+                <Popup>
+                  Halte <br></br>
+                  {lokasi.namaHalte}
+                </Popup>
+              </Marker>
+            ))
           : halte === "biru"
-            ? halteBiru.map((lokasi) => (
+          ? halteBiru.map((lokasi) => (
               <Marker
                 icon={busStopBlue}
                 position={[lokasi.coordinate[1], lokasi.coordinate[0]]}
@@ -379,24 +371,24 @@ const Maps = (props) => {
                 </Popup>
               </Marker>
             ))
-            : null}
+          : null}
 
         {currentBus === null
           ? null
           : currentBus.map((busses) => (
-            <Marker
-              icon={busses.busColor === "merah" ? redBus : blueBus}
-              position={busses.coordinate}
-              key={busses.coordinate}
-            >
-              <Popup>
-                {busses.busColor === "merah"
-                  ? "Bus jalur merah"
-                  : "Bus jalur biru"}{" "}
-                <br></br>
-              </Popup>
-            </Marker>
-          ))}
+              <Marker
+                icon={busses.busColor === "merah" ? redBus : blueBus}
+                position={busses.coordinate}
+                key={busses.coordinate}
+              >
+                <Popup>
+                  {busses.busColor === "merah"
+                    ? "Bus jalur merah"
+                    : "Bus jalur biru"}{" "}
+                  <br></br>
+                </Popup>
+              </Marker>
+            ))}
       </MapContainer>
 
       <ToastContainer

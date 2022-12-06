@@ -1,0 +1,91 @@
+[
+  {
+    "value": "Asrama UI",
+    "label": "Asrama UI"
+  },
+  {
+    "value": "Menwa",
+    "label": "Menwa"
+  },
+  {
+    "value": "Stasiun UI",
+    "label": "Stasiun UI"
+  },
+  {
+    "value": "FPsi",
+    "label": "Fakultas Psikologi"
+  },
+  {
+    "value": "FISIP",
+    "label": "FISIP"
+  },
+  {
+    "value": "FIB",
+    "label": "Fakultas Ilmu dan Budaya"
+  },
+  {
+    "value": "FEB",
+    "label": "Fakultas Ekonomi dan Bisnis"
+  },
+  {
+    "value": "FT",
+    "label": "Fakultas Teknik"
+  },
+  {
+    "value": "Vokasi",
+    "label": "Vokasi"
+  },
+  {
+    "value": "Pusgiwa",
+    "label": "Pusgiwa"
+  },
+  {
+    "value": "FMIPA",
+    "label": "FMIPA"
+  },
+  {
+    "value": "FIK",
+    "label": "Fakultas Ilmu Keperawatan"
+  },
+  {
+    "value": "FKM",
+    "label": "Fakultas Kesehatan Masyarakat"
+  },
+  {
+    "value": "RIK",
+    "label": "Rumpun Ilmu Kesehatan"
+  },
+  {
+    "value": "Balairung",
+    "label": "Balairung"
+  },
+  {
+    "value": "MUI/Perpus UI",
+    "label": "MUI/Perpus UI"
+  },
+  {
+    "value": "FH",
+    "label": "Fakultas Hukum"
+  },
+  {
+    "value": "Stasiun UI (Ke Asrama)",
+    "label": "Stasiun UI (Ke Asrama)"
+  },
+  {
+    "value": "Menwa (Ke Asrama)",
+    "label": "Menwa (Ke Asrama)"
+  },
+
+  {
+    "value": "St. Pondok Cina",
+    "label": "Stasiun Pondok Cina"
+  },
+  {
+    "value": "PNJ",
+    "label": "Politeknik Negeri Jakarta"
+  },
+  {
+    "value": "FIB/FISIP",
+    "label": "FIB/FISIP"
+  }
+]
