@@ -49,7 +49,6 @@ const Maps = (Refs) => {
 
   }, []);
 
-
   useEffect(() => {
 
     //Change displayed route
@@ -71,7 +70,7 @@ const Maps = (Refs) => {
     }
 
     //checkBusTimeout();
-  }, [route, routeRef, halte, currentBus,]);
+  }, [route, routeRef, halte, currentBus]);
 
   const _init = () => {
 

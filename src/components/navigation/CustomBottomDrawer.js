@@ -3,6 +3,8 @@ import { CustomTabs } from "../elements";
 import semuaHalte from "../../data/semuaHalte.json";
 import { DataHalteDanJalur } from "../../data";
 
+import halteBiru from "../../data/halteBiru.json";
+
 export const CustomBottomDrawer = (Refs) => {
 
   let { mainRef, dataBikun, selectedHalte } = Refs.props;
@@ -15,6 +17,14 @@ export const CustomBottomDrawer = (Refs) => {
 
     selectedHalte.current = halteValue;
 
+    for (let i = 0; i < halteBiru.length; i++) {
+      if (halteBiru[i].namaHalte === halteValue) {
+
+        mainRef.current.setView([halteBiru[i].coordinate[1], halteBiru[i].coordinate[0]], 18);
+        break;
+
+      }
+    }
   }
 
   return (
@@ -26,7 +36,7 @@ export const CustomBottomDrawer = (Refs) => {
           setIsOpen(true);
           SetSelectVal(e.target.value);
           handleSelect(e.target.value);
-          
+
         }}
       >
         <option value="">Pilih Halte</option>
