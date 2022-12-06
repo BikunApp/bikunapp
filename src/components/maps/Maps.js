@@ -39,12 +39,17 @@ const Maps = (props) => {
   const [currentBus, setCurrentBus] = useState([]);
 
   const [client, setClient] = useState(null);
-  const _topic = ["bikun"];
+  const _topic = [process.env.REACT_APP_MQTT_TOPIC];
   const _options = {};
 
   useEffect(() => {
 
     _init();
+
+  }, []);
+
+
+  useEffect(() => {
 
     //Change displayed route
     if (routeRef.current) {
@@ -124,7 +129,7 @@ const Maps = (props) => {
 
     client.connect({
       userName: process.env.REACT_APP_MQTT_USERNAME,
-      useSSL: false,
+      useSSL: Boolean(Number(process.env.REACT_APP_MQTT_SSL)),
       reconnect: true,
       onSuccess: () => {
         for (var i = 0; i < _topic.length; i++) {
@@ -147,7 +152,7 @@ const Maps = (props) => {
     let busLat = splitMessage[3];
     let busLong = splitMessage[4];
 
-    if(busLat === "" || busLong === "") {
+    if (busLat === "" || busLong === "") {
 
       return;
 
