@@ -7,6 +7,8 @@ import { ResponsiveAppBar, CustomBottomDrawer } from "../components/navigation";
 //import TestPage from '../components/TestPage';
 
 let mainRef = createRef();
+let dataBikun = createRef();
+let selectedHalte = createRef();
 
 const Dashboard = () => {
   return (
@@ -14,9 +16,9 @@ const Dashboard = () => {
       <div className="flex justify-center items-center min-h-screen">
         <div className="flex w-screen lg:w-auto max-w-screen-sm font-poppins">
           <ResponsiveAppBar props={mainRef} />
-          <Maps props={mainRef} />
+          <Maps props={{ mainRef, dataBikun, selectedHalte }} />
           {/* <SwipeableEdgeDrawer /> */}
-          <CustomBottomDrawer />
+          <CustomBottomDrawer props={{ mainRef, dataBikun, selectedHalte }} />
         </div>
 
         <div className="lg:flex lg:w-1/3 w-0 justify-center items-center hidden">

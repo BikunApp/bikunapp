@@ -19,6 +19,6 @@ export const SUPERVISOR_INFORMATION_DATA = [
     githubLink: "https://github.com",
     websiteLink: "https://google.com",
     linkedinLink: "https://linkedin.com",
-    team: "hive",
+    team: "ristek",
   },
 ];

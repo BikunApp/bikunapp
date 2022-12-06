@@ -26,8 +26,9 @@ import axios from "axios";
 
 let firstTimeSub = 0;
 
-const Maps = (props) => {
-  let mainRef = props.props;
+const Maps = (Refs) => {
+
+  let { mainRef, dataBikun, selectedHalte } = Refs.props;
 
   const mapCenter = [-6.3594334, 106.8275797];
   const mapZoom = 15;
@@ -43,6 +44,7 @@ const Maps = (props) => {
   const _options = {};
 
   useEffect(() => {
+
     _init();
 
   }, []);
@@ -69,35 +71,40 @@ const Maps = (props) => {
     }
 
     //checkBusTimeout();
-  }, [route, routeRef, halte, currentBus]);
+  }, [route, routeRef, halte, currentBus,]);
 
   const _init = () => {
+
     const c = mqtt.connect(
-      process.env.REACT_APP_MQTT_ADDRESS, // mqtt broker address
-      Number(process.env.REACT_APP_MQTT_PORT), // mqtt broker port
+      process.env.REACT_APP_MQTT_ADDRESS,       // mqtt broker address
+      Number(process.env.REACT_APP_MQTT_PORT),  // mqtt broker port
       Math.random().toString(16).substr(2, 14), // client id
-      _onConnectionLost, // connection lost callback
-      _onMessageArrived // message arrived callback
+      _onConnectionLost,                        // connection lost callback
+      _onMessageArrived                         // message arrived callback
     ); // mqtt.connect(host, port, clientId, _onConnectionLost, _onMessageArrived)
 
     setClient(c);
+
   };
 
   // called when client lost connection
   const _onConnectionLost = (responseObject) => {
+
     if (responseObject.errorCode !== 0) {
       console.log("onConnectionLost: " + responseObject.errorMessage);
 
-      // toast.error('Connection lost, please check your internet connection.', {
-      //   position: "top-right",
-      //   autoClose: 5000,
-      //   hideProgressBar: true,
-      //   closeOnClick: true,
-      //   pauseOnHover: true,
-      //   draggable: true,
-      //   progress: undefined,
-      //   theme: "colored",
-      // });
+      toast.error('Connection lost, please check your internet connection.', {
+
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+
+      });
     }
 
     console.log("reconnecting...");
@@ -119,6 +126,7 @@ const Maps = (props) => {
 
   // called when subscribing topic(s)
   const _onSubscribe = () => {
+
     client.connect({
       userName: process.env.REACT_APP_MQTT_USERNAME,
       useSSL: Boolean(Number(process.env.REACT_APP_MQTT_SSL)),
@@ -131,10 +139,12 @@ const Maps = (props) => {
     }); // called when the client connects
 
     firstTimeSub++;
+
   };
 
   // Parse the incoming message from IoT
   var parseIncomingMessage = (message) => {
+
     let splitMessage = message.split(";");
     let busId = splitMessage[0];
     let busStatus = splitMessage[1];
@@ -148,22 +158,6 @@ const Maps = (props) => {
 
     }
 
-    let busData = JSON.parse(
-      '{ "id": ' +
-        busId +
-        ', "status": ' +
-        busStatus +
-        ', "color": "' +
-        busColor +
-        '", "coordinate": [' +
-        busLat +
-        ", " +
-        busLong +
-        '], "lastUpdate": ' +
-        Date.now() +
-        "}"
-    );
-
     let coorString = busLong + "," + busLat;
     for (let i = 0; i < halteBiru.length; i++) {
       coorString =
@@ -174,7 +168,70 @@ const Maps = (props) => {
         halteBiru[i].coordinate[1];
     }
 
-    //calculateETA(coorString);
+    let busData;
+
+    const dataETA = calculateETA(coorString);
+
+    console.log(dataETA)
+
+    busData = JSON.parse(
+      '{ "id": ' +
+      busId +
+      ', "status": ' +
+      busStatus +
+      ', "color": "' +
+      busColor +
+      '", "coordinate": [' +
+      busLat +
+      ", " +
+      busLong +
+      '], "lastUpdate": ' +
+      Date.now() +
+      "}"
+
+    );
+
+    // if (dataETA !== null) {
+
+    //   busData = JSON.parse(
+    //     '{ "id": ' +
+    //     busId +
+    //     ', "status": ' +
+    //     busStatus +
+    //     ', "color": "' +
+    //     busColor +
+    //     '", "coordinate": [' +
+    //     busLat +
+    //     ", " +
+    //     busLong +
+    //     '], "lastUpdate": ' +
+    //     Date.now() +
+    //     ", " +
+    //     dataETA +
+    //     "}"
+
+    //   );
+
+    // } else {
+
+    //   busData = JSON.parse(
+    //     '{ "id": ' +
+    //     busId +
+    //     ', "status": ' +
+    //     busStatus +
+    //     ', "color": "' +
+    //     busColor +
+    //     '", "coordinate": [' +
+    //     busLat +
+    //     ", " +
+    //     busLong +
+    //     '], "lastUpdate": ' +
+    //     Date.now() +
+    //     "}"
+
+    //   );
+
+    // }
 
     let busDataArray = [...currentBus];
 
@@ -223,28 +280,35 @@ const Maps = (props) => {
   };
 
   var calculateETA = (coorString) => {
-    const URI =
-      process.env.REACT_APP_OSRM_ADDRESSES +
-      "/table/v1/car/" +
-      coorString +
-      ".json";
+
+    const URI = process.env.REACT_APP_OSRM_ADDRESSES + "/table/v1/car/" + coorString + ".json";
 
     axios({
+
       method: "get",
       url: URI,
       responseType: "json",
+
     }).then(function (response) {
+
       console.log(response.data);
-      let nearest = response.data.durations[0][1];
-      let theHalte;
+      let ETAs = response.data.durations[0][1];
+      let nextHalte;
+
       for (let i = 1; i < response.data.durations[0].length; i++) {
-        if (nearest > response.data.durations[0][i]) {
-          theHalte = halteBiru[i - 1].namaHalte;
-          nearest = response.data.durations[0][i];
+
+        if (ETAs > response.data.durations[0][i]) {
+          nextHalte = halteBiru[i - 1].namaHalte;
+          ETAs = response.data.durations[0][i];
         }
+
       }
 
-      console.log("halte" + theHalte + " dalam waktu " + nearest + " detik");
+      console.log("halte" + nextHalte + " dalam waktu " + ETAs + " detik");
+
+      const dataETA = { "nextHalte": nextHalte, "timeArrive": ETAs };
+      return (dataETA);
+
     });
   };
 
@@ -336,7 +400,7 @@ const Maps = (props) => {
           attribution='&copy; <a href="https://www.google.com/help/legalnotices_maps/">Google</a> Maps'
           url="https://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}"
           subdomains={["mt0", "mt1", "mt2", "mt3"]}
-          // className='map-tiles'
+        // className='map-tiles'
         />
 
         {route === jalurMerah ? (
@@ -347,19 +411,19 @@ const Maps = (props) => {
 
         {halte === "merah"
           ? halteMerah.map((lokasi) => (
-              <Marker
-                icon={busStopRed}
-                position={[lokasi.coordinate[1], lokasi.coordinate[0]]}
-                key={lokasi.namaHalte}
-              >
-                <Popup>
-                  Halte <br></br>
-                  {lokasi.namaHalte}
-                </Popup>
-              </Marker>
-            ))
+            <Marker
+              icon={busStopRed}
+              position={[lokasi.coordinate[1], lokasi.coordinate[0]]}
+              key={lokasi.namaHalte}
+            >
+              <Popup>
+                Halte <br></br>
+                {lokasi.namaHalte}
+              </Popup>
+            </Marker>
+          ))
           : halte === "biru"
-          ? halteBiru.map((lokasi) => (
+            ? halteBiru.map((lokasi) => (
               <Marker
                 icon={busStopBlue}
                 position={[lokasi.coordinate[1], lokasi.coordinate[0]]}
@@ -371,24 +435,24 @@ const Maps = (props) => {
                 </Popup>
               </Marker>
             ))
-          : null}
+            : null}
 
         {currentBus === null
           ? null
           : currentBus.map((busses) => (
-              <Marker
-                icon={busses.busColor === "merah" ? redBus : blueBus}
-                position={busses.coordinate}
-                key={busses.coordinate}
-              >
-                <Popup>
-                  {busses.busColor === "merah"
-                    ? "Bus jalur merah"
-                    : "Bus jalur biru"}{" "}
-                  <br></br>
-                </Popup>
-              </Marker>
-            ))}
+            <Marker
+              icon={busses.busColor === "merah" ? redBus : blueBus}
+              position={busses.coordinate}
+              key={busses.coordinate}
+            >
+              <Popup>
+                {busses.busColor === "merah"
+                  ? "Bus jalur merah"
+                  : "Bus jalur biru"}{" "}
+                <br></br>
+              </Popup>
+            </Marker>
+          ))}
       </MapContainer>
 
       <ToastContainer
