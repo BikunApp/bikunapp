@@ -4,6 +4,7 @@ import semuaHalte from "../../data/semuaHalte.json";
 import { DataHalteDanJalur } from "../../data";
 
 import halteBiru from "../../data/halteBiru.json";
+import halteMerah from "../../data/halteMerah.json";
 
 export const CustomBottomDrawer = (Refs) => {
 
@@ -17,12 +18,27 @@ export const CustomBottomDrawer = (Refs) => {
 
     selectedHalte.current = halteValue;
 
+    let notFound = 1;
+
     for (let i = 0; i < halteBiru.length; i++) {
       if (halteBiru[i].namaHalte === halteValue) {
 
-        mainRef.current.setView([halteBiru[i].coordinate[1], halteBiru[i].coordinate[0]], 18);
+        mainRef.current.setView([halteBiru[i].coordinate[1], halteBiru[i].coordinate[0]], 17);
+        notFound = 0;
         break;
 
+      }
+    }
+
+    if (notFound === 1) {
+
+      for (let i = 0; i < halteBiru.length; i++) {
+        if (halteMerah[i].namaHalte === halteValue) {
+
+          mainRef.current.setView([halteMerah[i].coordinate[1], halteMerah[i].coordinate[0]], 17);
+          break;
+
+        }
       }
     }
   }
