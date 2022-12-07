@@ -5,6 +5,9 @@ import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import { Carousel } from "../../elements";
 
+// context
+import { useBikunContext } from "../../../provider/BikunContextProvider";
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -36,10 +39,15 @@ function a11yProps(index) {
 }
 
 export const CustomTabs = ({ data, isBikun }) => {
+  
   const [value, setValue] = React.useState(0);
+  const { choosenJalur, setChoosenJalur } = useBikunContext();
 
   const handleChange = (event, newValue) => {
+
     setValue(newValue);
+    setChoosenJalur(newValue);
+
   };
 
   return (

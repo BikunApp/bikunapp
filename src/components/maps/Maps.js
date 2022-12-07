@@ -24,6 +24,9 @@ import blueStopIcon from "../../assets/icons/bus-stop-blue.png";
 import * as mqtt from "react-paho-mqtt";
 import axios from "axios";
 
+// context
+import { useBikunContext } from "../../provider/BikunContextProvider";
+
 let firstTimeSub = 0;
 
 const Maps = (Refs) => {
@@ -43,11 +46,23 @@ const Maps = (Refs) => {
   const _topic = [process.env.REACT_APP_MQTT_TOPIC];
   const _options = {};
 
+  const { choosenHalte, setChoosenHalte } = useBikunContext();
+  const { choosenJalur, setChoosenJalur } = useBikunContext();
+
   useEffect(() => {
 
     _init();
 
   }, []);
+
+  useEffect(() => {
+
+    if (client !== null) {
+
+      _onSubscribe();
+
+    }
+  }, [client]);
 
   useEffect(() => {
 
@@ -68,9 +83,11 @@ const Maps = (Refs) => {
         }
       }
     }
+  }, [route, routeRef, halte]);
 
-    //checkBusTimeout();
-  }, [route, routeRef, halte, currentBus]);
+  useEffect(() => {
+
+  }, [choosenHalte, choosenJalur, currentBus]);
 
   const _init = () => {
 
@@ -174,20 +191,13 @@ const Maps = (Refs) => {
     console.log(dataETA)
 
     busData = JSON.parse(
-      '{ "id": ' +
-      busId +
-      ', "status": ' +
-      busStatus +
-      ', "color": "' +
-      busColor +
-      '", "coordinate": [' +
-      busLat +
-      ", " +
-      busLong +
-      '], "lastUpdate": ' +
-      Date.now() +
+      '{ "id": ' + busId +
+      ', "namaBikun": "Bikun ' + busColor + ' ' + busId +
+      '", "status": ' + busStatus +
+      ', "type": "' + busColor +
+      '", "coordinate": [' + busLat + ", " + busLong +
+      '], "lastUpdate": ' + Date.now() +
       "}"
-
     );
 
     // if (dataETA !== null) {
@@ -232,24 +242,30 @@ const Maps = (Refs) => {
 
     // }
 
-    let busDataArray = [...currentBus];
+    let busDataArray = currentBus;
 
     if (busDataArray.length > 0) {
       let idNotExist = 1;
       for (let i = 0; i < busDataArray.length; i++) {
-        if (busDataArray[i].id == busData.id) {
+        if (busDataArray[i].id === busData.id) {
+
           busDataArray.splice(i, 1);
           busDataArray.push(busData);
           idNotExist = 0;
           break;
+
         }
       }
 
       if (idNotExist == 1) {
+
         busDataArray.push(busData);
+
       }
     } else {
+
       busDataArray.push(busData);
+
     }
 
     setCurrentBus(busDataArray);
@@ -440,12 +456,12 @@ const Maps = (Refs) => {
           ? null
           : currentBus.map((busses) => (
             <Marker
-              icon={busses.busColor === "merah" ? redBus : blueBus}
+              icon={busses.type === "merah" ? redBus : blueBus}
               position={busses.coordinate}
               key={busses.coordinate}
             >
               <Popup>
-                {busses.busColor === "merah"
+                {busses.type === "merah"
                   ? "Bus jalur merah"
                   : "Bus jalur biru"}{" "}
                 <br></br>
@@ -469,7 +485,7 @@ const Maps = (Refs) => {
       {/* Same as */}
       <ToastContainer />
 
-      {client !== null ? (firstTimeSub === 0 ? _onSubscribe() : null) : null}
+      {/* {client !== null ? (firstTimeSub === 0 ? _onSubscribe() : null) : null} */}
     </>
   );
 };

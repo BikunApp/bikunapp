@@ -1,10 +1,13 @@
-import React, { useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { CustomTabs } from "../elements";
 import semuaHalte from "../../data/semuaHalte.json";
 import { DataHalteDanJalur } from "../../data";
 
 import halteBiru from "../../data/halteBiru.json";
 import halteMerah from "../../data/halteMerah.json";
+
+// context 
+import { useBikunContext } from "../../provider/BikunContextProvider";
 
 export const CustomBottomDrawer = (Refs) => {
 
@@ -13,34 +16,36 @@ export const CustomBottomDrawer = (Refs) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectVal, SetSelectVal] = useState("");
   const [data, setData] = useState(useMemo(() => DataHalteDanJalur, []));
+  const { choosenHalte, setChoosenHalte } = useBikunContext();
 
   const handleSelect = (halteValue) => {
 
     selectedHalte.current = halteValue;
 
-    let notFound = 1;
+    // let notFound = 1;
 
-    for (let i = 0; i < halteBiru.length; i++) {
-      if (halteBiru[i].namaHalte === halteValue) {
+    // for (let i = 0; i < halteBiru.length; i++) {
+    //   if (halteBiru[i].namaHalte === halteValue) {
 
-        mainRef.current.setView([halteBiru[i].coordinate[1], halteBiru[i].coordinate[0]], 17);
-        notFound = 0;
-        break;
+    //     mainRef.current.setView([halteBiru[i].coordinate[1], halteBiru[i].coordinate[0]], 17);
+    //     notFound = 0;
+    //     break;
 
-      }
-    }
+    //   }
+    // }
 
-    if (notFound === 1) {
+    // if (notFound === 1) {
 
-      for (let i = 0; i < halteBiru.length; i++) {
-        if (halteMerah[i].namaHalte === halteValue) {
+    //   for (let i = 0; i < halteBiru.length; i++) {
+    //     if (halteMerah[i].namaHalte === halteValue) {
 
-          mainRef.current.setView([halteMerah[i].coordinate[1], halteMerah[i].coordinate[0]], 17);
-          break;
+    //       mainRef.current.setView([halteMerah[i].coordinate[1], halteMerah[i].coordinate[0]], 17);
+    //       break;
 
-        }
-      }
-    }
+    //     }
+    //   }
+    // }
+    setChoosenHalte(halteValue);
   }
 
   return (
