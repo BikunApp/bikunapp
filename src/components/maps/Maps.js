@@ -26,8 +26,10 @@ import axios from "axios";
 
 // context
 import { useBikunContext } from "../../provider/BikunContextProvider";
+import { FloodRounded } from "@mui/icons-material";
 
-let firstTimeSub = 0;
+let choosenRoute = 0;
+let choosenStop = "";
 
 const Maps = (Refs) => {
 
@@ -88,7 +90,10 @@ const Maps = (Refs) => {
 
   useEffect(() => {
 
-  }, [choosenHalte, choosenJalur, currentBus]);
+    choosenRoute = choosenJalur;
+    choosenStop = choosenHalte;
+
+  }, [choosenHalte, choosenJalur, currentBus, dataBikun]);
 
   const _init = () => {
 
@@ -169,43 +174,6 @@ const Maps = (Refs) => {
 
     }
 
-    let coorString = busLong + "," + busLat;
-    let choosenIndex;
-    if (choosenJalur === 1) {
-      for (let i = 0; i < halteBiru.length; i++) {
-        if (choosenHalte === halteBiru.namaHalte) {
-
-          choosenIndex = i;
-
-        }
-        coorString =
-          coorString +
-          ";" +
-          halteBiru[i].coordinate[0] +
-          "," +
-          halteBiru[i].coordinate[1];
-
-      }
-    } else if (choosenJalur === 2) {
-
-      for (let i = 0; i < halteMerah.length; i++) {
-        if (choosenHalte === halteMerah.namaHalte) {
-
-          choosenIndex = i;
-
-        }
-        coorString =
-          coorString +
-          ";" +
-          halteMerah[i].coordinate[0] +
-          "," +
-          halteMerah[i].coordinate[1];
-
-      }
-    }
-
-    const dataETA = calculateETA(coorString, choosenIndex);
-
     let busData;
     busData = JSON.parse(
       '{ "id": ' + busId +
@@ -217,11 +185,84 @@ const Maps = (Refs) => {
       "}"
     );
 
-    if (dataETA !== null) {
+    if (choosenStop !== "") {
 
-      busData = Object.assign(busData, dataETA);
+      let coorString = busLong + "," + busLat;
+      let choosenIndex;
 
+      if (choosenRoute === 1) {
+        for (let i = 0; i < halteBiru.length; i++) {
+          if (choosenStop == halteBiru[i].namaHalte) {
+
+            choosenIndex = i;
+
+          }
+          coorString =
+            coorString +
+            ";" +
+            halteBiru[i].coordinate[0] +
+            "," +
+            halteBiru[i].coordinate[1];
+
+        }
+      } else if (choosenRoute === 2) {
+
+        for (let i = 0; i < halteMerah.length; i++) {
+          if (choosenStop == halteMerah[i].namaHalte) {
+
+            choosenIndex = i;
+
+          }
+          coorString =
+            coorString +
+            ";" +
+            halteMerah[i].coordinate[0] +
+            "," +
+            halteMerah[i].coordinate[1];
+
+        }
+      } else {
+
+        for (let i = 0; i < halteBiru.length; i++) {
+          if (choosenStop == halteBiru[i].namaHalte) {
+
+            choosenIndex = i;
+
+          }
+          coorString =
+            coorString +
+            ";" +
+            halteBiru[i].coordinate[0] +
+            "," +
+            halteBiru[i].coordinate[1];
+
+        }
+        for (let i = 0; i < halteMerah.length; i++) {
+          if (choosenStop == halteMerah[i].namaHalte) {
+
+            choosenIndex = i;
+
+          }
+          coorString =
+            coorString +
+            ";" +
+            halteMerah[i].coordinate[0] +
+            "," +
+            halteMerah[i].coordinate[1];
+
+        }
+      }
+
+      calculateETA(coorString, choosenIndex, busData);
+
+      return;
     }
+
+    postParseMessage(busData);
+
+  };
+
+  const postParseMessage = (busData) => {
 
     let busDataArray = currentBus;
 
@@ -240,22 +281,21 @@ const Maps = (Refs) => {
 
       if (idNotExist == 1) {
 
-        busDataArray.push(busData);
+        busDataArray.unshift(busData);
 
       }
     } else {
 
-      busDataArray.push(busData);
+      busDataArray.unshift(busData);
 
     }
 
     setCurrentBus(busDataArray);
-    setDataBikun(busDataArray)
+    setDataBikun(busDataArray);
 
-    checkBusTimeout();
-  };
+  }
 
-  var calculateETA = (coorString, choosenIndex) => {
+  var calculateETA = (coorString, choosenIndex, busData) => {
 
     const URI = process.env.REACT_APP_OSRM_ADDRESSES + "/table/v1/car/" + coorString + ".json";
 
@@ -269,18 +309,19 @@ const Maps = (Refs) => {
 
       console.log(response.data);
       let nextHalteETA = response.data.durations[0][1];
-      let nextHalte = choosenJalur === 1 ? halteBiru[1].namaHalte : halteMerah[1].namaHalte;
+      let nextHalte = choosenRoute === 1 ? halteBiru[1].namaHalte : halteMerah[1].namaHalte;
 
       for (let i = 1; i < response.data.durations[0].length; i++) {
 
         if (nextHalteETA > response.data.durations[0][i]) {
 
-          nextHalte = choosenJalur === 1 ? halteBiru[i - 1].namaHalte : halteMerah[i - 1].namaHalte;
+          nextHalte = choosenRoute === 1 ? halteBiru[i - 1].namaHalte : halteMerah[i - 1].namaHalte;
 
         }
       }
 
       let ETAs = response.data.durations[0][choosenIndex];
+      console.log(ETAs);
 
       let finalETA;
       if (ETAs < 60) {
@@ -293,7 +334,7 @@ const Maps = (Refs) => {
 
       } else {
 
-        finalETA = ETAs / 60;
+        finalETA = Math.floor(ETAs / 60);
 
       }
 
@@ -303,7 +344,40 @@ const Maps = (Refs) => {
 
       )
 
-      return (dataETA);
+      console.log(dataETA);
+
+      busData = Object.assign(busData, dataETA);
+
+      postParseMessage(busData);
+
+      // let busDataArray = [...currentBus];
+
+      // if (busDataArray.length > 0) {
+      //   let idNotExist = 1;
+      //   for (let i = 0; i < busDataArray.length; i++) {
+      //     if (busDataArray[i].id === busData.id) {
+
+      //       busDataArray.splice(i, 1);
+      //       busDataArray.push(busData);
+      //       idNotExist = 0;
+      //       break;
+
+      //     }
+      //   }
+
+      //   if (idNotExist == 1) {
+
+      //     busDataArray.push(busData);
+
+      //   }
+      // } else {
+
+      //   busDataArray.push(busData);
+
+      // }
+
+      // setCurrentBus(busDataArray);
+      // setDataBikun(busDataArray);
 
     }).catch(function (error) {
 
@@ -410,6 +484,7 @@ const Maps = (Refs) => {
 
   return (
     <>
+      {console.log(currentBus)}
       <MapContainer
         center={mapCenter}
         zoom={mapZoom}
