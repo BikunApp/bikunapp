@@ -170,8 +170,14 @@ const Maps = (Refs) => {
     }
 
     let coorString = busLong + "," + busLat;
-    if (choosenJalur == 1) {
+    let choosenIndex;
+    if (choosenJalur === 1) {
       for (let i = 0; i < halteBiru.length; i++) {
+        if (choosenHalte === halteBiru.namaHalte) {
+
+          choosenIndex = i;
+
+        }
         coorString =
           coorString +
           ";" +
@@ -180,9 +186,14 @@ const Maps = (Refs) => {
           halteBiru[i].coordinate[1];
 
       }
-    } else if (choosenJalur == 2) {
+    } else if (choosenJalur === 2) {
 
       for (let i = 0; i < halteMerah.length; i++) {
+        if (choosenHalte === halteMerah.namaHalte) {
+
+          choosenIndex = i;
+
+        }
         coorString =
           coorString +
           ";" +
@@ -193,12 +204,9 @@ const Maps = (Refs) => {
       }
     }
 
+    const dataETA = calculateETA(coorString, choosenIndex);
+
     let busData;
-
-    const dataETA = calculateETA(coorString);
-
-    console.log(dataETA)
-
     busData = JSON.parse(
       '{ "id": ' + busId +
       ', "namaBikun": "Bikun ' + busColor + ' ' + busId +
@@ -209,47 +217,11 @@ const Maps = (Refs) => {
       "}"
     );
 
-    // if (dataETA !== null) {
+    if (dataETA !== null) {
 
-    //   busData = JSON.parse(
-    //     '{ "id": ' +
-    //     busId +
-    //     ', "status": ' +
-    //     busStatus +
-    //     ', "color": "' +
-    //     busColor +
-    //     '", "coordinate": [' +
-    //     busLat +
-    //     ", " +
-    //     busLong +
-    //     '], "lastUpdate": ' +
-    //     Date.now() +
-    //     ", " +
-    //     dataETA +
-    //     "}"
+      busData = Object.assign(busData, dataETA);
 
-    //   );
-
-    // } else {
-
-    //   busData = JSON.parse(
-    //     '{ "id": ' +
-    //     busId +
-    //     ', "status": ' +
-    //     busStatus +
-    //     ', "color": "' +
-    //     busColor +
-    //     '", "coordinate": [' +
-    //     busLat +
-    //     ", " +
-    //     busLong +
-    //     '], "lastUpdate": ' +
-    //     Date.now() +
-    //     "}"
-
-    //   );
-
-    // }
+    }
 
     let busDataArray = currentBus;
 
@@ -283,6 +255,63 @@ const Maps = (Refs) => {
     checkBusTimeout();
   };
 
+  var calculateETA = (coorString, choosenIndex) => {
+
+    const URI = process.env.REACT_APP_OSRM_ADDRESSES + "/table/v1/car/" + coorString + ".json";
+
+    axios({
+
+      method: "get",
+      url: URI,
+      responseType: "json",
+
+    }).then(function (response) {
+
+      console.log(response.data);
+      let nextHalteETA = response.data.durations[0][1];
+      let nextHalte = choosenJalur === 1 ? halteBiru[1].namaHalte : halteMerah[1].namaHalte;
+
+      for (let i = 1; i < response.data.durations[0].length; i++) {
+
+        if (nextHalteETA > response.data.durations[0][i]) {
+
+          nextHalte = choosenJalur === 1 ? halteBiru[i - 1].namaHalte : halteMerah[i - 1].namaHalte;
+
+        }
+      }
+
+      let ETAs = response.data.durations[0][choosenIndex];
+
+      let finalETA;
+      if (ETAs < 60) {
+
+        finalETA = "< 1";
+
+      } else if (ETAs < 10) {
+
+        finalETA = "arriving";
+
+      } else {
+
+        finalETA = ETAs / 60;
+
+      }
+
+      const dataETA = JSON.parse(
+
+        '{"detail": {"eta": "' + finalETA + '", "nextHalte": "' + nextHalte + '"}}'
+
+      )
+
+      return (dataETA);
+
+    }).catch(function (error) {
+
+      return (null);
+
+    });
+  };
+
   // check if last time bus send data not more than 1 minute
   var checkBusTimeout = () => {
     let busDataArray = [...currentBus];
@@ -302,39 +331,6 @@ const Maps = (Refs) => {
 
       setCurrentBus(busDataArray);
     }
-  };
-
-  var calculateETA = (coorString) => {
-
-    const URI = process.env.REACT_APP_OSRM_ADDRESSES + "/table/v1/car/" + coorString + ".json";
-
-    axios({
-
-      method: "get",
-      url: URI,
-      responseType: "json",
-
-    }).then(function (response) {
-
-      console.log(response.data);
-      let ETAs = response.data.durations[0][1];
-      let nextHalte;
-
-      for (let i = 1; i < response.data.durations[0].length; i++) {
-
-        if (ETAs > response.data.durations[0][i]) {
-          nextHalte = choosenJalur === 1 ? halteBiru[i - 1].namaHalte : halteMerah[i - 1].namaHalte;
-          ETAs = response.data.durations[0][i];
-        }
-
-      }
-
-      console.log("halte" + nextHalte + " dalam waktu " + ETAs + " detik");
-
-      const dataETA = { "nextHalte": nextHalte, "timeArrive": ETAs };
-      return (dataETA);
-
-    });
   };
 
   var handleChangeRoute = (e) => {
