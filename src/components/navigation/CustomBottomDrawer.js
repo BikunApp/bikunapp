@@ -11,16 +11,12 @@ import { useBikunContext } from "../../provider/BikunContextProvider";
 
 export const CustomBottomDrawer = (Refs) => {
 
-  let { mainRef, dataBikun, selectedHalte } = Refs.props;
-
   const [isOpen, setIsOpen] = useState(false);
   const [selectVal, SetSelectVal] = useState("");
   const [data, setData] = useState(useMemo(() => DataHalteDanJalur, []));
   const { choosenHalte, setChoosenHalte } = useBikunContext();
 
   const handleSelect = (halteValue) => {
-
-    selectedHalte.current = halteValue;
 
     // let notFound = 1;
 

@@ -31,7 +31,7 @@ let firstTimeSub = 0;
 
 const Maps = (Refs) => {
 
-  let { mainRef, dataBikun, selectedHalte } = Refs.props;
+  let { mainRef } = Refs.props;
 
   const mapCenter = [-6.3594334, 106.8275797];
   const mapZoom = 15;
@@ -46,6 +46,7 @@ const Maps = (Refs) => {
   const _topic = [process.env.REACT_APP_MQTT_TOPIC];
   const _options = {};
 
+  const { dataBikun, setDataBikun } = useBikunContext();
   const { choosenHalte, setChoosenHalte } = useBikunContext();
   const { choosenJalur, setChoosenJalur } = useBikunContext();
 
@@ -124,9 +125,6 @@ const Maps = (Refs) => {
     }
 
     console.log("reconnecting...");
-
-    // firstTimeSub = 0;
-    // _init();
   };
 
   // called when messages arrived
@@ -153,9 +151,6 @@ const Maps = (Refs) => {
         }
       },
     }); // called when the client connects
-
-    firstTimeSub++;
-
   };
 
   // Parse the incoming message from IoT
@@ -175,13 +170,27 @@ const Maps = (Refs) => {
     }
 
     let coorString = busLong + "," + busLat;
-    for (let i = 0; i < halteBiru.length; i++) {
-      coorString =
-        coorString +
-        ";" +
-        halteBiru[i].coordinate[0] +
-        "," +
-        halteBiru[i].coordinate[1];
+    if (choosenJalur == 1) {
+      for (let i = 0; i < halteBiru.length; i++) {
+        coorString =
+          coorString +
+          ";" +
+          halteBiru[i].coordinate[0] +
+          "," +
+          halteBiru[i].coordinate[1];
+
+      }
+    } else if (choosenJalur == 2) {
+
+      for (let i = 0; i < halteMerah.length; i++) {
+        coorString =
+          coorString +
+          ";" +
+          halteMerah[i].coordinate[0] +
+          "," +
+          halteMerah[i].coordinate[1];
+
+      }
     }
 
     let busData;
@@ -269,6 +278,7 @@ const Maps = (Refs) => {
     }
 
     setCurrentBus(busDataArray);
+    setDataBikun(busDataArray)
 
     checkBusTimeout();
   };
@@ -313,7 +323,7 @@ const Maps = (Refs) => {
       for (let i = 1; i < response.data.durations[0].length; i++) {
 
         if (ETAs > response.data.durations[0][i]) {
-          nextHalte = halteBiru[i - 1].namaHalte;
+          nextHalte = choosenJalur === 1 ? halteBiru[i - 1].namaHalte : halteMerah[i - 1].namaHalte;
           ETAs = response.data.durations[0][i];
         }
 
