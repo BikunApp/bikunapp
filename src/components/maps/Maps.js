@@ -16,6 +16,9 @@ import "react-toastify/dist/ReactToastify.css";
 //Leaflet maps
 import { MapContainer, TileLayer, Marker, Popup, GeoJSON } from "react-leaflet";
 
+// leaflet icons
+import { redBus, blueBus, busStopRed, busStopBlue } from "./leafletIcons";
+
 //GeoJSON rute bikun
 import jalurMerah from "../../data/JalurBikunMerah.json";
 import jalurBiru from "../../data/JalurBikunBiru.json";
@@ -26,9 +29,6 @@ import halteBiru from "../../data/halteBiru.json";
 
 // context
 import { useBikunContext } from "../../provider/BikunContextProvider";
-
-// leaflet icons
-import { redBus, blueBus, busStopRed, busStopBlue } from "./leafletIcons";
 
 let choosenRoute = 0;
 let choosenStop = "";
@@ -71,31 +71,42 @@ const Maps = (Refs) => {
 
   useEffect(() => {
 
+    choosenRoute = choosenJalur;
+    choosenStop = choosenHalte;
+
     //Change displayed route
     if (routeRef.current) {
+
       routeRef.current.clearLayers();
       if (route != null) {
+
         routeRef.current.addData(route);
+
       }
     }
 
     if (halte !== null) {
-      if (route !== null) {
-        if (route == jalurMerah) {
-          setHalte("merah");
-        } else {
-          setHalte("biru");
-        }
+      if (choosenRoute === 2) {
+
+        setHalte("merah");
+        setRoute(jalurMerah);
+        routeRef.current.setStyle({ color: "#c424a3" });
+
+      } else if (choosenRoute === 1) {
+
+        setHalte("biru");
+        setRoute(jalurBiru);
+        routeRef.current.setStyle({ color: "#64e6fb" });
+
       }
     }
-  }, [route, routeRef, halte]);
+
+  }, [route, routeRef, halte, choosenRoute, choosenJalur, choosenHalte]);
 
   useEffect(() => {
 
-    choosenRoute = choosenJalur;
-    choosenStop = choosenHalte;
 
-  }, [choosenHalte, choosenJalur, currentBus, dataBikun]);
+  }, [currentBus, dataBikun]);
 
   const _init = () => {
 
@@ -142,11 +153,10 @@ const Maps = (Refs) => {
       "onMessageArrived(" + Date.now() + "): " + message.payloadString
     );
 
-    const parsedMessage = parseIncomingMessage(message.payloadString, choosenStop, choosenRoute, currentBus);
-    console.log(parsedMessage);
-    console.log(currentBus);
+    parseIncomingMessage(message.payloadString, choosenStop, choosenRoute, currentBus);
 
     setCurrentBus([...currentBus]);
+    setDataBikun([...currentBus]);
 
   };
 
@@ -166,44 +176,9 @@ const Maps = (Refs) => {
     }); // called when the client connects
   };
 
-  var handleChangeRoute = (e) => {
-    if (route === jalurMerah) {
-      setRoute(jalurBiru);
-      if (halte != null) {
-        setHalte("biru");
-      }
-    } else {
-      setRoute(jalurMerah);
-      if (halte != null) {
-        setHalte("merah");
-      }
-    }
-  };
-
-  var handleRoute = (e) => {
-    if (route === null) {
-      setRoute(jalurMerah);
-    } else {
-      setRoute(null);
-    }
-  };
-
-  var handleHalte = (e) => {
-    if (halte === null) {
-      if (route === jalurMerah) {
-        setHalte("merah");
-      } else {
-        setHalte("biru");
-      }
-    } else {
-      setHalte(null);
-    }
-  };
-
   return (
     <>
       {console.log(currentBus)}
-      {console.log("Halte biru + merah" + halteMerah + halteBiru)}
       <MapContainer
         center={mapCenter}
         zoom={mapZoom}
@@ -218,11 +193,7 @@ const Maps = (Refs) => {
         // className='map-tiles'
         />
 
-        {route === jalurMerah ? (
-          <GeoJSON data={route} ref={routeRef} style={{ color: "#c424a3" }} />
-        ) : (
-          <GeoJSON data={route} ref={routeRef} style={{ color: "#64e6fb" }} />
-        )}
+        <GeoJSON data={route} ref={routeRef} style={{ color: "#c424a3" }} />
 
         {halte === "merah"
           ? halteMerah.map((lokasi) => (
@@ -261,10 +232,7 @@ const Maps = (Refs) => {
               key={busses.coordinate}
             >
               <Popup>
-                {busses.type === "merah"
-                  ? "Bus jalur merah"
-                  : "Bus jalur biru"}{" "}
-                <br></br>
+                {"Bikun " + busses.type + " " + busses.id} <br></br>
               </Popup>
             </Marker>
           ))}
