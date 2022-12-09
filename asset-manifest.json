@@ -1,9 +1,9 @@
 {
   "files": {
     "main.css": "/bikunapp/static/css/main.363f95a5.css",
-    "main.js": "/bikunapp/static/js/main.e50a96f0.js",
+    "main.js": "/bikunapp/static/js/main.edfb4dfb.js",
     "static/css/271.29dc6a85.chunk.css": "/bikunapp/static/css/271.29dc6a85.chunk.css",
-    "static/js/271.0fa5f847.chunk.js": "/bikunapp/static/js/271.0fa5f847.chunk.js",
+    "static/js/271.2c34ada4.chunk.js": "/bikunapp/static/js/271.2c34ada4.chunk.js",
     "static/js/787.11313f1a.chunk.js": "/bikunapp/static/js/787.11313f1a.chunk.js",
     "static/js/738.3adb0cba.chunk.js": "/bikunapp/static/js/738.3adb0cba.chunk.js",
     "static/media/rute-bikun-only.png": "/bikunapp/static/media/rute-bikun-only.90a3827ef956d72cf681.png",
@@ -16,14 +16,14 @@
     "index.html": "/bikunapp/index.html",
     "static/media/client-cert.pem": "/bikunapp/static/media/client-cert.9c614019d82167147bc4.pem",
     "main.363f95a5.css.map": "/bikunapp/static/css/main.363f95a5.css.map",
-    "main.e50a96f0.js.map": "/bikunapp/static/js/main.e50a96f0.js.map",
+    "main.edfb4dfb.js.map": "/bikunapp/static/js/main.edfb4dfb.js.map",
     "271.29dc6a85.chunk.css.map": "/bikunapp/static/css/271.29dc6a85.chunk.css.map",
-    "271.0fa5f847.chunk.js.map": "/bikunapp/static/js/271.0fa5f847.chunk.js.map",
+    "271.2c34ada4.chunk.js.map": "/bikunapp/static/js/271.2c34ada4.chunk.js.map",
     "787.11313f1a.chunk.js.map": "/bikunapp/static/js/787.11313f1a.chunk.js.map",
     "738.3adb0cba.chunk.js.map": "/bikunapp/static/js/738.3adb0cba.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.363f95a5.css",
-    "static/js/main.e50a96f0.js"
+    "static/js/main.edfb4dfb.js"
   ]
 }
