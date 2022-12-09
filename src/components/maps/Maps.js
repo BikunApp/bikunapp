@@ -1,5 +1,16 @@
 import { useEffect, useState, useRef } from "react";
 import { ToastContainer, toast } from "react-toastify";
+import * as mqtt from "react-paho-mqtt";
+import axios from "axios";
+
+// Maps Function
+import {
+
+  parseIncomingMessage,
+  calculateETA,
+  generateRandomString
+
+} from "./mapsFunction";
 
 import "./Maps.css";
 import "react-toastify/dist/ReactToastify.css";
@@ -20,9 +31,6 @@ import redBusIcon from "../../assets/icons/bus-icon-red.png";
 import blueBusIcon from "../../assets/icons/bus-icon-blue.png";
 import redStopIcon from "../../assets/icons/bus-stop-red.png";
 import blueStopIcon from "../../assets/icons/bus-stop-blue.png";
-
-import * as mqtt from "react-paho-mqtt";
-import axios from "axios";
 
 // context
 import { useBikunContext } from "../../provider/BikunContextProvider";
@@ -100,7 +108,7 @@ const Maps = (Refs) => {
     const c = mqtt.connect(
       process.env.REACT_APP_MQTT_ADDRESS,       // mqtt broker address
       Number(process.env.REACT_APP_MQTT_PORT),  // mqtt broker port
-      Math.random().toString(16).substr(2, 14), // client id
+      generateRandomString(),                   // client id
       _onConnectionLost,                        // connection lost callback
       _onMessageArrived                         // message arrived callback
     ); // mqtt.connect(host, port, clientId, _onConnectionLost, _onMessageArrived)
@@ -146,6 +154,7 @@ const Maps = (Refs) => {
   // called when subscribing topic(s)
   const _onSubscribe = () => {
 
+    console.log(client.clientId);
     client.connect({
       userName: process.env.REACT_APP_MQTT_USERNAME,
       useSSL: Boolean(Number(process.env.REACT_APP_MQTT_SSL)),
@@ -324,13 +333,13 @@ const Maps = (Refs) => {
       console.log(ETAs);
 
       let finalETA;
-      if (ETAs < 60) {
-
-        finalETA = "< 1";
-
-      } else if (ETAs < 10) {
+      if (ETAs < 10) {
 
         finalETA = "arriving";
+
+      } else if (ETAs < 60) {
+
+        finalETA = "< 1";
 
       } else {
 
@@ -388,7 +397,7 @@ const Maps = (Refs) => {
 
   // check if last time bus send data not more than 1 minute
   var checkBusTimeout = () => {
-    let busDataArray = [...currentBus];
+    let busDataArray = currentBus;
 
     // console.log("Arr: ")
     // console.log(busDataArray.length > 0 ? new Date(busDataArray[0].lastUpdate).getTime() : null);
