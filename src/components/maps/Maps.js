@@ -41,6 +41,9 @@ const Maps = (Refs) => {
   const mapZoom = 15;
 
   const routeRef = useRef();
+  const routeRefRed = useRef();
+  const routeRefBlue = useRef();
+
   const [route, setRoute] = useState(jalurMerah);
   const [halte, setHalte] = useState("merah");
 
@@ -74,14 +77,27 @@ const Maps = (Refs) => {
     choosenRoute = choosenJalur;
     choosenStop = choosenHalte;
 
+    console.log("choosen route " + choosenRoute);
+
     //Change displayed route
     if (routeRef.current) {
-
-      routeRef.current.clearLayers();
       if (route != null) {
 
-        routeRef.current.addData(route);
+        if (choosenRoute !== 0 || choosenRoute !== "") {
 
+          routeRef.current.clearLayers();
+          routeRef.current.addData(route);
+
+          if (choosenRoute === 2) {
+
+            routeRef.current.setStyle({ color: "#c424a3" });
+
+          } else if (choosenRoute === 1) {
+
+            routeRef.current.setStyle({ color: "#64e6fb" });
+
+          }
+        }
       }
     }
 
@@ -90,13 +106,16 @@ const Maps = (Refs) => {
 
         setHalte("merah");
         setRoute(jalurMerah);
-        routeRef.current.setStyle({ color: "#c424a3" });
+
 
       } else if (choosenRoute === 1) {
 
         setHalte("biru");
         setRoute(jalurBiru);
-        routeRef.current.setStyle({ color: "#64e6fb" });
+
+      } else {
+
+        setRoute(null);
 
       }
     }
@@ -193,7 +212,17 @@ const Maps = (Refs) => {
         // className='map-tiles'
         />
 
-        <GeoJSON data={route} ref={routeRef} style={{ color: "#c424a3" }} />
+        {choosenRoute === 0 || choosenRoute === "" ?
+          <>
+
+            <GeoJSON data={jalurMerah} ref={routeRefRed} style={{ color: "#c424a3" }} />
+            <GeoJSON data={jalurBiru} ref={routeRefBlue} style={{ color: "#64e6fb" }} />
+
+          </> :
+
+          <GeoJSON data={route} ref={routeRef} style={choosenRoute === 2 ? { color: "#c424a3" } : { color: "#64e6fb" }} />
+
+        }
 
         {halte === "merah"
           ? halteMerah.map((lokasi) => (
