@@ -1,9 +1,9 @@
 {
   "files": {
     "main.css": "/bikunapp/static/css/main.363f95a5.css",
-    "main.js": "/bikunapp/static/js/main.42a9b3e3.js",
+    "main.js": "/bikunapp/static/js/main.9f6433d1.js",
     "static/css/824.e091c15d.chunk.css": "/bikunapp/static/css/824.e091c15d.chunk.css",
-    "static/js/824.97e7130e.chunk.js": "/bikunapp/static/js/824.97e7130e.chunk.js",
+    "static/js/824.b2ef8383.chunk.js": "/bikunapp/static/js/824.b2ef8383.chunk.js",
     "static/js/787.11313f1a.chunk.js": "/bikunapp/static/js/787.11313f1a.chunk.js",
     "static/js/738.3adb0cba.chunk.js": "/bikunapp/static/js/738.3adb0cba.chunk.js",
     "static/media/rute-bikun-only.png": "/bikunapp/static/media/rute-bikun-only.90a3827ef956d72cf681.png",
@@ -13,14 +13,14 @@
     "static/media/bus-stop-red.png": "/bikunapp/static/media/bus-stop-red.f5708adec2129d64db87.png",
     "index.html": "/bikunapp/index.html",
     "main.363f95a5.css.map": "/bikunapp/static/css/main.363f95a5.css.map",
-    "main.42a9b3e3.js.map": "/bikunapp/static/js/main.42a9b3e3.js.map",
+    "main.9f6433d1.js.map": "/bikunapp/static/js/main.9f6433d1.js.map",
     "824.e091c15d.chunk.css.map": "/bikunapp/static/css/824.e091c15d.chunk.css.map",
-    "824.97e7130e.chunk.js.map": "/bikunapp/static/js/824.97e7130e.chunk.js.map",
+    "824.b2ef8383.chunk.js.map": "/bikunapp/static/js/824.b2ef8383.chunk.js.map",
     "787.11313f1a.chunk.js.map": "/bikunapp/static/js/787.11313f1a.chunk.js.map",
     "738.3adb0cba.chunk.js.map": "/bikunapp/static/js/738.3adb0cba.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.363f95a5.css",
-    "static/js/main.42a9b3e3.js"
+    "static/js/main.9f6433d1.js"
   ]
 }
