@@ -26,13 +26,11 @@ import axios from "axios";
 
 // context
 import { useBikunContext } from "../../provider/BikunContextProvider";
-import { FloodRounded } from "@mui/icons-material";
 
 let choosenRoute = 0;
 let choosenStop = "";
 
 const Maps = (Refs) => {
-
   let { mainRef } = Refs.props;
 
   const mapCenter = [-6.3594334, 106.8275797];
@@ -53,22 +51,16 @@ const Maps = (Refs) => {
   const { choosenJalur, setChoosenJalur } = useBikunContext();
 
   useEffect(() => {
-
     _init();
-
   }, []);
 
   useEffect(() => {
-
     if (client !== null) {
-
       _onSubscribe();
-
     }
   }, [client]);
 
   useEffect(() => {
-
     //Change displayed route
     if (routeRef.current) {
       routeRef.current.clearLayers();
@@ -79,7 +71,7 @@ const Maps = (Refs) => {
 
     if (halte !== null) {
       if (route !== null) {
-        if (route == jalurMerah) {
+        if (route === jalurMerah) {
           setHalte("merah");
         } else {
           setHalte("biru");
@@ -89,34 +81,28 @@ const Maps = (Refs) => {
   }, [route, routeRef, halte]);
 
   useEffect(() => {
-
     choosenRoute = choosenJalur;
     choosenStop = choosenHalte;
-
   }, [choosenHalte, choosenJalur, currentBus, dataBikun]);
 
   const _init = () => {
-
     const c = mqtt.connect(
-      process.env.REACT_APP_MQTT_ADDRESS,       // mqtt broker address
-      Number(process.env.REACT_APP_MQTT_PORT),  // mqtt broker port
+      process.env.REACT_APP_MQTT_ADDRESS, // mqtt broker address
+      Number(process.env.REACT_APP_MQTT_PORT), // mqtt broker port
       Math.random().toString(16).substr(2, 14), // client id
-      _onConnectionLost,                        // connection lost callback
-      _onMessageArrived                         // message arrived callback
+      _onConnectionLost, // connection lost callback
+      _onMessageArrived // message arrived callback
     ); // mqtt.connect(host, port, clientId, _onConnectionLost, _onMessageArrived)
 
     setClient(c);
-
   };
 
   // called when client lost connection
   const _onConnectionLost = (responseObject) => {
-
     if (responseObject.errorCode !== 0) {
       console.log("onConnectionLost: " + responseObject.errorMessage);
 
-      toast.error('Connection lost, please check your internet connection.', {
-
+      toast.error("Connection lost, please check your internet connection.", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: true,
@@ -125,7 +111,6 @@ const Maps = (Refs) => {
         draggable: true,
         progress: undefined,
         theme: "colored",
-
       });
     }
 
@@ -145,7 +130,6 @@ const Maps = (Refs) => {
 
   // called when subscribing topic(s)
   const _onSubscribe = () => {
-
     client.connect({
       userName: process.env.REACT_APP_MQTT_USERNAME,
       useSSL: Boolean(Number(process.env.REACT_APP_MQTT_SSL)),
@@ -160,7 +144,6 @@ const Maps = (Refs) => {
 
   // Parse the incoming message from IoT
   var parseIncomingMessage = (message) => {
-
     let splitMessage = message.split(";");
     let busId = splitMessage[0];
     let busStatus = splitMessage[1];
@@ -169,33 +152,38 @@ const Maps = (Refs) => {
     let busLong = splitMessage[4];
 
     if (busLat === "" || busLong === "") {
-
       return;
-
     }
 
     let busData;
     busData = JSON.parse(
-      '{ "id": ' + busId +
-      ', "namaBikun": "Bikun ' + busColor + ' ' + busId +
-      '", "status": ' + busStatus +
-      ', "type": "' + busColor +
-      '", "coordinate": [' + busLat + ", " + busLong +
-      '], "lastUpdate": ' + Date.now() +
-      "}"
+      '{ "id": ' +
+        busId +
+        ', "namaBikun": "Bikun ' +
+        busColor +
+        " " +
+        busId +
+        '", "status": ' +
+        busStatus +
+        ', "type": "' +
+        busColor +
+        '", "coordinate": [' +
+        busLat +
+        ", " +
+        busLong +
+        '], "lastUpdate": ' +
+        Date.now() +
+        "}"
     );
 
     if (choosenStop !== "") {
-
       let coorString = busLong + "," + busLat;
       let choosenIndex;
 
       if (choosenRoute === 1) {
         for (let i = 0; i < halteBiru.length; i++) {
           if (choosenStop == halteBiru[i].namaHalte) {
-
             choosenIndex = i;
-
           }
           coorString =
             coorString +
@@ -203,15 +191,11 @@ const Maps = (Refs) => {
             halteBiru[i].coordinate[0] +
             "," +
             halteBiru[i].coordinate[1];
-
         }
       } else if (choosenRoute === 2) {
-
         for (let i = 0; i < halteMerah.length; i++) {
           if (choosenStop == halteMerah[i].namaHalte) {
-
             choosenIndex = i;
-
           }
           coorString =
             coorString +
@@ -219,15 +203,11 @@ const Maps = (Refs) => {
             halteMerah[i].coordinate[0] +
             "," +
             halteMerah[i].coordinate[1];
-
         }
       } else {
-
         for (let i = 0; i < halteBiru.length; i++) {
-          if (choosenStop == halteBiru[i].namaHalte) {
-
+          if (choosenStop === halteBiru[i].namaHalte) {
             choosenIndex = i;
-
           }
           coorString =
             coorString +
@@ -235,13 +215,10 @@ const Maps = (Refs) => {
             halteBiru[i].coordinate[0] +
             "," +
             halteBiru[i].coordinate[1];
-
         }
         for (let i = 0; i < halteMerah.length; i++) {
-          if (choosenStop == halteMerah[i].namaHalte) {
-
+          if (choosenStop === halteMerah[i].namaHalte) {
             choosenIndex = i;
-
           }
           coorString =
             coorString +
@@ -249,7 +226,6 @@ const Maps = (Refs) => {
             halteMerah[i].coordinate[0] +
             "," +
             halteMerah[i].coordinate[1];
-
         }
       }
 
@@ -259,131 +235,117 @@ const Maps = (Refs) => {
     }
 
     postParseMessage(busData);
-
   };
 
   const postParseMessage = (busData) => {
-
     let busDataArray = currentBus;
 
     if (busDataArray.length > 0) {
       let idNotExist = 1;
       for (let i = 0; i < busDataArray.length; i++) {
         if (busDataArray[i].id === busData.id) {
-
           busDataArray.splice(i, 1);
           busDataArray.push(busData);
           idNotExist = 0;
           break;
-
         }
       }
 
-      if (idNotExist == 1) {
-
+      if (idNotExist === 1) {
         busDataArray.unshift(busData);
-
       }
     } else {
-
       busDataArray.unshift(busData);
-
     }
-
     setCurrentBus(busDataArray);
     setDataBikun(busDataArray);
-
-  }
+  };
 
   var calculateETA = (coorString, choosenIndex, busData) => {
-
-    const URI = process.env.REACT_APP_OSRM_ADDRESSES + "/table/v1/car/" + coorString + ".json";
+    const URI =
+      process.env.REACT_APP_OSRM_ADDRESSES +
+      "/table/v1/car/" +
+      coorString +
+      ".json";
 
     axios({
-
       method: "get",
       url: URI,
       responseType: "json",
+    })
+      .then(function (response) {
+        console.log(response.data);
+        let nextHalteETA = response.data.durations[0][1];
+        let nextHalte =
+          choosenRoute === 1 ? halteBiru[1].namaHalte : halteMerah[1].namaHalte;
 
-    }).then(function (response) {
-
-      console.log(response.data);
-      let nextHalteETA = response.data.durations[0][1];
-      let nextHalte = choosenRoute === 1 ? halteBiru[1].namaHalte : halteMerah[1].namaHalte;
-
-      for (let i = 1; i < response.data.durations[0].length; i++) {
-
-        if (nextHalteETA > response.data.durations[0][i]) {
-
-          nextHalte = choosenRoute === 1 ? halteBiru[i - 1].namaHalte : halteMerah[i - 1].namaHalte;
-
+        for (let i = 1; i < response.data.durations[0].length; i++) {
+          if (nextHalteETA > response.data.durations[0][i]) {
+            nextHalte =
+              choosenRoute === 1
+                ? halteBiru[i - 1].namaHalte
+                : halteMerah[i - 1].namaHalte;
+          }
         }
-      }
 
-      let ETAs = response.data.durations[0][choosenIndex];
-      console.log(ETAs);
+        let ETAs = response.data.durations[0][choosenIndex];
+        console.log(ETAs);
 
-      let finalETA;
-      if (ETAs < 60) {
+        let finalETA;
+        if (ETAs < 60) {
+          finalETA = "< 1";
+        } else if (ETAs < 10) {
+          finalETA = "arriving";
+        } else {
+          finalETA = Math.floor(ETAs / 60);
+        }
 
-        finalETA = "< 1";
+        const dataETA = JSON.parse(
+          '{"detail": {"eta": "' +
+            finalETA +
+            '", "nextHalte": "' +
+            nextHalte +
+            '"}}'
+        );
 
-      } else if (ETAs < 10) {
+        console.log(dataETA);
 
-        finalETA = "arriving";
+        busData = Object.assign(busData, dataETA);
 
-      } else {
+        postParseMessage(busData);
 
-        finalETA = Math.floor(ETAs / 60);
+        // let busDataArray = [...currentBus];
 
-      }
+        // if (busDataArray.length > 0) {
+        //   let idNotExist = 1;
+        //   for (let i = 0; i < busDataArray.length; i++) {
+        //     if (busDataArray[i].id === busData.id) {
 
-      const dataETA = JSON.parse(
+        //       busDataArray.splice(i, 1);
+        //       busDataArray.push(busData);
+        //       idNotExist = 0;
+        //       break;
 
-        '{"detail": {"eta": "' + finalETA + '", "nextHalte": "' + nextHalte + '"}}'
+        //     }
+        //   }
 
-      )
+        //   if (idNotExist == 1) {
 
-      console.log(dataETA);
+        //     busDataArray.push(busData);
 
-      busData = Object.assign(busData, dataETA);
+        //   }
+        // } else {
 
-      postParseMessage(busData);
+        //   busDataArray.push(busData);
 
-      // let busDataArray = [...currentBus];
+        // }
 
-      // if (busDataArray.length > 0) {
-      //   let idNotExist = 1;
-      //   for (let i = 0; i < busDataArray.length; i++) {
-      //     if (busDataArray[i].id === busData.id) {
-
-      //       busDataArray.splice(i, 1);
-      //       busDataArray.push(busData);
-      //       idNotExist = 0;
-      //       break;
-
-      //     }
-      //   }
-
-      //   if (idNotExist == 1) {
-
-      //     busDataArray.push(busData);
-
-      //   }
-      // } else {
-
-      //   busDataArray.push(busData);
-
-      // }
-
-      // setCurrentBus(busDataArray);
-      // setDataBikun(busDataArray);
-
-    }).catch(function (error) {
-
-      return (null);
-
-    });
+        // setCurrentBus(busDataArray);
+        // setDataBikun(busDataArray);
+      })
+      .catch(function (error) {
+        return null;
+      });
   };
 
   // check if last time bus send data not more than 1 minute
@@ -496,7 +458,7 @@ const Maps = (Refs) => {
           attribution='&copy; <a href="https://www.google.com/help/legalnotices_maps/">Google</a> Maps'
           url="https://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}"
           subdomains={["mt0", "mt1", "mt2", "mt3"]}
-        // className='map-tiles'
+          // className='map-tiles'
         />
 
         {route === jalurMerah ? (
@@ -507,19 +469,19 @@ const Maps = (Refs) => {
 
         {halte === "merah"
           ? halteMerah.map((lokasi) => (
-            <Marker
-              icon={busStopRed}
-              position={[lokasi.coordinate[1], lokasi.coordinate[0]]}
-              key={lokasi.namaHalte}
-            >
-              <Popup>
-                Halte <br></br>
-                {lokasi.namaHalte}
-              </Popup>
-            </Marker>
-          ))
+              <Marker
+                icon={busStopRed}
+                position={[lokasi.coordinate[1], lokasi.coordinate[0]]}
+                key={lokasi.namaHalte}
+              >
+                <Popup>
+                  Halte <br></br>
+                  {lokasi.namaHalte}
+                </Popup>
+              </Marker>
+            ))
           : halte === "biru"
-            ? halteBiru.map((lokasi) => (
+          ? halteBiru.map((lokasi) => (
               <Marker
                 icon={busStopBlue}
                 position={[lokasi.coordinate[1], lokasi.coordinate[0]]}
@@ -531,24 +493,24 @@ const Maps = (Refs) => {
                 </Popup>
               </Marker>
             ))
-            : null}
+          : null}
 
         {currentBus === null
           ? null
           : currentBus.map((busses) => (
-            <Marker
-              icon={busses.type === "merah" ? redBus : blueBus}
-              position={busses.coordinate}
-              key={busses.coordinate}
-            >
-              <Popup>
-                {busses.type === "merah"
-                  ? "Bus jalur merah"
-                  : "Bus jalur biru"}{" "}
-                <br></br>
-              </Popup>
-            </Marker>
-          ))}
+              <Marker
+                icon={busses.type === "merah" ? redBus : blueBus}
+                position={busses.coordinate}
+                key={busses.coordinate}
+              >
+                <Popup>
+                  {busses.type === "merah"
+                    ? "Bus jalur merah"
+                    : "Bus jalur biru"}{" "}
+                  <br></br>
+                </Popup>
+              </Marker>
+            ))}
       </MapContainer>
 
       <ToastContainer
