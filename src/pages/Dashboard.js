@@ -16,7 +16,9 @@ const Dashboard = () => {
           <ResponsiveAppBar props={mainRef} />
           <Maps props={{ mainRef }} />
           {/* <SwipeableEdgeDrawer /> */}
+
           <CustomBottomDrawer props={{ mainRef }} />
+
         </div>
 
         <div className="lg:flex lg:w-1/3 w-0 justify-center items-center hidden">

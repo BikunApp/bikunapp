@@ -27,7 +27,7 @@ export const CustomBottomDrawer = (props) => {
     //dataBikun[i].detail !== null || dataBikun[i].detail !== undefined
     for (let i = 0; i < dataBikun.length; i++) {
       if (dataBikun[i]?.detail?.eta !== null || dataBikun[i]?.detail?.eta !== undefined || dataBikun[i]?.detail?.eta !== "") {
-        if (dataBikun[i].detail?.eta === "arriving" || (dataBikun[i].detail?.eta !== 'arriving' ? Number(dataBikun[i].detail?.eta) < 30 : true)) {
+        if (Number(dataBikun[i].detail?.eta) < 30) {
 
 
           if (dataBikun[i].type === "biru") {
@@ -48,15 +48,15 @@ export const CustomBottomDrawer = (props) => {
       [
         {
           label: "Both",
-          content: bothBikun,
+          content: bothBikun.sort((a, b) => (a.detail.eta > b.detail.eta) ? 1 : -1),
         },
         {
           label: "Blue Line",
-          content: bikunBiru,
+          content: bikunBiru.sort((a, b) => (a.detail.eta > b.detail.eta) ? 1 : -1),
         },
         {
           label: "Red Line",
-          content: bikunMerah,
+          content: bikunMerah.sort((a, b) => (a.detail.eta > b.detail.eta) ? 1 : -1),
         },
       ]);
 
@@ -98,7 +98,7 @@ export const CustomBottomDrawer = (props) => {
   };
 
   return (
-    <div className="rounded-t-[20px] flex flex-col gap-3 p-3 bg-primary-purple-heart absolute bottom-0 z-[4000] sm:w-[640px] w-full">
+    <div className="rounded-t-[20px] flex flex-col gap-3 p-3 bg-primary-purple-heart fixed bottom-0 z-[4000] sm:w-[640px] w-full">
       <select
         className="w-full p-2 rounded-lg"
         onChange={(e) => {

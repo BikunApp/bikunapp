@@ -54,11 +54,11 @@ export const calculateETA = async (coorString, choosenIndex, busData, choosenRou
         let finalETA;
         if (ETAs < 10) {
 
-            finalETA = "arriving";
+            finalETA = 0;
 
         } else if (ETAs < 60) {
 
-            finalETA = "<1";
+            finalETA = 1;
 
         } else {
 
