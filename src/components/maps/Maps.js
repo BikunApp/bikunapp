@@ -34,7 +34,6 @@ let choosenRoute = 0;
 let choosenStop = "";
 
 const Maps = (Refs) => {
-
   let { mainRef } = Refs.props;
 
   const mapCenter = [-6.3594334, 106.8275797];
@@ -58,17 +57,12 @@ const Maps = (Refs) => {
   const { choosenJalur, setChoosenJalur } = useBikunContext();
 
   useEffect(() => {
-
     _init();
-
   }, []);
 
   useEffect(() => {
-
     if (client !== null) {
-
       _onSubscribe();
-
     }
   }, [client]);
 
@@ -128,7 +122,6 @@ const Maps = (Refs) => {
   }, [currentBus, dataBikun]);
 
   const _init = () => {
-
     const c = mqtt.connect(
       process.env.REACT_APP_MQTT_ADDRESS,       // mqtt broker address
       Number(process.env.REACT_APP_MQTT_PORT),  // mqtt broker port
@@ -138,17 +131,14 @@ const Maps = (Refs) => {
     ); // mqtt.connect(host, port, clientId, _onConnectionLost, _onMessageArrived)
 
     setClient(c);
-
   };
 
   // called when client lost connection
   const _onConnectionLost = (responseObject) => {
-
     if (responseObject.errorCode !== 0) {
       console.log("onConnectionLost: " + responseObject.errorMessage);
 
-      toast.error('Connection lost, please check your internet connection.', {
-
+      toast.error("Connection lost, please check your internet connection.", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: true,
@@ -157,7 +147,6 @@ const Maps = (Refs) => {
         draggable: true,
         progress: undefined,
         theme: "colored",
-
       });
     }
 
@@ -209,7 +198,7 @@ const Maps = (Refs) => {
           attribution='&copy; <a href="https://www.google.com/help/legalnotices_maps/">Google</a> Maps'
           url="https://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}"
           subdomains={["mt0", "mt1", "mt2", "mt3"]}
-        // className='map-tiles'
+          // className='map-tiles'
         />
 
         {choosenRoute === 0 || choosenRoute === "" ?
@@ -226,19 +215,19 @@ const Maps = (Refs) => {
 
         {halte === "merah"
           ? halteMerah.map((lokasi) => (
-            <Marker
-              icon={busStopRed}
-              position={[lokasi.coordinate[1], lokasi.coordinate[0]]}
-              key={lokasi.namaHalte}
-            >
-              <Popup>
-                Halte <br></br>
-                {lokasi.namaHalte}
-              </Popup>
-            </Marker>
-          ))
+              <Marker
+                icon={busStopRed}
+                position={[lokasi.coordinate[1], lokasi.coordinate[0]]}
+                key={lokasi.namaHalte}
+              >
+                <Popup>
+                  Halte <br></br>
+                  {lokasi.namaHalte}
+                </Popup>
+              </Marker>
+            ))
           : halte === "biru"
-            ? halteBiru.map((lokasi) => (
+          ? halteBiru.map((lokasi) => (
               <Marker
                 icon={busStopBlue}
                 position={[lokasi.coordinate[1], lokasi.coordinate[0]]}
@@ -250,7 +239,7 @@ const Maps = (Refs) => {
                 </Popup>
               </Marker>
             ))
-            : null}
+          : null}
 
         {currentBus === null
           ? null
