@@ -39,9 +39,10 @@ function a11yProps(index) {
 }
 
 export const CustomTabs = ({ data, isBikun }) => {
-  
+
   const [value, setValue] = React.useState(0);
   const { choosenJalur, setChoosenJalur } = useBikunContext();
+  const { dataBikun, setDataBikun } = useBikunContext();
 
   const handleChange = (event, newValue) => {
 

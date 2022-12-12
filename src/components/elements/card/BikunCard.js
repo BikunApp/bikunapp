@@ -25,7 +25,7 @@ export const BikunCard = ({ data }) => {
       </section>
       <section className="flex flex-col justify-between gap-4">
         <div className="flex flex-col gap-1">
-          <p className="font-poppins text-sm">{data?.detail?.eta} mins</p>
+          <p className="font-poppins text-sm">{data?.detail?.eta === 'arriving' ? 'arriving' : <>{data?.detail?.eta} mins</>}</p>
           <p className="font-poppins text-gray text-poppins-p-small">
             {hour}: {minutes} {isPM ? "PM" : "AM"}
           </p>

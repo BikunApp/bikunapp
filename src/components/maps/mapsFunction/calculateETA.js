@@ -5,7 +5,7 @@ import { postParseMessage } from "./parseIncomingMessage";
 import halteMerah from "../../../data/halteMerah.json";
 import halteBiru from "../../../data/halteBiru.json";
 
-export const calculateETA = (coorString, choosenIndex, busData, choosenRoute, currentBus) => {
+export const calculateETA = async (coorString, choosenIndex, busData, choosenRoute, currentBus) => {
 
     console.log("enter calculateETA")
 
@@ -19,21 +19,37 @@ export const calculateETA = (coorString, choosenIndex, busData, choosenRoute, cu
 
     }).then(function (response) {
 
-        console.log(response.data);
         let nextHalteETA = response.data.durations[0][1];
-        let nextHalte = choosenRoute === 1 ? halteBiru[1].namaHalte : halteMerah[1].namaHalte;
+        let nextHalte;
+        if (choosenRoute !== 0) {
 
-        for (let i = 1; i < response.data.durations[0].length; i++) {
+            nextHalte = choosenRoute === 1 ? halteBiru[0].namaHalte : halteMerah[0].namaHalte;
+
+        } else {
+
+            nextHalte = halteBiru[0].namaHalte;
+
+        }
+
+        const bothHalte = Object.assign(halteBiru, halteMerah);
+
+        for (let i = 1; i < response.data.durations[0].length - 1; i++) {
 
             if (nextHalteETA > response.data.durations[0][i]) {
 
-                nextHalte = choosenRoute === 1 ? halteBiru[i - 1].namaHalte : halteMerah[i - 1].namaHalte;
+                if (choosenRoute !== 0) {
 
+                    nextHalte = choosenRoute === 1 ? halteBiru[i - 1].namaHalte : halteMerah[i - 1].namaHalte;
+
+                } else {
+
+                    nextHalte = bothHalte[i - 1].namaHalte;
+
+                }
             }
         }
 
         let ETAs = response.data.durations[0][choosenIndex];
-        console.log(ETAs);
 
         let finalETA;
         if (ETAs < 10) {
@@ -42,7 +58,7 @@ export const calculateETA = (coorString, choosenIndex, busData, choosenRoute, cu
 
         } else if (ETAs < 60) {
 
-            finalETA = "< 1";
+            finalETA = "<1";
 
         } else {
 
@@ -55,8 +71,6 @@ export const calculateETA = (coorString, choosenIndex, busData, choosenRoute, cu
             '{"detail": {"eta": "' + finalETA + '", "nextHalte": "' + nextHalte + '"}}'
 
         )
-
-        console.log(dataETA);
 
         busData = Object.assign(busData, dataETA);
 
@@ -92,7 +106,7 @@ export const calculateETA = (coorString, choosenIndex, busData, choosenRoute, cu
         // setDataBikun(busDataArray);
 
     }).catch(function (error) {
-
+        console.log("error fetc data " + error)
         return (null);
 
     });

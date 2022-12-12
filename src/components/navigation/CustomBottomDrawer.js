@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { CustomTabs } from "../elements";
 import semuaHalte from "../../data/semuaHalte.json";
 import { DataHalteDanJalur } from "../../data";
@@ -9,13 +9,63 @@ import halteMerah from "../../data/halteMerah.json";
 // context
 import { useBikunContext } from "../../provider/BikunContextProvider";
 
+//let data = [];
 export const CustomBottomDrawer = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectVal, SetSelectVal] = useState("");
-  const [data] = useState(useMemo(() => DataHalteDanJalur, []));
+  //const [data] = useState(useMemo(() => DataHalteDanJalur, []));
+  const [data, setData] = useState([]);
   const { setChoosenHalte } = useBikunContext();
+  const { dataBikun, setDataBikun } = useBikunContext();
+
+  useEffect(() => {
+
+    let bothBikun = [];
+    let bikunBiru = [];
+    let bikunMerah = [];
+
+    //dataBikun[i].detail !== null || dataBikun[i].detail !== undefined
+    for (let i = 0; i < dataBikun.length; i++) {
+      if (dataBikun[i]?.detail?.eta !== null || dataBikun[i]?.detail?.eta !== undefined || dataBikun[i]?.detail?.eta !== "") {
+        if (dataBikun[i].detail?.eta === "arriving" || (dataBikun[i].detail?.eta !== 'arriving' ? Number(dataBikun[i].detail?.eta) < 30 : true)) {
+
+
+          if (dataBikun[i].type === "biru") {
+
+            bikunBiru.push(dataBikun[i]);
+
+          } else {
+
+            bikunMerah.push(dataBikun[i]);
+
+          }
+          bothBikun.push(dataBikun[i]);
+        }
+      }
+    }
+
+    setData(
+      [
+        {
+          label: "Both",
+          content: bothBikun,
+        },
+        {
+          label: "Blue Line",
+          content: bikunBiru,
+        },
+        {
+          label: "Red Line",
+          content: bikunMerah,
+        },
+      ]);
+
+  }, [dataBikun]);
 
   const handleSelect = (halteValue) => {
+
+    setDataBikun([]);
+
     if (halteValue === "") {
       props.props.mainRef.current.setView([-6.3594334, 106.8275797], 15);
     } else {

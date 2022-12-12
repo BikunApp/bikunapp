@@ -118,8 +118,13 @@ const Maps = (Refs) => {
 
   useEffect(() => {
 
+    if(dataBikun.length === 0) {
+      setCurrentBus([]);
+    }
+  }, [dataBikun]);
 
-  }, [currentBus, dataBikun]);
+  useEffect(() => {
+  }, [currentBus]);
 
   const _init = () => {
     const c = mqtt.connect(
@@ -161,10 +166,7 @@ const Maps = (Refs) => {
       "onMessageArrived(" + Date.now() + "): " + message.payloadString
     );
 
-    parseIncomingMessage(message.payloadString, choosenStop, choosenRoute, currentBus);
-
-    setCurrentBus([...currentBus]);
-    setDataBikun([...currentBus]);
+    awaitParseMessage(message);
 
   };
 
@@ -184,6 +186,16 @@ const Maps = (Refs) => {
     }); // called when the client connects
   };
 
+  const awaitParseMessage = async (message) => {
+
+    await parseIncomingMessage(message.payloadString, choosenStop, choosenRoute, currentBus)
+      .then(function (result) {
+
+        setCurrentBus([...result]);
+        setDataBikun([...result]);
+      })
+  }
+
   return (
     <>
       {console.log(currentBus)}
@@ -198,7 +210,7 @@ const Maps = (Refs) => {
           attribution='&copy; <a href="https://www.google.com/help/legalnotices_maps/">Google</a> Maps'
           url="https://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}"
           subdomains={["mt0", "mt1", "mt2", "mt3"]}
-          // className='map-tiles'
+        // className='map-tiles'
         />
 
         {choosenRoute === 0 || choosenRoute === "" ?
@@ -215,19 +227,19 @@ const Maps = (Refs) => {
 
         {halte === "merah"
           ? halteMerah.map((lokasi) => (
-              <Marker
-                icon={busStopRed}
-                position={[lokasi.coordinate[1], lokasi.coordinate[0]]}
-                key={lokasi.namaHalte}
-              >
-                <Popup>
-                  Halte <br></br>
-                  {lokasi.namaHalte}
-                </Popup>
-              </Marker>
-            ))
+            <Marker
+              icon={busStopRed}
+              position={[lokasi.coordinate[1], lokasi.coordinate[0]]}
+              key={lokasi.namaHalte}
+            >
+              <Popup>
+                Halte <br></br>
+                {lokasi.namaHalte}
+              </Popup>
+            </Marker>
+          ))
           : halte === "biru"
-          ? halteBiru.map((lokasi) => (
+            ? halteBiru.map((lokasi) => (
               <Marker
                 icon={busStopBlue}
                 position={[lokasi.coordinate[1], lokasi.coordinate[0]]}
@@ -239,7 +251,7 @@ const Maps = (Refs) => {
                 </Popup>
               </Marker>
             ))
-          : null}
+            : null}
 
         {currentBus === null
           ? null

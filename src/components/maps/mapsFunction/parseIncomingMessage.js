@@ -4,7 +4,7 @@ import { calculateETA } from "./calculateETA";
 import halteMerah from "../../../data/halteMerah.json";
 import halteBiru from "../../../data/halteBiru.json";
 
-export const parseIncomingMessage = (message, choosenStop, choosenRoute, currentBus) => {
+export const parseIncomingMessage = async (message, choosenStop, choosenRoute, currentBus) => {
 
     let splitMessage = message.split(";");
     let busId = splitMessage[0];
@@ -98,14 +98,20 @@ export const parseIncomingMessage = (message, choosenStop, choosenRoute, current
             }
         }
 
-        return calculateETA(coorString, choosenIndex, busData, choosenRoute, currentBus);
+        await calculateETA(coorString, choosenIndex, busData, choosenRoute, currentBus)
+            .then(function (response) {
+
+                return currentBus;
+
+            })
+
     }
 
-    return postParseMessage(busData, currentBus);
+    return await postParseMessage(busData, currentBus);
 
 }
 
-export const postParseMessage = (busData, currentBus) => {
+export const postParseMessage = async (busData, currentBus) => {
 
     let busDataArray = currentBus;
 
@@ -132,6 +138,7 @@ export const postParseMessage = (busData, currentBus) => {
         busDataArray.unshift(busData);
 
     }
+    console.log(busDataArray);
 
     return (busDataArray);
 
