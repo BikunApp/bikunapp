@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
+import useStateCallback from "../hooks/useStateCallback"
 
 export const BikunContext = createContext({});
 
@@ -6,7 +7,7 @@ export const useBikunContext = () => useContext(BikunContext);
 
 const BikunContextProvider = ({ children }) => {
 
-    const [dataBikun, setDataBikun] = useState([]);
+    const [dataBikun, setDataBikun] = useStateCallback([]);
     const [choosenHalte, setChoosenHalte] = useState("");
     const [choosenJalur, setChoosenJalur] = useState("");
 

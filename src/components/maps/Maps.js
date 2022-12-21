@@ -139,10 +139,10 @@ const Maps = (Refs) => {
 
   useEffect(() => {
 
-    if (client !== null) {
-      console.log("masuk unsub");
-      _onUnsubscribe();
-    }
+    // if (client !== null) {
+    //   console.log("masuk unsub");
+    //   _onUnsubscribe();
+    // }
 
   }, [choosenHalte])
 
@@ -227,8 +227,8 @@ const Maps = (Refs) => {
     }
 
     setTimeout(function () {
-      setCurrentBus(null);
-      setDataBikun(null);
+      setCurrentBus([]);
+      setDataBikun([]);
 
       for (var i = 0; i < _topic.length; i++) {
         client.subscribe(_topic[i], _options);
@@ -240,15 +240,17 @@ const Maps = (Refs) => {
   }
 
   const awaitParseMessage = async (message) => {
+    setDataBikun([], () => {
+      console.log(dataBikun);
+      parseIncomingMessage(message.payloadString, choosenStop, choosenRoute, dataBikun)
+        .then(function (result) {
 
-    parseIncomingMessage(message.payloadString, choosenStop, choosenRoute, currentBus)
-      .then(function (result) {
+          console.log("print once");
+          setCurrentBus(result);
+          setDataBikun([...result]);
 
-        console.log("print once");
-        setCurrentBus(result);
-        setDataBikun([...result]);
-
-      })
+        })
+    })
   }
 
   return (
