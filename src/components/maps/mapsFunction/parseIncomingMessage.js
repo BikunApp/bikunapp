@@ -30,6 +30,8 @@ export const parseIncomingMessage = async (message, choosenStop, choosenRoute, c
         "}"
     );
 
+    console.log(choosenStop);
+
     if (choosenStop !== "") {
 
         let coorString = busLong + "," + busLat;

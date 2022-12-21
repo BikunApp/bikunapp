@@ -19,6 +19,7 @@ export const CustomBottomDrawer = (props) => {
   const { dataBikun, setDataBikun } = useBikunContext();
 
   useEffect(() => {
+    console.log(dataBikun)
 
     let bothBikun = [];
     let bikunBiru = [];
@@ -26,7 +27,8 @@ export const CustomBottomDrawer = (props) => {
 
     //dataBikun[i].detail !== null || dataBikun[i].detail !== undefined
     for (let i = 0; i < dataBikun.length; i++) {
-      if (dataBikun[i]?.detail?.eta !== null || dataBikun[i]?.detail?.eta !== undefined || dataBikun[i]?.detail?.eta !== "") {
+      console.log(dataBikun[i]);
+      if (dataBikun[i]?.detail?.eta !== null || dataBikun[i]?.detail?.eta !== undefined || dataBikun[i]?.detail?.eta !== "" || dataBikun[i]?.detail?.eta !== "NaN") {
         if (Number(dataBikun[i].detail?.eta) < 30) {
 
 
@@ -48,19 +50,24 @@ export const CustomBottomDrawer = (props) => {
       [
         {
           label: "Both",
-          content: bothBikun.sort((a, b) => (a.detail.eta > b.detail.eta) ? 1 : -1),
+          content: bothBikun.sort((a, b) => (Number(a.detail.eta) > Number(b.detail.eta)) ? 1 : -1),
         },
         {
           label: "Blue Line",
-          content: bikunBiru.sort((a, b) => (a.detail.eta > b.detail.eta) ? 1 : -1),
+          content: bikunBiru.sort((a, b) => (Number(a.detail.eta) > Number(b.detail.eta)) ? 1 : -1),
         },
         {
           label: "Red Line",
-          content: bikunMerah.sort((a, b) => (a.detail.eta > b.detail.eta) ? 1 : -1),
+          content: bikunMerah.sort((a, b) => (Number(a.detail.eta) > Number(b.detail.eta)) ? 1 : -1),
         },
       ]);
 
   }, [dataBikun]);
+
+  useEffect(() => {
+
+    console.log(data);
+  }, [data]);
 
   const handleSelect = (halteValue) => {
 

@@ -45,8 +45,11 @@ const Maps = (Refs) => {
 
   const [route, setRoute] = useState(jalurMerah);
   const [halte, setHalte] = useState("merah");
+  const [reset, setReset] = useState(false);
 
   const [currentBus, setCurrentBus] = useState([]);
+  // const [choosenRoute, setChoosenRoute] = useState(0);
+  // const [choosenStop, setChoosenStop] = useState("");
 
   const [client, setClient] = useState(null);
   const _topic = [process.env.REACT_APP_MQTT_TOPIC];
@@ -68,10 +71,15 @@ const Maps = (Refs) => {
 
   useEffect(() => {
 
+
+    // setChoosenRoute(choosenJalur);
+    // setChoosenStop(choosenHalte);
+
     choosenRoute = choosenJalur;
     choosenStop = choosenHalte;
 
-    console.log("choosen route " + choosenRoute);
+    console.log(choosenRoute);
+    console.log(choosenStop);
 
     //Change displayed route
     if (routeRef.current) {
@@ -114,17 +122,36 @@ const Maps = (Refs) => {
       }
     }
 
-  }, [route, routeRef, halte, choosenRoute, choosenJalur, choosenHalte]);
+  }, [route, routeRef, halte, choosenJalur, choosenHalte]);
+
+  // useEffect(() => {
+
+
+
+  // }, [choosenRoute, choosenStop]);
+
+  // useEffect(() => {
+
+  //   if (dataBikun.length === 0) {
+  //     setCurrentBus([]);
+  //   }
+  // }, [dataBikun]);
 
   useEffect(() => {
 
-    if(dataBikun.length === 0) {
-      setCurrentBus([]);
+    if (client !== null) {
+      console.log("masuk unsub");
+      _onUnsubscribe();
     }
-  }, [dataBikun]);
+
+  }, [choosenHalte])
 
   useEffect(() => {
-  }, [currentBus]);
+  }, [currentBus, choosenRoute, choosenStop]);
+
+  useEffect(() => {
+    console.log(reset);
+  }, [reset]);
 
   const _init = () => {
     const c = mqtt.connect(
@@ -159,15 +186,18 @@ const Maps = (Refs) => {
   };
 
   // called when messages arrived
-  const _onMessageArrived = (message) => {
+  const _onMessageArrived = async (message) => {
     // var jsonMes = JSON.parse(message.payloadString);
     // var arrMes = Object.keys(message.payloadString);
     console.log(
       "onMessageArrived(" + Date.now() + "): " + message.payloadString
     );
 
-    awaitParseMessage(message);
+    if (!reset) {
 
+      await awaitParseMessage(message);
+
+    }
   };
 
   // called when subscribing topic(s)
@@ -186,13 +216,38 @@ const Maps = (Refs) => {
     }); // called when the client connects
   };
 
+  // called when subscribing topic(s)
+  const _onUnsubscribe = () => {
+
+    setReset(true);
+    for (var i = 0; i < _topic.length; i++) {
+
+      client.unsubscribe(_topic[i], _options);
+
+    }
+
+    setTimeout(function () {
+      setCurrentBus(null);
+      setDataBikun(null);
+
+      for (var i = 0; i < _topic.length; i++) {
+        client.subscribe(_topic[i], _options);
+      }
+
+      setReset(false);
+
+    }, 2000);
+  }
+
   const awaitParseMessage = async (message) => {
 
-    await parseIncomingMessage(message.payloadString, choosenStop, choosenRoute, currentBus)
+    parseIncomingMessage(message.payloadString, choosenStop, choosenRoute, currentBus)
       .then(function (result) {
 
-        setCurrentBus([...result]);
+        console.log("print once");
+        setCurrentBus(result);
         setDataBikun([...result]);
+
       })
   }
 
