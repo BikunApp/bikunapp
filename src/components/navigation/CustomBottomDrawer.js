@@ -97,7 +97,7 @@ export const CustomBottomDrawer = (props) => {
             }
           }
         }
-      }, 300);
+      }, 500);
     }
     updateChoosenHalte(halteValue);
   };
