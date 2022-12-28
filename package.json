@@ -32,6 +32,7 @@
     "socket.io-client": "^4.5.3",
     "swiper": "^8.4.5",
     "url": "^0.11.0",
+    "use-state-with-callback": "^3.0.2",
     "web-vitals": "^2.1.0"
   },
   "scripts": {
