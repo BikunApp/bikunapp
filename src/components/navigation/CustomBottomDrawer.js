@@ -70,31 +70,34 @@ export const CustomBottomDrawer = (props) => {
       // center the map
       props.props.mainRef.current.setView([-6.3594334, 106.8275797], 15);
     } else {
-      let notFound = true;
+      props.props.mainRef.current.setView([-6.3594334, 106.8275797], 15);
+      setTimeout(() => {
+        let notFound = true;
 
-      for (let i = 0; i < halteBiru.length; i++) {
-        if (halteBiru[i].namaHalte === halteValue) {
-          props.props.mainRef.current.setView(
-            [halteBiru[i].coordinate[1], halteBiru[i].coordinate[0]],
-            20
-          );
-          notFound = false;
-          break;
-        }
-      }
-
-      if (notFound) {
-        for (let i = 0; i < halteMerah.length; i++) {
-          if (halteMerah[i].namaHalte === halteValue) {
+        for (let i = 0; i < halteBiru.length; i++) {
+          if (halteBiru[i].namaHalte === halteValue) {
             props.props.mainRef.current.setView(
-              [halteMerah[i].coordinate[1], halteMerah[i].coordinate[0]],
+              [halteBiru[i].coordinate[1], halteBiru[i].coordinate[0]],
               20
             );
             notFound = false;
             break;
           }
         }
-      }
+
+        if (notFound) {
+          for (let i = 0; i < halteMerah.length; i++) {
+            if (halteMerah[i].namaHalte === halteValue) {
+              props.props.mainRef.current.setView(
+                [halteMerah[i].coordinate[1], halteMerah[i].coordinate[0]],
+                20
+              );
+              notFound = false;
+              break;
+            }
+          }
+        }
+      }, 300);
     }
     updateChoosenHalte(halteValue);
   };
