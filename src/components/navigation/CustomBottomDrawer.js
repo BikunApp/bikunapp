@@ -67,14 +67,16 @@ export const CustomBottomDrawer = (props) => {
 
   const handleSelect = (halteValue) => {
     if (halteValue === "") {
+      // center the map
       props.props.mainRef.current.setView([-6.3594334, 106.8275797], 15);
     } else {
       let notFound = true;
+
       for (let i = 0; i < halteBiru.length; i++) {
         if (halteBiru[i].namaHalte === halteValue) {
           props.props.mainRef.current.setView(
             [halteBiru[i].coordinate[1], halteBiru[i].coordinate[0]],
-            17
+            20
           );
           notFound = false;
           break;
@@ -82,11 +84,11 @@ export const CustomBottomDrawer = (props) => {
       }
 
       if (notFound) {
-        for (let i = 0; i < halteBiru.length; i++) {
+        for (let i = 0; i < halteMerah.length; i++) {
           if (halteMerah[i].namaHalte === halteValue) {
             props.props.mainRef.current.setView(
               [halteMerah[i].coordinate[1], halteMerah[i].coordinate[0]],
-              17
+              20
             );
             notFound = false;
             break;
