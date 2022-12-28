@@ -29,7 +29,6 @@ import { useStateWithCallbackLazy } from "use-state-with-callback";
 let choosenRoute = 0;
 let choosenStop = "";
 let halteSkrg = "";
-let dataBikunRil = [];
 
 const Maps = (Refs) => {
   let { mainRef } = Refs.props;
@@ -169,15 +168,11 @@ const Maps = (Refs) => {
   const awaitParseMessage = (message) => {
     // run when halte changes, empty the bikun then fill again with new data
     if (halteSkrg !== choosenStop) {
-      console.log("Masuk");
       halteSkrg = choosenStop;
       setHalteSekarang(choosenStop, (stop) => {
-        console.log(`halte skrg after: ${stop}`);
         setDataBikun(
           (prev) => prev.splice(),
           (curr) => {
-            // console.log(curr);
-            dataBikunRil = curr;
             parseIncomingMessage(
               message.payloadString,
               choosenStop,
@@ -185,7 +180,6 @@ const Maps = (Refs) => {
               curr
             ).then((result) => {
               console.log(result);
-              // console.log("print once");
 
               setCurrentBus([...result]);
               setDataBikun([...result]);
@@ -194,7 +188,6 @@ const Maps = (Refs) => {
         );
       });
     } else {
-      console.log("Masuk 2");
       setDataBikun(
         (prev) => [...prev],
         (curr) => {
@@ -206,7 +199,6 @@ const Maps = (Refs) => {
             curr
           ).then((result) => {
             console.log(result);
-            // console.log("print once");
 
             setCurrentBus([...result]);
             setDataBikun([...result]);
@@ -285,9 +277,9 @@ const Maps = (Refs) => {
             ))
           : null}
 
-        {currentBus === null
+        {dataBikun === null
           ? null
-          : currentBus.map((busses, index) => (
+          : dataBikun.map((busses, index) => (
               <Marker
                 icon={busses.type === "merah" ? redBus : blueBus}
                 position={busses.coordinate}
