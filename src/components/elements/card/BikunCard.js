@@ -2,15 +2,22 @@ import moment from "moment";
 import React from "react";
 import { BikunTag } from "../../elements";
 
-export const BikunCard = ({ data }) => {
+export const BikunCard = ({ data, mainRef }) => {
   const now = new Date();
   const eta = moment(now).add(data?.detail?.eta, "m").toDate();
   const hour = eta.getHours().toString();
   const minutes = eta.getMinutes().toString();
   const isPM = hour >= 12;
 
+  const handleClickCard = () => {
+    mainRef.current.setView(data?.coordinate, 200);
+  };
+
   return (
-    <div className="bg-white shadow-cardBikun rounded-lg w-[280px] min-h-[80px] max-h-[12s0px] flex justify-between gap-8 px-2 py-3">
+    <div
+      onClick={handleClickCard}
+      className="bg-white shadow-cardBikun rounded-lg w-[280px] min-h-[80px] max-h-[12s0px] flex justify-between gap-8 px-2 py-3"
+    >
       <section>
         <section className="flex gap-2 items-center">
           <div

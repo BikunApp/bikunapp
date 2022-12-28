@@ -116,7 +116,11 @@ export const CustomBottomDrawer = (props) => {
       </select>
       {isOpen && selectVal && (
         <section>
-          <CustomTabs data={data} isBikun={true} />
+          <CustomTabs
+            mainRef={props.props.mainRef}
+            data={data}
+            isBikun={true}
+          />
         </section>
       )}
     </div>

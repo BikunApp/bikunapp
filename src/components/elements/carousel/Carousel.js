@@ -5,7 +5,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { BikunCard } from "../../elements";
 
-export const Carousel = ({ data, isBikun }) => {
+export const Carousel = ({ data, isBikun, mainRef }) => {
   const bikunData = isBikun
     ? data?.sort((a, b) => Number(a?.detail?.eta) - Number(b?.detail?.eta))
     : [];
@@ -44,7 +44,7 @@ export const Carousel = ({ data, isBikun }) => {
       {isBikun
         ? bikunData?.map((slide, index) => (
             <SwiperSlide key={index}>
-              <BikunCard data={slide} />
+              <BikunCard mainRef={mainRef} data={slide} />
             </SwiperSlide>
           ))
         : data?.map((slide, index) => (

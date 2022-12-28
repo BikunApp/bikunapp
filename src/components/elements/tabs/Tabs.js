@@ -38,7 +38,7 @@ function a11yProps(index) {
   };
 }
 
-export const CustomTabs = ({ data, isBikun }) => {
+export const CustomTabs = ({ data, isBikun, mainRef }) => {
   const [value, setValue] = React.useState(0);
   const { setChoosenJalur } = useBikunContext();
 
@@ -61,7 +61,11 @@ export const CustomTabs = ({ data, isBikun }) => {
         <TabPanel value={value} index={index}>
           {isBikun ? (
             <Box key={index} sx={{ p: 2 }}>
-              <Carousel data={data[index]?.content} isBikun={true} />
+              <Carousel
+                mainRef={mainRef}
+                data={data[index]?.content}
+                isBikun={true}
+              />
             </Box>
           ) : (
             panel.content
