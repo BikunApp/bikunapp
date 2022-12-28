@@ -13,7 +13,7 @@ export const parseIncomingMessage = async (
   let splitMessage = message.split(";");
   let busId = splitMessage[0];
   let busStatus = splitMessage[1];
-  let busColor = splitMessage[2] == "0" ? "merah" : "biru";
+  let busColor = splitMessage[2] === "0" ? "merah" : "biru";
   let busLat = splitMessage[3];
   let busLong = splitMessage[4];
 
@@ -50,7 +50,7 @@ export const parseIncomingMessage = async (
 
     if (choosenRoute === 1) {
       for (let i = 0; i < halteBiru.length; i++) {
-        if (choosenStop == halteBiru[i].namaHalte) {
+        if (choosenStop === halteBiru[i].namaHalte) {
           choosenIndex = i;
         }
         coorString =
@@ -62,7 +62,7 @@ export const parseIncomingMessage = async (
       }
     } else if (choosenRoute === 2) {
       for (let i = 0; i < halteMerah.length; i++) {
-        if (choosenStop == halteMerah[i].namaHalte) {
+        if (choosenStop === halteMerah[i].namaHalte) {
           choosenIndex = i;
         }
         coorString =
@@ -74,7 +74,7 @@ export const parseIncomingMessage = async (
       }
     } else {
       for (let i = 0; i < halteBiru.length; i++) {
-        if (choosenStop == halteBiru[i].namaHalte) {
+        if (choosenStop === halteBiru[i].namaHalte) {
           choosenIndex = i;
         }
         coorString =
@@ -85,7 +85,7 @@ export const parseIncomingMessage = async (
           halteBiru[i].coordinate[1];
       }
       for (let i = 0; i < halteMerah.length; i++) {
-        if (choosenStop == halteMerah[i].namaHalte) {
+        if (choosenStop === halteMerah[i].namaHalte) {
           choosenIndex = i;
         }
         coorString =
@@ -125,7 +125,7 @@ export const postParseMessage = async (busData, currentBus) => {
       }
     }
 
-    if (idNotExist == 1) {
+    if (idNotExist === 1) {
       busDataArray.unshift(busData);
     }
   } else {

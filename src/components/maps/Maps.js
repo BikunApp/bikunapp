@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState, useRef } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import * as mqtt from "react-paho-mqtt";
@@ -43,7 +44,6 @@ const Maps = (Refs) => {
   const [route, setRoute] = useState(jalurMerah);
   const [halte, setHalte] = useState("merah");
 
-  const [currentBus, setCurrentBus] = useState([]);
   // const [choosenRoute, setChoosenRoute] = useState(0);
   // const [choosenStop, setChoosenStop] = useState("");
 
@@ -181,7 +181,6 @@ const Maps = (Refs) => {
             ).then((result) => {
               console.log(result);
 
-              setCurrentBus([...result]);
               setDataBikun([...result]);
             });
           }
@@ -200,7 +199,6 @@ const Maps = (Refs) => {
           ).then((result) => {
             console.log(result);
 
-            setCurrentBus([...result]);
             setDataBikun([...result]);
           });
         }

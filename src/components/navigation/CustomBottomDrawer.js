@@ -1,7 +1,6 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CustomTabs } from "../elements";
 import semuaHalte from "../../data/semuaHalte.json";
-import { DataHalteDanJalur } from "../../data";
 
 import halteBiru from "../../data/halteBiru.json";
 import halteMerah from "../../data/halteMerah.json";
