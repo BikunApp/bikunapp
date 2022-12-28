@@ -1,7 +1,7 @@
 export const DEV_INFORMATION_DATA = [
   {
     name: "Ariq Pradipa Santoso",
-    photo: null,
+    photo: "/team/ariq_pradipa.png",
     role: "Initiator / Frontend Developer",
     faculty: "F. Teknik",
     year: "2020",
@@ -60,9 +60,9 @@ export const DEV_INFORMATION_DATA = [
     role: "Frontend Developer",
     faculty: "F. Ilmu Komputer",
     year: "2020",
-    githubLink: "https://github.com",
-    websiteLink: "https://google.com",
-    linkedinLink: "https://linkedin.com",
+    githubLink: "https://github.com/zuhalal",
+    websiteLink: null,
+    linkedinLink: "https://www.linkedin.com/in/zuhal-alimul-hadi/",
     team: "ristek",
   },
 ];

@@ -34,7 +34,7 @@ export const TeamInfoCard = ({
           </section>
           <section className="flex gap-4 items-center">
             {githubLink ? (
-              <a href={githubLink}>
+              <a href={githubLink} target="_blank" rel="noreferrer">
                 <img
                   src={`${process.env.PUBLIC_URL}/icons/github.svg`}
                   alt="github"
@@ -43,7 +43,7 @@ export const TeamInfoCard = ({
             ) : null}
 
             {linkedinLink ? (
-              <a href={linkedinLink}>
+              <a href={linkedinLink} target="_blank" rel="noreferrer">
                 <img
                   src={`${process.env.PUBLIC_URL}/icons/linkedin.svg`}
                   alt="linkedin"
@@ -52,7 +52,7 @@ export const TeamInfoCard = ({
             ) : null}
 
             {websiteLink ? (
-              <a href={websiteLink}>
+              <a href={websiteLink} target="_blank" rel="noreferrer">
                 <img
                   src={`${process.env.PUBLIC_URL}/icons/globe.svg`}
                   alt="globe"
