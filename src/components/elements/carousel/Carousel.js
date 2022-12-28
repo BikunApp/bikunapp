@@ -6,9 +6,8 @@ import "swiper/css";
 import { BikunCard } from "../../elements";
 
 export const Carousel = ({ data, isBikun }) => {
-  console.log(data);
   const bikunData = isBikun
-    ? data?.sort((a, b) => a?.detail?.eta - b?.detail?.eta)
+    ? data?.sort((a, b) => Number(a?.detail?.eta) - Number(b?.detail?.eta))
     : [];
   return (
     <Swiper

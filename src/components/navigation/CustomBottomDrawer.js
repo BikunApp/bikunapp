@@ -1,7 +1,6 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CustomTabs } from "../elements";
 import semuaHalte from "../../data/semuaHalte.json";
-import { DataHalteDanJalur } from "../../data";
 
 import halteBiru from "../../data/halteBiru.json";
 import halteMerah from "../../data/halteMerah.json";
@@ -15,10 +14,10 @@ export const CustomBottomDrawer = (props) => {
   const [selectVal, SetSelectVal] = useState("");
   //const [data] = useState(useMemo(() => DataHalteDanJalur, []));
   const [data, setData] = useState([]);
-  const { setChoosenHalte } = useBikunContext();
-  const { dataBikun, setDataBikun } = useBikunContext();
+  const { dataBikun, updateChoosenHalte } = useBikunContext();
 
   useEffect(() => {
+    // console.log(dataBikun);
 
     let bothBikun = [];
     let bikunBiru = [];
@@ -26,46 +25,47 @@ export const CustomBottomDrawer = (props) => {
 
     //dataBikun[i].detail !== null || dataBikun[i].detail !== undefined
     for (let i = 0; i < dataBikun.length; i++) {
-      if (dataBikun[i]?.detail?.eta !== null || dataBikun[i]?.detail?.eta !== undefined || dataBikun[i]?.detail?.eta !== "") {
+      // console.log(dataBikun[i]);
+      if (
+        dataBikun[i]?.detail?.eta !== null ||
+        dataBikun[i]?.detail?.eta !== undefined ||
+        dataBikun[i]?.detail?.eta !== "" ||
+        dataBikun[i]?.detail?.eta !== "NaN"
+      ) {
         if (Number(dataBikun[i].detail?.eta) < 30) {
-
-
           if (dataBikun[i].type === "biru") {
-
             bikunBiru.push(dataBikun[i]);
-
           } else {
-
             bikunMerah.push(dataBikun[i]);
-
           }
           bothBikun.push(dataBikun[i]);
         }
       }
     }
 
-    setData(
-      [
-        {
-          label: "Both",
-          content: bothBikun.sort((a, b) => (a.detail.eta > b.detail.eta) ? 1 : -1),
-        },
-        {
-          label: "Blue Line",
-          content: bikunBiru.sort((a, b) => (a.detail.eta > b.detail.eta) ? 1 : -1),
-        },
-        {
-          label: "Red Line",
-          content: bikunMerah.sort((a, b) => (a.detail.eta > b.detail.eta) ? 1 : -1),
-        },
-      ]);
-
+    setData([
+      {
+        label: "Both",
+        content: bothBikun.sort((a, b) =>
+          Number(a.detail.eta) > Number(b.detail.eta) ? 1 : -1
+        ),
+      },
+      {
+        label: "Blue Line",
+        content: bikunBiru.sort((a, b) =>
+          Number(a.detail.eta) > Number(b.detail.eta) ? 1 : -1
+        ),
+      },
+      {
+        label: "Red Line",
+        content: bikunMerah.sort((a, b) =>
+          Number(a.detail.eta) > Number(b.detail.eta) ? 1 : -1
+        ),
+      },
+    ]);
   }, [dataBikun]);
 
   const handleSelect = (halteValue) => {
-
-    setDataBikun([]);
-
     if (halteValue === "") {
       props.props.mainRef.current.setView([-6.3594334, 106.8275797], 15);
     } else {
@@ -94,7 +94,7 @@ export const CustomBottomDrawer = (props) => {
         }
       }
     }
-    setChoosenHalte(halteValue);
+    updateChoosenHalte(halteValue);
   };
 
   return (
@@ -108,8 +108,8 @@ export const CustomBottomDrawer = (props) => {
         }}
       >
         <option value="">Pilih Halte</option>
-        {semuaHalte.map((halte) => (
-          <option key={halte.value} value={halte.value}>
+        {semuaHalte.map((halte, index) => (
+          <option key={index} value={halte.value}>
             Halte {halte.label}
           </option>
         ))}
