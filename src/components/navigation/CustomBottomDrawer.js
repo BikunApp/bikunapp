@@ -67,32 +67,37 @@ export const CustomBottomDrawer = (props) => {
 
   const handleSelect = (halteValue) => {
     if (halteValue === "") {
+      // center the map
       props.props.mainRef.current.setView([-6.3594334, 106.8275797], 15);
     } else {
-      let notFound = true;
-      for (let i = 0; i < halteBiru.length; i++) {
-        if (halteBiru[i].namaHalte === halteValue) {
-          props.props.mainRef.current.setView(
-            [halteBiru[i].coordinate[1], halteBiru[i].coordinate[0]],
-            17
-          );
-          notFound = false;
-          break;
-        }
-      }
+      props.props.mainRef.current.setView([-6.3594334, 106.8275797], 15);
+      setTimeout(() => {
+        let notFound = true;
 
-      if (notFound) {
         for (let i = 0; i < halteBiru.length; i++) {
-          if (halteMerah[i].namaHalte === halteValue) {
+          if (halteBiru[i].namaHalte === halteValue) {
             props.props.mainRef.current.setView(
-              [halteMerah[i].coordinate[1], halteMerah[i].coordinate[0]],
-              17
+              [halteBiru[i].coordinate[1], halteBiru[i].coordinate[0]],
+              20
             );
             notFound = false;
             break;
           }
         }
-      }
+
+        if (notFound) {
+          for (let i = 0; i < halteMerah.length; i++) {
+            if (halteMerah[i].namaHalte === halteValue) {
+              props.props.mainRef.current.setView(
+                [halteMerah[i].coordinate[1], halteMerah[i].coordinate[0]],
+                20
+              );
+              notFound = false;
+              break;
+            }
+          }
+        }
+      }, 500);
     }
     updateChoosenHalte(halteValue);
   };
@@ -116,7 +121,11 @@ export const CustomBottomDrawer = (props) => {
       </select>
       {isOpen && selectVal && (
         <section>
-          <CustomTabs data={data} isBikun={true} />
+          <CustomTabs
+            mainRef={props.props.mainRef}
+            data={data}
+            isBikun={true}
+          />
         </section>
       )}
     </div>
