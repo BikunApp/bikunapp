@@ -1,26 +1,26 @@
 {
   "files": {
-    "main.css": "/bikunapp/static/css/main.6a9fda93.css",
-    "main.js": "/bikunapp/static/js/main.b0b3db22.js",
-    "static/css/715.67400934.chunk.css": "/bikunapp/static/css/715.67400934.chunk.css",
-    "static/js/715.7ecbea1c.chunk.js": "/bikunapp/static/js/715.7ecbea1c.chunk.js",
+    "main.css": "/bikunapp/static/css/main.675580ba.css",
+    "main.js": "/bikunapp/static/js/main.c7361f22.js",
+    "static/css/233.93fd156d.chunk.css": "/bikunapp/static/css/233.93fd156d.chunk.css",
+    "static/js/233.2ad6eca3.chunk.js": "/bikunapp/static/js/233.2ad6eca3.chunk.js",
     "static/js/787.11313f1a.chunk.js": "/bikunapp/static/js/787.11313f1a.chunk.js",
-    "static/js/780.579a3bf6.chunk.js": "/bikunapp/static/js/780.579a3bf6.chunk.js",
+    "static/js/394.106c9f0a.chunk.js": "/bikunapp/static/js/394.106c9f0a.chunk.js",
     "static/media/rute-bikun-only.png": "/bikunapp/static/media/rute-bikun-only.90a3827ef956d72cf681.png",
     "static/media/bus-icon-red.png": "/bikunapp/static/media/bus-icon-red.a1e1eccd116c8e43019d.png",
     "static/media/bus-icon-blue.png": "/bikunapp/static/media/bus-icon-blue.49eb66e0cf2d2c18132a.png",
     "static/media/bus-stop-blue.png": "/bikunapp/static/media/bus-stop-blue.4b8c91a97c09f8bd012d.png",
     "static/media/bus-stop-red.png": "/bikunapp/static/media/bus-stop-red.f5708adec2129d64db87.png",
     "index.html": "/bikunapp/index.html",
-    "main.6a9fda93.css.map": "/bikunapp/static/css/main.6a9fda93.css.map",
-    "main.b0b3db22.js.map": "/bikunapp/static/js/main.b0b3db22.js.map",
-    "715.67400934.chunk.css.map": "/bikunapp/static/css/715.67400934.chunk.css.map",
-    "715.7ecbea1c.chunk.js.map": "/bikunapp/static/js/715.7ecbea1c.chunk.js.map",
+    "main.675580ba.css.map": "/bikunapp/static/css/main.675580ba.css.map",
+    "main.c7361f22.js.map": "/bikunapp/static/js/main.c7361f22.js.map",
+    "233.93fd156d.chunk.css.map": "/bikunapp/static/css/233.93fd156d.chunk.css.map",
+    "233.2ad6eca3.chunk.js.map": "/bikunapp/static/js/233.2ad6eca3.chunk.js.map",
     "787.11313f1a.chunk.js.map": "/bikunapp/static/js/787.11313f1a.chunk.js.map",
-    "780.579a3bf6.chunk.js.map": "/bikunapp/static/js/780.579a3bf6.chunk.js.map"
+    "394.106c9f0a.chunk.js.map": "/bikunapp/static/js/394.106c9f0a.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.6a9fda93.css",
-    "static/js/main.b0b3db22.js"
+    "static/css/main.675580ba.css",
+    "static/js/main.c7361f22.js"
   ]
 }
