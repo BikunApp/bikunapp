@@ -28,7 +28,7 @@
         ]
     },
     {
-        "namaHalte": "St. Pondok Cina",
+        "namaHalte": "Balairung",
         "coordinate": [
             106.83178257197142,
             -6.368212251024606
@@ -42,7 +42,7 @@
         ]
     },
     {
-        "namaHalte": "FKM",
+        "namaHalte": "RSUI/FKM",
         "coordinate": [
             106.8293622136116,
             -6.371677262480034
@@ -63,7 +63,7 @@
         ]
     },
     {
-        "namaHalte": "PNJ",
+        "namaHalte": "SOR",
         "coordinate": [
             106.82448193430899,
             -6.366915739619239
@@ -91,10 +91,17 @@
         ]
     },
     {
-        "namaHalte": "FIB/FISIP",
+        "namaHalte": "FIB",
         "coordinate": [
             106.82978868484497,
             -6.361254501381427
+        ]
+    },
+    {
+        "namaHalte": "FISIP",
+        "coordinate": [
+            106.830172,
+            -6.361574
         ]
     },
     {

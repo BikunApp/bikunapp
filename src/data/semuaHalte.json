@@ -36,8 +36,8 @@
     "label": "Vokasi"
   },
   {
-    "value": "Pusgiwa",
-    "label": "Pusgiwa"
+    "value": "SOR",
+    "label": "SOR"
   },
   {
     "value": "FMIPA",
@@ -48,7 +48,7 @@
     "label": "Fakultas Ilmu Keperawatan"
   },
   {
-    "value": "FKM",
+    "value": "RSUI/FKM",
     "label": "Fakultas Kesehatan Masyarakat"
   },
   {
@@ -60,7 +60,7 @@
     "label": "Balairung"
   },
   {
-    "value": "MUI/Perpus UI",
+    "value": "MUI",
     "label": "MUI/Perpus UI"
   },
   {
@@ -74,18 +74,5 @@
   {
     "value": "Menwa (Ke Asrama)",
     "label": "Menwa (Ke Asrama)"
-  },
-
-  {
-    "value": "St. Pondok Cina",
-    "label": "Stasiun Pondok Cina"
-  },
-  {
-    "value": "PNJ",
-    "label": "Politeknik Negeri Jakarta"
-  },
-  {
-    "value": "FIB/FISIP",
-    "label": "FIB/FISIP"
   }
 ]

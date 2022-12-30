@@ -63,7 +63,7 @@
         ]
     },
     {
-        "namaHalte": "Pusgiwa",
+        "namaHalte": "SOR",
         "coordinate": [
             106.82409569621086,
             -6.366829771900677
@@ -84,7 +84,7 @@
         ]
     },
     {
-        "namaHalte": "FKM",
+        "namaHalte": "RSUI/FKM",
         "coordinate": [
             106.82910673320292,
             -6.371465343997397
@@ -105,7 +105,7 @@
         ]
     },
     {
-        "namaHalte": "MUI/Perpus UI",
+        "namaHalte": "MUI",
         "coordinate": [
             106.83204710483551,
             -6.3655942342627565
