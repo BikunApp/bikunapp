@@ -41,6 +41,7 @@ const Maps = (Refs) => {
   const routeRefRed = useRef();
   const routeRefBlue = useRef();
 
+  const [prevRoute, setPrevRoute] = useState(0);
   const [route, setRoute] = useState(jalurMerah);
   const [halte, setHalte] = useState("merah");
 
@@ -51,11 +52,9 @@ const Maps = (Refs) => {
   const _topic = [process.env.REACT_APP_MQTT_TOPIC];
   const _options = {};
 
-  const { dataBikun, setDataBikun, choosenHalte, choosenJalur } =
-    useBikunContext();
+  const { dataBikun, setDataBikun, choosenHalte, choosenJalur } = useBikunContext();
 
-  const [halteSekarang, setHalteSekarang] =
-    useStateWithCallbackLazy(choosenHalte);
+  const [halteSekarang, setHalteSekarang] = useStateWithCallbackLazy(choosenHalte);
 
   useEffect(() => {
     _init();
@@ -68,15 +67,10 @@ const Maps = (Refs) => {
   }, [client]);
 
   useEffect(() => {
-    // setChoosenRoute(choosenJalur);
-    // setChoosenStop(choosenHalte);
 
     choosenRoute = choosenJalur;
     choosenStop = choosenHalte;
     halteSkrg = halteSekarang;
-
-    // console.log(choosenRoute);
-    // console.log(choosenStop);
 
     //Change displayed route
     if (routeRef.current) {
@@ -86,8 +80,11 @@ const Maps = (Refs) => {
           routeRef.current.addData(route);
 
           if (choosenRoute === 2) {
+            setPrevRoute(2);
             routeRef.current.setStyle({ color: "#c424a3" });
+
           } else if (choosenRoute === 1) {
+            setPrevRoute(1);
             routeRef.current.setStyle({ color: "#64e6fb" });
           }
         }
@@ -105,6 +102,7 @@ const Maps = (Refs) => {
         setRoute(null);
       }
     }
+
   }, [route, routeRef, halte, choosenJalur, choosenHalte]);
 
   const _init = () => {
@@ -141,13 +139,9 @@ const Maps = (Refs) => {
 
   // called when messages arrived
   const _onMessageArrived = async (message) => {
-    // var jsonMes = JSON.parse(message.payloadString);
-    // var arrMes = Object.keys(message.payloadString);
-    // console.log(
-    //   "onMessageArrived(" + Date.now() + "): " + message.payloadString
-    // );
 
     awaitParseMessage(message);
+
   };
 
   // called when subscribing topic(s)
@@ -221,34 +215,41 @@ const Maps = (Refs) => {
           attribution='&copy; <a href="https://www.google.com/help/legalnotices_maps/">Google</a> Maps'
           url="https://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}"
           subdomains={["mt0", "mt1", "mt2", "mt3"]}
-          // className='map-tiles'
+        // className='map-tiles'
         />
 
         {choosenRoute === 0 || choosenRoute === "" ? (
           <>
-            <GeoJSON
-              data={jalurMerah}
-              ref={routeRefRed}
-              style={{ color: "#c424a3" }}
-            />
-            <GeoJSON
-              data={jalurBiru}
-              ref={routeRefBlue}
-              style={{ color: "#64e6fb" }}
-            />
-          </>
-        ) : (
-          <GeoJSON
-            data={route}
-            ref={routeRef}
-            style={
-              choosenRoute === 2 ? { color: "#c424a3" } : { color: "#64e6fb" }
-            }
-          />
-        )}
+            {prevRoute === 1 ? (
+              <>
+                <GeoJSON
+                  data={jalurBiru}
+                  ref={routeRefBlue}
+                  style={{ color: "#64e6fb" }}
+                />
+                <GeoJSON
+                  data={jalurMerah}
+                  ref={routeRefRed}
+                  style={{ color: "#c424a3" }}
+                />
+              </>
+            ) :
+              (
+                <>
+                  <GeoJSON
+                    data={jalurMerah}
+                    ref={routeRefRed}
+                    style={{ color: "#c424a3" }}
+                  />
+                  <GeoJSON
+                    data={jalurBiru}
+                    ref={routeRefBlue}
+                    style={{ color: "#64e6fb" }}
+                  />
+                </>
+              )}
 
-        {halte === "merah"
-          ? halteMerah.map((lokasi, index) => (
+            {halteMerah.map((lokasi, index) => (
               <Marker
                 icon={busStopRed}
                 position={[lokasi.coordinate[1], lokasi.coordinate[0]]}
@@ -259,9 +260,8 @@ const Maps = (Refs) => {
                   {lokasi.namaHalte}
                 </Popup>
               </Marker>
-            ))
-          : halte === "biru"
-          ? halteBiru.map((lokasi, index) => (
+            ))}
+            {halteBiru.map((lokasi, index) => (
               <Marker
                 icon={busStopBlue}
                 position={[lokasi.coordinate[1], lokasi.coordinate[0]]}
@@ -272,22 +272,62 @@ const Maps = (Refs) => {
                   {lokasi.namaHalte}
                 </Popup>
               </Marker>
-            ))
-          : null}
+            ))}
+          </>
+        ) :
+          (
+            <>
+              <GeoJSON
+                data={route}
+                ref={routeRef}
+                style={
+                  choosenRoute === 2 ? { color: "#c424a3" } : { color: "#64e6fb" }
+                }
+              />
+              {halte === "merah"
+                ? halteMerah.map((lokasi, index) => (
+                  <Marker
+                    icon={busStopRed}
+                    position={[lokasi.coordinate[1], lokasi.coordinate[0]]}
+                    key={index}
+                  >
+                    <Popup>
+                      Halte <br></br>
+                      {lokasi.namaHalte}
+                    </Popup>
+                  </Marker>
+                ))
+                : halte === "biru"
+                  ? halteBiru.map((lokasi, index) => (
+                    <Marker
+                      icon={busStopBlue}
+                      position={[lokasi.coordinate[1], lokasi.coordinate[0]]}
+                      key={index}
+                    >
+                      <Popup>
+                        Halte <br></br>
+                        {lokasi.namaHalte}
+                      </Popup>
+                    </Marker>
+                  ))
+                  : null}
+            </>
+          )
+        }
 
         {dataBikun === null
           ? null
           : dataBikun.map((busses, index) => (
-              <Marker
-                icon={busses.type === "merah" ? redBus : blueBus}
-                position={busses.coordinate}
-                key={index}
-              >
-                <Popup>
-                  {"Bikun " + busses.type + " " + busses.id} <br></br>
-                </Popup>
-              </Marker>
-            ))}
+            <Marker
+              icon={busses.type === "merah" ? redBus : blueBus}
+              position={busses.coordinate}
+              key={index}
+            >
+              <Popup>
+                {"Bikun " + busses.type + " " + busses.id} <br></br>
+              </Popup>
+            </Marker>
+          ))}
       </MapContainer>
 
       <ToastContainer
