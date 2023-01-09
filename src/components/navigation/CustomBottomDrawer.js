@@ -17,35 +17,6 @@ export const CustomBottomDrawer = (props) => {
   const { dataBikun, updateChoosenHalte } = useBikunContext();
 
   useEffect(() => {
-    // console.log(dataBikun);
-
-    let bothBikun = [];
-    let bikunBiru = [];
-    let bikunMerah = [];
-    console.log(dataBikun);
-
-    //dataBikun[i].detail !== null || dataBikun[i].detail !== undefined
-    for (let i = 0; i < dataBikun.length; i++) {
-      console.log(dataBikun[i]);
-      if (
-        dataBikun[i]?.detail?.eta != null &&
-        dataBikun[i]?.detail?.eta !== undefined &&
-        dataBikun[i]?.detail?.eta !== "" &&
-        dataBikun[i]?.detail?.eta !== "NaN"
-      ) {
-        if (Number(dataBikun[i].detail?.eta) < 30) {
-          if (dataBikun[i].type === "biru") {
-            bikunBiru.push(dataBikun[i]);
-          } else {
-            bikunMerah.push(dataBikun[i]);
-          }
-          bothBikun.push(dataBikun[i]);
-        }
-      }
-    }
-
-    console.log(bothBikun);
-
     setData([
       {
         label: "Both",
@@ -118,10 +89,6 @@ export const CustomBottomDrawer = (props) => {
     }
     updateChoosenHalte(halteValue);
   };
-
-  useEffect(() => {
-    console.log(dataBikun);
-  }, [dataBikun]);
 
   return (
     <div className="rounded-t-[20px] flex flex-col gap-3 p-3 bg-primary-purple-heart fixed bottom-0 z-[4000] sm:w-[640px] w-full">
