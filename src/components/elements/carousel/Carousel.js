@@ -39,7 +39,6 @@ export const Carousel = ({ data, isBikun, mainRef }) => {
         },
       }}
       className="p-3"
-      onSlideChange={() => console.log("slide change")}
     >
       {isBikun
         ? bikunData?.map((slide, index) => (

@@ -7,7 +7,7 @@ const RouteInfo = () => {
         <p className="text-4xl font-poppins font-medium tracking-wide text-black">
           Bikun Route Info
         </p>
-        <img className="w-10/12" src={ruteBikun}></img>
+        <img alt="rute bikun" className="w-10/12" src={ruteBikun}></img>
       </div>
     </>
   );
