@@ -143,7 +143,7 @@ const Maps = (Refs) => {
 
   // called when subscribing topic(s)
   const _onSubscribe = () => {
-    console.log(client.clientId);
+    // console.log(client.clientId);
     client.connect({
       userName: process.env.REACT_APP_MQTT_USERNAME,
       useSSL: Boolean(Number(process.env.REACT_APP_MQTT_SSL)),
@@ -170,7 +170,7 @@ const Maps = (Refs) => {
               choosenRoute,
               curr
             ).then((result) => {
-              console.log(result);
+              // console.log(result);
 
               updateDataBikun([...result]);
             });
@@ -198,10 +198,6 @@ const Maps = (Refs) => {
 
     // to do: add condition to empty the bikun only when halte state changes
   };
-
-  useEffect(() => {
-    console.log(dataBikun);
-  }, [dataBikun]);
 
   return (
     <>
